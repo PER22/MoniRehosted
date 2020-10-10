@@ -4,8 +4,8 @@ from pubnub import Pubnub
 
 class Cloud:
     # Initialize the Pubnub Keys
-    g_pub_key = "pub-c-e172d2c0-f4ff-4cb7-b610-46e2cbce18d5"
-    g_sub_key = "sub-c-82bf53a4-bd8a-11ea-a44f-6e05387a1df4"
+    g_pub_key = "pub-c-7cd0dca0-eb36-44f8-bfef-d692af28f7d4"
+    g_sub_key = "sub-c-01442846-0b27-11eb-8b70-9ebeb8f513a7"
 
     '''****************************************************************************************
     Function Name   :   init
@@ -16,7 +16,7 @@ class Cloud:
         #Pubnub Initialization
         global pubnub
         pubnub = Pubnub(publish_key = self.g_pub_key, subscribe_key = self.g_sub_key)
-        pubnub.subscribe(channels = 'Trash-Client', callback = self.callback, error = self.callback, reconnect = self.reconnect, disconnect = self.disconnect)
+        pubnub.subscribe(channels = 'FinanceSub', callback = self.callback, error = self.callback, reconnect = self.reconnect, disconnect = self.disconnect)
 
 
     '''****************************************************************************************
