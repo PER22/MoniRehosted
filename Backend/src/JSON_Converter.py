@@ -18,10 +18,12 @@ class JSON_Converter:
     @staticmethod
     def convertStocksToJSON(stocks):
 
+        json = ""
         for stock in stocks:
-            print("EUU")
+            json = json + str(JSON_Converter.convertStockToJSON(stock)) + ", "
 
-        return("")
+
+        return(json[:-2])
 
     @staticmethod
     def customtDecoder(dict):

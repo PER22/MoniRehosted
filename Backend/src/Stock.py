@@ -1,7 +1,7 @@
 class Stock:
     name = ""
     label = ""
-    data = [[], [], [] ,[], [], [], [] ,[]] #ArrayList{ArrayList{"date" "Open" "High" "Low" "Close" "Volume"}}
+    data = [] #ArrayList{ArrayList{"date" "Open" "High" "Low" "Close" "Volume"}}
 
 
     def __init__(self, new_name, new_label, new_data):

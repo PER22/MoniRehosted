@@ -22,6 +22,33 @@ Request:
 }
 
 
+
+
+### Get Initial ETF
+{
+ “requester”: “Client”,
+ “operation”: “GetETFLabels”,
+ "amount": "100"
+}
+
+### Get ETF (example TSLA)
+{
+ “requester”: “Client”,
+ “operation”: “GetSETFData”,
+ "stock": "TSLA"
+}
+
+### Get ETF Prediction(example TSLA)
+{
+ “requester”: “Client”,
+ “operation”: “GetETFPrediction”,
+ "stock": "TSLA"
+}
+
+
+
+
+
 Return:
 
 ### Return Initial stocks
@@ -54,38 +81,16 @@ Return:
  “operation”: “ReturnStockData”,
  "stock": "TSLA",
  "data":
- {
-    "name": "Tesla",
-    "label": "TSLA",
-    "stock data":
-    {
-      {
-        "date": "2017-08-11"
-        "Open": "16"
-        "High": "41"
-        "Low": "16"
-        "Close": "16"
-        "Volume": "16"
-      },
-      {
-        "date": "2017-09-11"
-        "Open": "16"
-        "High": "41"
-        "Low": "16"
-        "Close": "16"
-        "Volume": "16"
-      },
-      {
-        "date": "2017-10-11"
-        "Open": "16"
-        "High": "41"
-        "Low": "16"
-        "Close": "16"
-        "Volume": "16"
-      }
-    }
+  {
+  'name': 'Tesla',
+  'label': 'TSLA',
+  'data':
+    [
+      ['date', 'Open', 'High', 'Low', 'Close', 'Volume'],
+      ['date', 'Open', 'High', 'Low', 'Close', 'Volume'],
+      ['date', 'Open', 'High', 'Low', 'Close', 'Volume']
+    ]
   }
- }
 }
 
 ### Return Stock Prediction(example TSLA)
@@ -95,16 +100,46 @@ Return:
  "stock": "TSLA"
  "data":
  {
-     "name": "Tesla",
-     "label": "TSLA",
-     "stock data":
-     {
-       "date": "2017-08-11"
-       "Open": "16"
-       "High": "41"
-       "Low": "16"
-       "Close": "16"
-       "Volume": "16"
-     }
+ 'name': 'Tesla',
+ 'label': 'TSLA',
+ 'data':
+   [
+     ['date', 'Open', 'High', 'Low', 'Close', 'Volume']
+   ]
+ }
+}
+
+
+### Return ETF (example TSLA)
+{
+ “requester”: “Server”,
+ “operation”: “ReturnETFData”,
+ "stock": "TSLA",
+ "data":
+  {
+  'name': 'Tesla',
+  'label': 'TSLA',
+  'data':
+    [
+      ['date', 'Open', 'High', 'Low', 'Close', 'Volume'],
+      ['date', 'Open', 'High', 'Low', 'Close', 'Volume'],
+      ['date', 'Open', 'High', 'Low', 'Close', 'Volume']
+    ]
+  }
+}
+
+### Return ETF Prediction(example TSLA)
+{
+ “requester”: “Server”,
+ “operation”: “ReturnETFPrediction”
+ "stock": "TSLA"
+ "data":
+ {
+ 'name': 'Tesla',
+ 'label': 'TSLA',
+ 'data':
+   [
+     ['date', 'Open', 'High', 'Low', 'Close', 'Volume']
+   ]
  }
 }
