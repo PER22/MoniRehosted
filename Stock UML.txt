@@ -1,0 +1,3 @@
+name IE Tesla
+label IE TSLA
+ArrayList{ArrayList{"date" "Open" "High" "Low" "Close" "Volume"}}
