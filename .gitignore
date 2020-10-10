@@ -154,10 +154,3 @@ version
 !/dev/ci/**/Gemfile.lock
 
 *.pyc
-Backend/.idea/misc.xml
-Backend/.idea/inspectionProfiles/profiles_settings.xml
-Backend/.idea/modules.xml
-Backend/.idea/vcs.xml
-Backend/.idea/Backend.iml
-Backend/src/__pycache__/Cloud.cpython-38.pyc
-Backend/src/Cloud.pyc
