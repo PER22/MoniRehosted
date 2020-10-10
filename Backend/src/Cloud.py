@@ -36,12 +36,13 @@ class Cloud:
                 self.database.get("stock", controlCommand["stock"])
             elif(controlCommand["operation"] == "GetStockPrediction"):
                 self.database.get("stock", controlCommand["stock"])
+
             elif(controlCommand["operation"] == "GetETFLabels"):
-                self.database.get("stock", controlCommand["etf"])
+                self.database.get("etf", controlCommand["etf"])
             elif(controlCommand["operation"] == "GetETFData"):
-                self.database.get("stock", controlCommand["etf"])
+                self.database.get("etf", controlCommand["etf"])
             elif(controlCommand["operation"] == "GetETFPrediction"):
-                self.database.get("stock", controlCommand["etf"])
+                self.database.get("etf", controlCommand["etf"])
             else:
                 print("OOPS something went wrong")
         else:
