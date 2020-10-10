@@ -7,4 +7,4 @@ class StockTypes:
         Stocks = new_ETFs
 
     def get(self, type, label):
-        return print("Type: " + str(type) + " | Label: " + str(label))
+        print("Type: " + str(type) + " | Label: " + str(label))
