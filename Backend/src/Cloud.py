@@ -25,7 +25,7 @@ class Cloud:
     Parameters      :   controlCommand
     ****************************************************************************************'''
     def getMessage(self, controlCommand):
-        if(controlCommand.has_key("trigger")):
+        if(controlCommand.has_key("operation")):
             if(controlCommand["trigger"] == "open" and controlCommand["status"] == 1):
                 self.trashCanLid.openLid()
             elif(controlCommand["trigger"] == "close" and controlCommand["status"] == 0):
