@@ -2,22 +2,22 @@ Request:
 
 ### Get Initial stocks
 {
- “requester”: “Client”,
- “operation”: “GetStockLabels”,
+ "requester": "Client",
+ "operation": "GetStockLabels",
  "amount": "100"
 }
 
 ### Get Stock (example TSLA)
 {
- “requester”: “Client”,
- “operation”: “GetStockData”,
+ "requester": "Client",
+ "operation": "GetStockData",
  "stock": "TSLA"
 }
 
 ### Get Stock Prediction(example TSLA)
 {
- “requester”: “Client”,
- “operation”: “GetStockPrediction”,
+ "requester": "Client",
+ "operation": "GetStockPrediction",
  "stock": "TSLA"
 }
 
@@ -26,23 +26,23 @@ Request:
 
 ### Get Initial ETF
 {
- “requester”: “Client”,
- “operation”: “GetETFLabels”,
+ "requester": "Client",
+ "operation": "GetETFLabels",
  "amount": "100"
 }
 
 ### Get ETF (example TSLA)
 {
- “requester”: “Client”,
- “operation”: “GetSETFData”,
- "stock": "TSLA"
+ "requester": "Client",
+ "operation": "GetSETFData",
+ "etf": "TSLA"
 }
 
 ### Get ETF Prediction(example TSLA)
 {
- “requester”: “Client”,
- “operation”: “GetETFPrediction”,
- "stock": "TSLA"
+ "requester": "Client",
+ "operation": "GetETFPrediction",
+ "etf": "TSLA"
 }
 
 
@@ -53,8 +53,8 @@ Return:
 
 ### Return Initial stocks
 {
- “requester”: “Server”,
- “operation”: “ReturnStockLabels”,
+ "requester": "Server",
+ "operation": "ReturnStockLabels",
  "amount": "100",
  "data": {
  {
@@ -77,34 +77,34 @@ Return:
 
 ### Return Stock (example TSLA)
 {
- “requester”: “Server”,
- “operation”: “ReturnStockData”,
+ "requester": "Server",
+ "operation": "ReturnStockData",
  "stock": "TSLA",
  "data":
   {
-  'name': 'Tesla',
-  'label': 'TSLA',
-  'data':
+  "name": "Tesla",
+  "label": "TSLA",
+  "data":
     [
-      ['date', 'Open', 'High', 'Low', 'Close', 'Volume'],
-      ['date', 'Open', 'High', 'Low', 'Close', 'Volume'],
-      ['date', 'Open', 'High', 'Low', 'Close', 'Volume']
+      ["date", "Open", "High", "Low", "Close", "Volume"],
+      ["date", "Open", "High", "Low", "Close", "Volume"],
+      ["date", "Open", "High", "Low", "Close", "Volume"]
     ]
   }
 }
 
 ### Return Stock Prediction(example TSLA)
 {
- “requester”: “Server”,
- “operation”: “ReturnStockPrediction”
+ "requester": "Server",
+ "operation": "ReturnStockPrediction"
  "stock": "TSLA"
  "data":
  {
- 'name': 'Tesla',
- 'label': 'TSLA',
- 'data':
+ "name": "Tesla",
+ "label": "TSLA",
+ "data":
    [
-     ['date', 'Open', 'High', 'Low', 'Close', 'Volume']
+     ["date", "Open", "High", "Low", "Close", "Volume"]
    ]
  }
 }
@@ -112,34 +112,34 @@ Return:
 
 ### Return ETF (example TSLA)
 {
- “requester”: “Server”,
- “operation”: “ReturnETFData”,
+ "requester": "Server",
+ "operation": "ReturnETFData",
  "stock": "TSLA",
  "data":
   {
-  'name': 'Tesla',
-  'label': 'TSLA',
-  'data':
+  "name": "Tesla",
+  "label": "TSLA",
+  "data":
     [
-      ['date', 'Open', 'High', 'Low', 'Close', 'Volume'],
-      ['date', 'Open', 'High', 'Low', 'Close', 'Volume'],
-      ['date', 'Open', 'High', 'Low', 'Close', 'Volume']
+      ["date", "Open", "High", "Low", "Close", "Volume"],
+      ["date", "Open", "High", "Low", "Close", "Volume"],
+      ["date", "Open", "High", "Low", "Close", "Volume"]
     ]
   }
 }
 
 ### Return ETF Prediction(example TSLA)
 {
- “requester”: “Server”,
- “operation”: “ReturnETFPrediction”
+ "requester": "Server",
+ "operation": "ReturnETFPrediction"
  "stock": "TSLA"
  "data":
  {
- 'name': 'Tesla',
- 'label': 'TSLA',
- 'data':
+ "name": "Tesla",
+ "label": "TSLA",
+ "data":
    [
-     ['date', 'Open', 'High', 'Low', 'Close', 'Volume']
+     ["date", "Open", "High", "Low", "Close", "Volume"]
    ]
  }
 }
