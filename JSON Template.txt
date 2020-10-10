@@ -1,6 +1,110 @@
-{\rtf1\ansi\ansicpg1252\cocoartf2573
-\cocoatextscaling0\cocoaplatform0{\fonttbl}
-{\colortbl;\red255\green255\blue255;}
-{\*\expandedcolortbl;;}
-\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+Request:
+
+### Get Initial stocks
+{
+ “requester”: “Client”,
+ “operation”: “GetStockLabels”,
+ "amount": "100"
+}
+
+### Get Stock (example TSLA)
+{
+ “requester”: “Client”,
+ “operation”: “GetStockData”,
+ "stock": "TSLA"
+}
+
+### Get Stock Prediction(example TSLA)
+{
+ “requester”: “Client”,
+ “operation”: “GetStockPrediction”,
+ "stock": "TSLA"
+}
+
+
+Return:
+
+### Return Initial stocks
+{
+ “requester”: “Server”,
+ “operation”: “ReturnStockLabels”,
+ "amount": "100",
+ "data": {
+ {
+   "name": "Tesla"
+   "label": "TSLA"
+   "open": "41"
+ },
+ {
+   "name": "Tesla"
+   "label": "TSLA"
+   "open": "41"
+ },
+ {
+   "name": "Tesla"
+   "label": "TSLA"
+   "open": "41"
+ }
+ }
+}
+
+### Return Stock (example TSLA)
+{
+ “requester”: “Server”,
+ “operation”: “ReturnStockData”,
+ "stock": "TSLA",
+ "data":
+ {
+    "name": "Tesla",
+    "label": "TSLA",
+    "stock data":
+    {
+      {
+        "date": "2017-08-11"
+        "Open": "16"
+        "High": "41"
+        "Low": "16"
+        "Close": "16"
+        "Volume": "16"
+      },
+      {
+        "date": "2017-09-11"
+        "Open": "16"
+        "High": "41"
+        "Low": "16"
+        "Close": "16"
+        "Volume": "16"
+      },
+      {
+        "date": "2017-10-11"
+        "Open": "16"
+        "High": "41"
+        "Low": "16"
+        "Close": "16"
+        "Volume": "16"
+      }
+    }
+  }
+ }
+}
+
+### Return Stock Prediction(example TSLA)
+{
+ “requester”: “Server”,
+ “operation”: “ReturnStockPrediction”
+ "stock": "TSLA"
+ "data":
+ {
+     "name": "Tesla",
+     "label": "TSLA",
+     "stock data":
+     {
+       "date": "2017-08-11"
+       "Open": "16"
+       "High": "41"
+       "Low": "16"
+       "Close": "16"
+       "Volume": "16"
+     }
+ }
 }
