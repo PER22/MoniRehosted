@@ -13,19 +13,19 @@ class JSON_Converter:
         if not isinstance(stock, Stock):
             return super(JSON_Converter).default(stock)
 
-        return str(stock.__dict__).replace("\'", "\"")
+        return stock.__dict__
 
     @staticmethod
     def convertListToJSON(stock):
 
-        return str(json.dumps(stock)).replace("\'", "\"")
+        return json.dumps(stock)
 
     @staticmethod
     def convertStocksToJSON(stocks):
 
         json = ""
         for stock in stocks:
-            json = json + str(JSON_Converter.convertStockToJSON(stock)) + ", "
+            json = json + JSON_Converter.convertStockToJSON(stock) + ", "
 
 
         return(json[:-2])
@@ -36,10 +36,10 @@ class JSON_Converter:
 
     @staticmethod
     def buildJSON(requester, operation, thirdField, thirdFieldData, data):
-        json = "{\"requester\": \"" + str(requester) + "\", " + \
-                "\"operation\": \"" + str(operation) + "\", " + \
-                "\"" + str(thirdField) + "\": \"" + str(thirdFieldData) + "\", " + \
-                "\"data\": " + str(data) + "}"
+        json = "{requester: " + str(requester) + ", " + \
+                "operation: " + str(operation) + ", " + \
+                "" + str(thirdField) + ": " + str(thirdFieldData) + ", " + \
+                "data: " + str(data) + "}"
 
         return(json)
 
