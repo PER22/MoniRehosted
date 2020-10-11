@@ -4,6 +4,7 @@ from pubnub import Pubnub
 from Database import Database
 from Stock import Stock
 from JSON_Converter import JSON_Converter
+import json
 
 class Cloud:
     # Initialize the Pubnub Keys
@@ -31,10 +32,16 @@ class Cloud:
     def getMessage(self, controlCommand):
         if(controlCommand.has_key("operation")):
             if(controlCommand["operation"] == "GetStockLabels"):
-                response = JSON_Converter.buildJSON("Server", "ReturnStockLabels", "amount", controlCommand["amount"],
-                            JSON_Converter.convertListToJSON(self.database.getLabels("stock", controlCommand["amount"])))
+                response = json.dumps(JSON_Converter.buildJSON("Server", "ReturnStockLabels", "amount", controlCommand["amount"],
+                            JSON_Converter.convertListToJSON(self.database.getLabels("stock", controlCommand["amount"]))))
+
+                print(response)
+                pubnub.publish(channel="FinanceSub", message=response)
             elif(controlCommand["operation"] == "GetStockData"):
-                self.database.get("stock", controlCommand["stock"])
+
+
+                response = JSON_Converter.convertStockToJSON(self.database.get("stock", controlCommand["stock"]))
+                pubnub.publish(channel="FinanceSub", message=response)
             elif(controlCommand["operation"] == "GetStockPrediction"):
                 self.database.get("stock", controlCommand["stock"])
 
