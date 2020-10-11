@@ -16,11 +16,6 @@ class JSON_Converter:
         return stock.__dict__
 
     @staticmethod
-    def convertListToJSON(stock):
-
-        return json.dumps(stock)
-
-    @staticmethod
     def convertStocksToJSON(stocks):
 
         json = ""
