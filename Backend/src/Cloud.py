@@ -6,12 +6,14 @@ from pubnub.enums import PNStatusCategory
 from pubnub.pnconfiguration import PNConfiguration
 from pubnub.pubnub import PubNub
 from Database import Database
+from time import sleep
 import time
 import os
 
 def my_publish_callback(envelope, status):
     # Check whether request successfully completed or not
     if not status.is_error():
+        print("Request could not be completed")
         pass
 class MySubscribeCallback(SubscribeCallback):
 
@@ -27,39 +29,42 @@ class MySubscribeCallback(SubscribeCallback):
         controlCommand = message.message
         print(message)
         if(controlCommand["requester"] == "Client"):
-
-
-            if(controlCommand["operation"] == "GetStockLabels"):
+            assetType = ("stock" if ("stock" in controlCommand["operation"].lower()) else "etf")
+            #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+            #-=-=-=-=-=-=-=- Stocks -=-=-==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+            #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+            if("Labels" in controlCommand["operation"]):
                 pubnub.publish().channel('FinanceSub').message({
                     "requester": "Server",
-                    "operation": "ReturnStockLabels",
-                    "amount": "100",
-                    "data": database.getLabels("stock", controlCommand["amount"])
+                    "operation": "ReturnStockLabels" if (assetType == "stock") else "ReturnETFLabels",
+                    "amount": controlCommand["amount"],
+                    "data": database.getLabels(assetType, controlCommand["amount"])
                 }).pn_async(my_publish_callback)
 
-            elif(controlCommand["operation"] == "GetStockData"):
-                response = JSON_Converter.convertStockToJSON(self.database.get("stock", controlCommand["stock"]))
-                #pubnub.publish(channel="FinanceSub", message=response)
-            elif(controlCommand["operation"] == "GetStockPrediction"):
+
+            elif("Data" in controlCommand["operation"]):
+                originalAsset = database.get(assetType, controlCommand[assetType])
+
+                for i in range(len(originalAsset)):
+                    print(str(i) + ". Chunk")
+                    pubnub.publish().channel('FinanceSub').message({
+                        "requester": "Server",
+                        "operation": "ReturnStockData" if (assetType == "stock") else "ReturnETFData",
+                        "assetType": controlCommand[assetType],
+                        "part": i,
+                        "total": len(originalAsset),
+                        "data": originalAsset[0].toJSON()
+                    }).pn_async(my_publish_callback)
+                    #sleep(0.2)
+
+
+            elif("Prediction" in controlCommand["operation"]):
                 pubnub.publish().channel('FinanceSub').message({
                     "requester": "Server",
-                    "operation": "ReturnStockLabels",
-                    "amount": "100",
-                    "data": database.getLabels("stock", controlCommand["amount"])
+                    "operation": "ReturnStockPredictions" if (assetType == "stock") else "ReturnETFPredictions",
+                    assetType: controlCommand[assetType],
+                    "data": JSON_Converter.convertStockToJSON(database.get(assetType, controlCommand[assetType]))
                 }).pn_async(my_publish_callback)
-
-            elif(controlCommand["operation"] == "GetETFLabels"):
-                pubnub.publish().channel('FinanceSub').message({
-                    "requester": "Server",
-                    "operation": "ReturnETFLabels",
-                    "amount": "100",
-                    "data": database.getLabels("etf", controlCommand["amount"])
-                }).pn_async(my_publish_callback)
-
-            elif(controlCommand["operation"] == "GetETFData"):
-                database.get("etf", controlCommand["etf"])
-            elif(controlCommand["operation"] == "GetETFPrediction"):
-                database.get("etf", controlCommand["etf"])
             else:
                 print("OOPS something went wrong")
         else:

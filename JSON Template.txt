@@ -84,36 +84,60 @@ Return:
 }
 ### Return Stock (example TSLA)
 {
- "requester": "Server",
- "operation": "ReturnStockData",
- "stock": "TSLA",
- "data":
-  {
-  "name": "Tesla",
-  "label": "TSLA",
-  "data":
-    [
-      ["date", "Open", "High", "Low", "Close", "Volume"],
-      ["date", "Open", "High", "Low", "Close", "Volume"],
-      ["date", "Open", "High", "Low", "Close", "Volume"]
+  "requester": "Server",
+  "operation": "ReturnStockData",
+  "stock": "TSLA",
+  "data": {
+    "name": "Tesla",
+    "label": "TSLA",
+    "data": [
+      [
+        "date",
+        "Open",
+        "High",
+        "Low",
+        "Close",
+        "Volume"
+      ],
+      [
+        "date",
+        "Open",
+        "High",
+        "Low",
+        "Close",
+        "Volume"
+      ],
+      [
+        "date",
+        "Open",
+        "High",
+        "Low",
+        "Close",
+        "Volume"
+      ]
     ]
   }
 }
 
 ### Return Stock Prediction(example TSLA)
 {
- "requester": "Server",
- "operation": "ReturnStockPrediction"
- "stock": "TSLA"
- "data":
- {
- "name": "Tesla",
- "label": "TSLA",
- "data":
-   [
-     ["date", "Open", "High", "Low", "Close", "Volume"]
-   ]
- }
+  "requester": "Server",
+  "operation": "ReturnStockPredictions",
+  "stock": "TSLA",
+  "data": {
+    "name": "Tesla",
+    "label": "TSLA",
+    "data": [
+      [
+        "date",
+        "Open",
+        "High",
+        "Low",
+        "Close",
+        "Volume"
+      ]
+    ]
+  }
 }
 
 
@@ -151,34 +175,58 @@ Return:
 
 ### Return ETF (example TSLA)
 {
- "requester": "Server",
- "operation": "ReturnETFData",
- "stock": "TSLA",
- "data":
-  {
-  "name": "Tesla",
-  "label": "TSLA",
-  "data":
-    [
-      ["date", "Open", "High", "Low", "Close", "Volume"],
-      ["date", "Open", "High", "Low", "Close", "Volume"],
-      ["date", "Open", "High", "Low", "Close", "Volume"]
+  "requester": "Server",
+  "operation": "ReturnETFData",
+  "etf": "TSLA",
+  "data": {
+    "name": "Tesla",
+    "label": "TSLA",
+    "data": [
+      [
+        "date",
+        "Open",
+        "High",
+        "Low",
+        "Close",
+        "Volume"
+      ],
+      [
+        "date",
+        "Open",
+        "High",
+        "Low",
+        "Close",
+        "Volume"
+      ],
+      [
+        "date",
+        "Open",
+        "High",
+        "Low",
+        "Close",
+        "Volume"
+      ]
     ]
   }
 }
 
 ### Return ETF Prediction(example TSLA)
 {
- "requester": "Server",
- "operation": "ReturnETFPrediction"
- "stock": "TSLA"
- "data":
- {
- "name": "Tesla",
- "label": "TSLA",
- "data":
-   [
-     ["date", "Open", "High", "Low", "Close", "Volume"]
-   ]
- }
+  "requester": "Server",
+  "operation": "ReturnETFPredictions",
+  "etf": "TSLA",
+  "data": {
+    "name": "Tesla",
+    "label": "TSLA",
+    "data": [
+      [
+        "date",
+        "Open",
+        "High",
+        "Low",
+        "Close",
+        "Volume"
+      ]
+    ]
+  }
 }
