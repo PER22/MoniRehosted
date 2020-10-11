@@ -55,7 +55,7 @@ class MySubscribeCallback(SubscribeCallback):
                         "total": len(originalAsset),
                         "data": originalAsset[0].toJSON()
                     }).pn_async(my_publish_callback)
-                    sleep(0.05)
+                    #sleep(0.05)
 
 
             elif("Prediction" in controlCommand["operation"]):

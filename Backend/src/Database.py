@@ -54,7 +54,7 @@ class Database:
         chunks = 0
         chunk_size = 0
 
-        for i in range(1, 100):
+        for i in range(1, 200):
             if(len(data) % i == 0):
                 chunks = int(len(data) / i)
                 chunk_size = i
