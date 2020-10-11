@@ -10,15 +10,17 @@ class JSON_Converter:
 
     @staticmethod
     def convertStockToJSON(stock):
+
+        if type(stock) == list:
+            stock = stock[0]
+
         if not isinstance(stock, Stock):
             return super(JSON_Converter).default(stock)
 
-        return stock.__dict__
+        convertedAsset = stock.__dict__
 
-    @staticmethod
-    def convertListToJSON(stock):
-
-        return json.dumps(stock)
+        print(convertedAsset)
+        return convertedAsset
 
     @staticmethod
     def convertStocksToJSON(stocks):

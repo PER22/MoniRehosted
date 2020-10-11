@@ -8,3 +8,10 @@ class Stock:
 
     def toString(self):
         return("Name: " + self.name + " | Label: " + self.label + " | Data: " + str(self.data))
+
+    def toJSON(self):
+        return{
+                "name": self.name,
+                "name": self.label,
+                "data": self.data
+              }

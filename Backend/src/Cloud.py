@@ -1,95 +1,82 @@
-#Import the Modules Required
-import time
-from pubnub import Pubnub
-from Database import Database
 from Stock import Stock
 from JSON_Converter import JSON_Converter
 import json
+from pubnub.callbacks import SubscribeCallback
+from pubnub.enums import PNStatusCategory
+from pubnub.pnconfiguration import PNConfiguration
+from pubnub.pubnub import PubNub
+from Database import Database
+from time import sleep
+import time
+import os
 
-class Cloud:
-    # Initialize the Pubnub Keys
-    g_pub_key = "pub-c-7cd0dca0-eb36-44f8-bfef-d692af28f7d4"
-    g_sub_key = "sub-c-01442846-0b27-11eb-8b70-9ebeb8f513a7"
-    database = Database([], [])
+def my_publish_callback(envelope, status):
+    # Check whether request successfully completed or not
+    if not status.is_error():
+        print("Request could not be completed")
+        pass
+class MySubscribeCallback(SubscribeCallback):
 
-    '''****************************************************************************************
-    Function Name   :   init
-    Description     :   Initalize the pubnub keys and Starts Subscribing
-    Parameters      :   None
-    ****************************************************************************************'''
     def __init__(self):
-        #Pubnub Initialization
-        global pubnub
-        pubnub = Pubnub(publish_key = self.g_pub_key, subscribe_key = self.g_sub_key)
-        pubnub.subscribe(channels = 'FinanceSub', callback = self.callback, error = self.callback, reconnect = self.reconnect, disconnect = self.disconnect)
+        global database
+        database = Database([], [])
+
+    def presence(self, pubnub, presence):
+        pass
+    def status(self, pubnub, status):
+        pass
+    def message(self, pubnub, message):
+        controlCommand = message.message
+        print(message)
+        if(controlCommand["requester"] == "Client"):
+            assetType = ("stock" if ("stock" in controlCommand["operation"].lower()) else "etf")
+            #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+            #-=-=-=-=-=-=-=- Stocks -=-=-==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+            #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+            if("Labels" in controlCommand["operation"]):
+                pubnub.publish().channel('FinanceSub').message({
+                    "requester": "Server",
+                    "operation": "ReturnStockLabels" if (assetType == "stock") else "ReturnETFLabels",
+                    "amount": controlCommand["amount"],
+                    "data": database.getLabels(assetType, controlCommand["amount"])
+                }).pn_async(my_publish_callback)
 
 
-    '''****************************************************************************************
-    Function Name   :   alexaControl
-    Description     :   Alexa Control, commands received and action performed
-    Parameters      :   controlCommand
-    ****************************************************************************************'''
-    def getMessage(self, controlCommand):
-        if(controlCommand.has_key("operation")):
-            if(controlCommand["operation"] == "GetStockLabels"):
-                response = json.dumps(JSON_Converter.buildJSON("Server", "ReturnStockLabels", "amount", controlCommand["amount"],
-                            JSON_Converter.convertListToJSON(self.database.getLabels("stock", controlCommand["amount"]))))
+            elif("Data" in controlCommand["operation"]):
+                originalAsset = database.get(assetType, controlCommand[assetType])
 
-                print(response)
-                pubnub.publish(channel="FinanceSub", message=response)
-            elif(controlCommand["operation"] == "GetStockData"):
+                for i in range(len(originalAsset)):
+                    print(str(i) + ". Chunk")
+                    pubnub.publish().channel('FinanceSub').message({
+                        "requester": "Server",
+                        "operation": "ReturnStockData" if (assetType == "stock") else "ReturnETFData",
+                        "assetType": controlCommand[assetType],
+                        "part": i,
+                        "total": len(originalAsset),
+                        "data": originalAsset[0].toJSON()
+                    }).pn_async(my_publish_callback)
+                    #sleep(0.2)
 
 
-                response = JSON_Converter.convertStockToJSON(self.database.get("stock", controlCommand["stock"]))
-                pubnub.publish(channel="FinanceSub", message=response)
-            elif(controlCommand["operation"] == "GetStockPrediction"):
-                self.database.get("stock", controlCommand["stock"])
-
-            elif(controlCommand["operation"] == "GetETFLabels"):
-                response = JSON_Converter.buildJSON("Server", "ReturnETFLabels", "amount", controlCommand["amount"],
-                            JSON_Converter.convertListToJSON(self.database.getLabels("stock", controlCommand["amount"])))
-            elif(controlCommand["operation"] == "GetETFData"):
-                self.database.get("etf", controlCommand["etf"])
-            elif(controlCommand["operation"] == "GetETFPrediction"):
-                self.database.get("etf", controlCommand["etf"])
+            elif("Prediction" in controlCommand["operation"]):
+                pubnub.publish().channel('FinanceSub').message({
+                    "requester": "Server",
+                    "operation": "ReturnStockPredictions" if (assetType == "stock") else "ReturnETFPredictions",
+                    assetType: controlCommand[assetType],
+                    "data": JSON_Converter.convertStockToJSON(database.get(assetType, controlCommand[assetType]))
+                }).pn_async(my_publish_callback)
             else:
                 print("OOPS something went wrong")
         else:
             pass
 
+class Cloud:
+    def __init__(self):
+        pnconfig = PNConfiguration()
+        pnconfig.publish_key = 'pub-c-7cd0dca0-eb36-44f8-bfef-d692af28f7d4'
+        pnconfig.subscribe_key = 'sub-c-01442846-0b27-11eb-8b70-9ebeb8f513a7'
+        global pubnub
+        pubnub = PubNub(pnconfig)
 
-    '''****************************************************************************************
-    Function Name   :   callback
-    Description     :   Waits for the message from the alexaTrigger channel
-    Parameters      :   message - Sensor Status sent from the hardware
-                        channel - channel for the callback
-    ****************************************************************************************'''
-    def callback(self, message, channel):
-        if(message.has_key("requester") and (message["requester"] == "Client")):
-            self.getMessage(message)
-        else:
-            pass
-
-    '''****************************************************************************************
-    Function Name   :   error
-    Description     :   If error in the channel, prints the error
-    Parameters      :   message - error message
-    ****************************************************************************************'''
-    def error(self, message):
-        print("ERROR : " + str(message))
-
-    '''****************************************************************************************
-    Function Name   :   reconnect
-    Description     :   Responds if server connects with pubnub
-    Parameters      :   message
-    ****************************************************************************************'''
-    def reconnect(self, message):
-        print("RECONNECTED")
-
-    '''****************************************************************************************
-    Function Name   :   disconnect
-    Description     :   Responds if server disconnects from pubnub
-    Parameters      :   message
-    ****************************************************************************************'''
-    def disconnect(self, message):
-        print("DISCONNECTED")
+        pubnub.add_listener(MySubscribeCallback())
+        pubnub.subscribe().channels("FinanceSub").execute()
