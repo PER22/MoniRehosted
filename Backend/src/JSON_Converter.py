@@ -36,10 +36,10 @@ class JSON_Converter:
 
     @staticmethod
     def buildJSON(requester, operation, thirdField, thirdFieldData, data):
-        json = "{requester: " + str(requester) + ", " + \
-                "operation: " + str(operation) + ", " + \
-                "" + str(thirdField) + ": " + str(thirdFieldData) + ", " + \
-                "data: " + str(data) + "}"
+        json = {'requester': str(requester),
+                'operation': str(operation) ,
+                str(thirdField): str(thirdFieldData),
+                'data': str(data)}
 
         return(json)
 
