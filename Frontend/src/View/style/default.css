@@ -1,0 +1,135 @@
+/* UNIVERSAL */
+body {
+  background: linear-gradient(#ffffff 80%, #f2f2f2);
+  background-attachment: fixed;
+	background-position: center top;
+	background-repeat: no-repeat;
+	background-size: 100vw auto;
+
+  font-family: 'Raleway', sans-serif;
+  font-family: 'Montserrat', sans-serif;
+}
+
+h1 {
+  font-family: 'Raleway', sans-serif;
+  font-size: 3em;
+}
+
+h2 {
+  font-family: 'Raleway', sans-serif;
+  font-size: 2.5em;
+}
+
+h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2em;
+}
+
+h4 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.3em;
+}
+
+p {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.25em;
+  color: #4F4F4F;
+}
+
+form {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.25em;
+    color: #4F4F4F;
+}
+
+button {
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+ol {
+	list-style-type: none;
+}
+
+/*Header*/
+.top-bar-logo {
+  width: auto;
+  height: 100px;
+}
+
+.top-bar {
+  height: 10vh;
+  min-height: 20px;
+  display: flex;
+}
+
+.stock-information {
+  width: 80vw;
+  text-align: center;
+
+  padding: 5px;
+}
+
+/*Portfolio Section*/
+.portfolio {
+  min-width: 90%;
+  min-width: 90vw;
+
+  padding: 0;
+
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 3vh;
+  margin-bottom: 3vh;
+}
+
+.portfolio-content {
+  min-height: 79%;
+  min-height: 79vh;
+
+  display: flex;
+  margin-top: 2vh;
+  padding-top: 2vh;
+
+  border-top: 1px solid gray;
+}
+
+.portfolio-content table{
+  margin-top: 2vh;
+}
+
+/* Stocks Section (Left Side)*/
+.stock-sect {
+	width: 20%;
+	float: left;
+}
+
+.stock-sect table {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.stock-sect tr {
+  min-height: 0px;
+
+  padding-left: auto;
+  padding-right: auto;
+}
+
+/* Analytics Section (Right Side)*/
+.analytics-sect {
+	width: 80%;
+	height: 1-;
+	float: right;
+}
+
+
+
+
+
+

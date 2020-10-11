@@ -1,18 +1,42 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="UTF-8">
-    <title>Hello World!</title>
     <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
-  </head>
-  <body>
-    <h1>Hello World!</h1>
-    We are using node <script>document.write(process.versions.node)</script>,
-    Chrome <script>document.write(process.versions.chrome)</script>,
-    and Electron <script>document.write(process.versions.electron)</script>.
-  <script src="src/StockGenerator.js">
+    <!--<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />-->
+    <meta http-equiv="Content-Security-Policy" content="default-src * self blob: data: gap:; style-src * self 'unsafe-inline' blob: data: gap:; script-src * 'self' 'unsafe-eval' 'unsafe-inline' blob: data: gap:; object-src * 'self' blob: data: gap:; img-src * self 'unsafe-inline' blob: data: gap:; connect-src self * 'unsafe-inline' blob: data: gap:; frame-src * self blob: data: gap:;">
+    <!--Script Includes-->
+    <script src="../Model/Stock.js"></script>
+    <script src="../Model/Portfolio.js"></script>
+    <script src="../Controller/displayScripts.js"></script>
+    <script src="../Controller/utility.js"></script>
+    <script src="../Controller/inits.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <!-- Stylesheets -->
+    <link rel="stylesheet" type="text/css" href="style/default.css">
 
-  </script>
-  </body>
+    <title>Stonks</title>
+</head>
+<body onload="initializePortfolio()">
+    <!--Portfolio Section-->
+    <div class="portfolio container">
+
+        <div class="top-bar">
+            <div class="stock-information">
+                <h3 id="selectedStockName"></h3>
+            </div>
+        </div>
+
+        <div class="portfolio-content" id="portfolio">
+            <!-- Stock Selection Section-->
+            <div class="stock-sect" id="stockHeader">
+            </div>            
+
+            <!-- Stock Viewing Section-->
+            <div class="analytics-sect">
+                <canvas id="myChart" width="200" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+</body>
 </html>
