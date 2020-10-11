@@ -1,8 +1,11 @@
-
 .DS_Store
 Backend/.idea/workspace.xml
 # Prerequisites
 *.d
+
+
+#Patricks environment
+*.ipynb
 
 # Compiled Object files
 *.slo
