@@ -38,7 +38,10 @@ class Cloud:
                 print(response)
                 pubnub.publish(channel="FinanceSub", message=response)
             elif(controlCommand["operation"] == "GetStockData"):
-                self.database.get("stock", controlCommand["stock"])
+
+
+                response = JSON_Converter.convertStockToJSON(self.database.get("stock", controlCommand["stock"]))
+                pubnub.publish(channel="FinanceSub", message=response)
             elif(controlCommand["operation"] == "GetStockPrediction"):
                 self.database.get("stock", controlCommand["stock"])
 
