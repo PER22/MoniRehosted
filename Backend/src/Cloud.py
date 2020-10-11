@@ -35,7 +35,7 @@ class Cloud:
                             JSON_Converter.convertListToJSON(self.database.getLabels("stock", controlCommand["amount"])))
 
                 print(response)
-                pubnub.publish(channel="FinanceSub", message=JSON_Converter.convertListToJSON(self.database.getLabels("stock", controlCommand["amount"])))
+                pubnub.publish(channel="FinanceSub", message=response.replace("\"", """))
             elif(controlCommand["operation"] == "GetStockData"):
                 self.database.get("stock", controlCommand["stock"])
             elif(controlCommand["operation"] == "GetStockPrediction"):
