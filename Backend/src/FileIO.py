@@ -80,7 +80,21 @@ class FileIO:
         
         return (self.all_stocks, self.all_etfs)
 
-
+    def save(self:
+        #save Stocks
+        for each_ticker in self.all_stocks:
+            file_object = open(self.stocks_directory + each_ticker + ".us.txt",'w')
+            file_to_build = "Date,Open,High,Low,Close,Volume,OpenInt\n"
+            for each_entry in self.all_stocks[each_ticker].data:
+                line_to_build = ""
+                for i in range(6):
+                    line_to_build = line_to_build + str(self.all_stocks[each_ticker].data[each_entry][i]) + ", "
+                line_to_build = line_to_build + str(self.all_stocks[each_ticker].data[each_entry][6]) + "\n"
+                file_to_build += line_to_build
+            file_object.write(file_to_build)
+            file_object.close()
+            
+        #save ETFs
 
 
 
