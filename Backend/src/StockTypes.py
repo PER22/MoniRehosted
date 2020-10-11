@@ -18,7 +18,7 @@ class StockTypes:
 
 
     #-=-=-=- Helper Function -=-=-=-=-=-
-    def createDummyStock(self) -> Stock:
+    def createDummyStock(self):
         return(Stock("Tesla", "TSLA", [["date","Open","High","Low","Close", "Volume"],
                                        ["date","Open","High","Low","Close", "Volume"],
                                        ["date","Open","High","Low","Close", "Volume"]]))
