@@ -32,7 +32,7 @@ class Cloud:
     def getMessage(self, controlCommand):
         if(controlCommand.has_key("operation")):
             if(controlCommand["operation"] == "GetStockLabels"):
-                response = json.dump(JSON_Converter.buildJSON("Server", "ReturnStockLabels", "amount", controlCommand["amount"],
+                response = json.dumps(JSON_Converter.buildJSON("Server", "ReturnStockLabels", "amount", controlCommand["amount"],
                             JSON_Converter.convertListToJSON(self.database.getLabels("stock", controlCommand["amount"]))))
 
                 print(response)
