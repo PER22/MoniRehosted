@@ -12,7 +12,7 @@ class StockTypes:
         print("Type: " + str(type) + " | Label: " + str(label))
         return(self.createDummyStock())
 
-    def getStockLabels(self, type, amount):
+    def getLabels(self, type, amount):
         print("Type: " + str(type) + " | Amount: " + str(amount))
         return(self.createDummyLabels())
 

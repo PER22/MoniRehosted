@@ -31,14 +31,16 @@ class Cloud:
     def getMessage(self, controlCommand):
         if(controlCommand.has_key("operation")):
             if(controlCommand["operation"] == "GetStockLabels"):
-                self.database.get("stock", controlCommand["stock"])
+                response = JSON_Converter.buildJSON("Server", "ReturnStockLabels", "amount", controlCommand["amount"],
+                            JSON_Converter.convertListToJSON(self.database.getLabels("stock", controlCommand["amount"])))
             elif(controlCommand["operation"] == "GetStockData"):
                 self.database.get("stock", controlCommand["stock"])
             elif(controlCommand["operation"] == "GetStockPrediction"):
                 self.database.get("stock", controlCommand["stock"])
 
             elif(controlCommand["operation"] == "GetETFLabels"):
-                self.database.get("etf", controlCommand["etf"])
+                response = JSON_Converter.buildJSON("Server", "ReturnETFLabels", "amount", controlCommand["amount"],
+                            JSON_Converter.convertListToJSON(self.database.getLabels("stock", controlCommand["amount"])))
             elif(controlCommand["operation"] == "GetETFData"):
                 self.database.get("etf", controlCommand["etf"])
             elif(controlCommand["operation"] == "GetETFPrediction"):
