@@ -1,13 +1,15 @@
 /* *********************************************************
  
 ********************************************************** */
+
 class Stock{
     constructor(name, label, data){
         this.name = name;
         this.label = label;
         this.data =data;
     }
-};
+}
+
 
 class StockData{
     constructor(date, open, high, low, close, volume){
@@ -18,7 +20,6 @@ class StockData{
         this.close = close;
         this.volume = volume;
     }
-};
+}
 
-exports.Stock =Stock
-exports.StockData =StockData
+module.exports = {Stock, StockData}
