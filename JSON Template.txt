@@ -90,6 +90,8 @@ Return:
   "data": {
     "name": "Tesla",
     "label": "TSLA",
+    "part": 1,
+    "total": 3,
     "data": [
       [
         "date",
@@ -116,6 +118,46 @@ Return:
         "Volume"
       ]
     ]
+  }
+}
+
+alternatively (because of reasons)
+
+{
+  "requester": "Server",
+  "operation": "ReturnStockData",
+  "stock": "TSLA",
+  "data": {
+    "name": "Tesla",
+    "label": "TSLA",
+    "part": 1,
+    "data": [
+      [
+        "date",
+        "Open",
+        "High",
+        "Low",
+        "Close",
+        "Volume"
+      ],
+      [
+        "date",
+        "Open",
+        "High",
+        "Low",
+        "Close",
+        "Volume"
+      ],
+      [
+        "date",
+        "Open",
+        "High",
+        "Low",
+        "Close",
+        "Volume"
+      ]
+    ],
+    "total": 3
   }
 }
 
@@ -181,6 +223,8 @@ Return:
   "data": {
     "name": "Tesla",
     "label": "TSLA",
+    "part": 1,
+    "total": 3,
     "data": [
       [
         "date",
@@ -207,6 +251,46 @@ Return:
         "Volume"
       ]
     ]
+  }
+}
+
+alternatively (because of reasons)
+
+{
+  "requester": "Server",
+  "operation": "ReturnETFData",
+  "etf": "TSLA",
+  "data": {
+    "name": "Tesla",
+    "label": "TSLA",
+    "part": 1,
+    "data": [
+      [
+        "date",
+        "Open",
+        "High",
+        "Low",
+        "Close",
+        "Volume"
+      ],
+      [
+        "date",
+        "Open",
+        "High",
+        "Low",
+        "Close",
+        "Volume"
+      ],
+      [
+        "date",
+        "Open",
+        "High",
+        "Low",
+        "Close",
+        "Volume"
+      ]
+    ],
+    "total": 3
   }
 }
 
