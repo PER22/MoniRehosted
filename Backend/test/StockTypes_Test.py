@@ -1,21 +1,15 @@
+from unittest import TestCase
+from StockTypes import StockTypes
 from Stock import Stock
 
-class StockTypes:
-    ETFs = []
-    Stocks = []
+class StockTypes_Test(TestCase):
+    database = StockTypes([], [])
 
-    def __init__(self, new_Stocks, new_ETFs):
-        ETFs = new_Stocks
-        Stocks = new_ETFs
+    def test_get(self):
+        self.fail()
 
-    def get(self, type, label):
-        print("Type: " + str(type) + " | Label: " + str(label))
-        return(self.createDummyStock())
-
-    def getStockLabels(self, type, amount):
-        print("Type: " + str(type) + " | Amount: " + str(amount))
-        return(self.createDummyLabels())
-
+    def test_get_stock_labels(self):
+        self.fail()
 
     #-=-=-=- Helper Function -=-=-=-=-=-
     def createDummyStock(self) -> Stock:
@@ -34,6 +28,3 @@ class StockTypes:
                   ["Tesla", "TSLA", "41"]]
 
         return(labels)
-
-
-

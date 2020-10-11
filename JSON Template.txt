@@ -22,6 +22,7 @@ Request:
 }
 
 
+################################################################################
 
 
 ### Get Initial ETF
@@ -47,7 +48,9 @@ Request:
 
 
 
-
+################################################################################
+################################################################################
+################################################################################
 
 Return:
 
@@ -56,23 +59,12 @@ Return:
  "requester": "Server",
  "operation": "ReturnStockLabels",
  "amount": "100",
- "data": {
- {
-   "name": "Tesla"
-   "label": "TSLA"
-   "open": "41"
- },
- {
-   "name": "Tesla"
-   "label": "TSLA"
-   "open": "41"
- },
- {
-   "name": "Tesla"
-   "label": "TSLA"
-   "open": "41"
- }
- }
+ "data": [
+   ["Tesla", "TSLA", "41"],
+   ["Tesla", "TSLA", "41"],
+   ["Tesla", "TSLA", "41"],
+   ["Tesla", "TSLA", "41"]
+ ]
 }
 
 ### Return Stock (example TSLA)
@@ -109,6 +101,22 @@ Return:
  }
 }
 
+
+################################################################################
+
+
+### Return Initial ETF
+{
+ "requester": "Server",
+ "operation": "ReturnETFLabels",
+ "amount": "100",
+ "data": [
+   ["Tesla", "TSLA", "41"],
+   ["Tesla", "TSLA", "41"],
+   ["Tesla", "TSLA", "41"],
+   ["Tesla", "TSLA", "41"]
+ ]
+}
 
 ### Return ETF (example TSLA)
 {

@@ -13,7 +13,12 @@ class JSON_Converter:
         if not isinstance(stock, Stock):
             return super(JSON_Converter).default(stock)
 
-        return stock.__dict__
+        return str(stock.__dict__).replace("\'", "\"")
+
+    @staticmethod
+    def convertListToJSON(stock):
+
+        return str(json.dumps(stock)).replace("\'", "\"")
 
     @staticmethod
     def convertStocksToJSON(stocks):
@@ -24,6 +29,20 @@ class JSON_Converter:
 
 
         return(json[:-2])
+
+
+
+
+
+    @staticmethod
+    def buildJSON(requester, operation, thirdField, thirdFieldData, data):
+        json = "{\"requester\": \"" + str(requester) + "\", " + \
+                "\"operation\": \"" + str(operation) + "\", " + \
+                "\"" + str(thirdField) + "\": \"" + str(thirdFieldData) + "\", " + \
+                "\"data\": " + str(data) + "}"
+
+        return(json)
+
 
     @staticmethod
     def customtDecoder(dict):
