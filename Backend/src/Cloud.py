@@ -1,11 +1,15 @@
 #Import the Modules Required
 import time
 from pubnub import Pubnub
+from StockTypes import StockTypes
+from Stock import Stock
+from JSON_Converter import JSON_Converter
 
 class Cloud:
     # Initialize the Pubnub Keys
     g_pub_key = "pub-c-7cd0dca0-eb36-44f8-bfef-d692af28f7d4"
     g_sub_key = "sub-c-01442846-0b27-11eb-8b70-9ebeb8f513a7"
+    database = StockTypes([], [])
 
     '''****************************************************************************************
     Function Name   :   init
@@ -26,10 +30,21 @@ class Cloud:
     ****************************************************************************************'''
     def getMessage(self, controlCommand):
         if(controlCommand.has_key("operation")):
-            if(controlCommand["trigger"] == "open" and controlCommand["status"] == 1):
-                self.trashCanLid.openLid()
-            elif(controlCommand["trigger"] == "close" and controlCommand["status"] == 0):
-                self.trashCanLid.closeLid()
+            if(controlCommand["operation"] == "GetStockLabels"):
+                response = JSON_Converter.buildJSON("Server", "ReturnStockLabels", "amount", controlCommand["amount"],
+                            JSON_Converter.convertListToJSON(self.database.getLabels("stock", controlCommand["amount"])))
+            elif(controlCommand["operation"] == "GetStockData"):
+                self.database.get("stock", controlCommand["stock"])
+            elif(controlCommand["operation"] == "GetStockPrediction"):
+                self.database.get("stock", controlCommand["stock"])
+
+            elif(controlCommand["operation"] == "GetETFLabels"):
+                response = JSON_Converter.buildJSON("Server", "ReturnETFLabels", "amount", controlCommand["amount"],
+                            JSON_Converter.convertListToJSON(self.database.getLabels("stock", controlCommand["amount"])))
+            elif(controlCommand["operation"] == "GetETFData"):
+                self.database.get("etf", controlCommand["etf"])
+            elif(controlCommand["operation"] == "GetETFPrediction"):
+                self.database.get("etf", controlCommand["etf"])
             else:
                 print("OOPS something went wrong")
         else:
@@ -43,7 +58,7 @@ class Cloud:
                         channel - channel for the callback
     ****************************************************************************************'''
     def callback(self, message, channel):
-        if(message.has_key("requester")):
+        if(message.has_key("requester") and (message["requester"] == "Client")):
             self.getMessage(message)
         else:
             pass
