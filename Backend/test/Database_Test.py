@@ -1,9 +1,9 @@
 from unittest import TestCase
-from StockTypes import StockTypes
+from Database import Database
 from Stock import Stock
 
-class StockTypes_Test(TestCase):
-    database = StockTypes([], [])
+class Database_Test(TestCase):
+    database = Database([], [])
 
     def test_get(self):
         self.fail()

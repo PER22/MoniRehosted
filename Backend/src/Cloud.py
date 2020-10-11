@@ -1,7 +1,7 @@
 #Import the Modules Required
 import time
 from pubnub import Pubnub
-from StockTypes import StockTypes
+from Database import Database
 from Stock import Stock
 from JSON_Converter import JSON_Converter
 
@@ -9,7 +9,7 @@ class Cloud:
     # Initialize the Pubnub Keys
     g_pub_key = "pub-c-7cd0dca0-eb36-44f8-bfef-d692af28f7d4"
     g_sub_key = "sub-c-01442846-0b27-11eb-8b70-9ebeb8f513a7"
-    database = StockTypes([], [])
+    database = Database([], [])
 
     '''****************************************************************************************
     Function Name   :   init
