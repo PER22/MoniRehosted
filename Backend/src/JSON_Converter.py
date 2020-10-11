@@ -13,7 +13,7 @@ class JSON_Converter:
         if not isinstance(stock, Stock):
             return super(JSON_Converter).default(stock)
 
-        return stock.__dict__
+        return json.dumps(stock)#return stock.__dict__
 
     @staticmethod
     def convertListToJSON(stock):
