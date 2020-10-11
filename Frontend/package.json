@@ -7,5 +7,8 @@
     "start": "electron ."
   },
   "author": "FTAH",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "pubnub": "^4.29.9"
+  }
 }
