@@ -77,7 +77,8 @@ class FileIO:
         total_time = round(end_time - start_time)
         
         print(str(count_rows_processed) + " rows processed in " + str(total_time) + " seconds.")    
-
+        
+        return (self.all_stocks, self.all_etfs)
 
 
 
