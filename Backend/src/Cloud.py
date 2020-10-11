@@ -4,6 +4,9 @@ from pubnub.callbacks import SubscribeCallback
 from pubnub.enums import PNStatusCategory, PNOperationType
 from pubnub.pnconfiguration import PNConfiguration
 from pubnub.pubnub import PubNub
+
+
+
 from StockTypes import StockTypes
 from Stock import Stock
 from JSON_Converter import JSON_Converter
@@ -81,14 +84,9 @@ class Cloud:
 
         pnconfig.subscribe_key = self.g_pub_key
         pnconfig.publish_key = self.g_sub_key
-        pnconfig.uuid = 'FinanceServerUUID98721340123984'
+        #pnconfig.uuid = 'FinanceServerUUID98721340123984'
 
         pubnub = PubNub(pnconfig)
 
         pubnub.add_listener(MySubscribeCallback())
-        pubnub.subscribe().channels('FinanceSub').execute()
-
-        pubnub.publish().channel("my_channel").message({
-            'name': 'Alex',
-            'online': True
-        }).sync()
+        pubnub.subscribe().channels("FinanceSub").execute()
