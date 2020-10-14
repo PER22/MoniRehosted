@@ -12,6 +12,7 @@
     <script src="../Controller/utility.js"></script>
     <script src="../Controller/inits.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.29.9.js"></script>
     <!-- Stylesheets -->
     <link rel="stylesheet" type="text/css" href="style/default.css">
 
@@ -19,22 +20,34 @@
 </head>
 <body onload="initializePortfolio()">
     <!--Portfolio Section-->
-    <div class="portfolio container">
-
-        <div class="top-bar">
-            <div class="stock-information">
-                <h3 id="selectedStockName"></h3>
-            </div>
-        </div>
-
+    <div class="portfolio-container">
         <div class="portfolio-content" id="portfolio">
             <!-- Stock Selection Section-->
-            <div class="stock-sect" id="stockHeader">
-            </div>            
+            <div class="stock-selection-sect" id="stockHeader" onclick=displayStockList()>
+                
+            </div>
 
             <!-- Stock Viewing Section-->
             <div class="analytics-sect">
-                <canvas id="myChart" width="200" height="200"></canvas>
+                <div class="stock-header-sect">
+                    <label class="header-label">Tesla, Inc.</label>
+                </div>
+                <div class="stock-details-sect">
+                    <div class="stock-details-price">
+                        <label class="detail-label-large" id="current-price-label">276.05</label>
+                    </div>
+                    <div class="stock-details-close-open">
+                        <div>
+                            <label class="detail-label" id="close-label">Previous Close</label>
+                        </div>
+                        <div style="padding-top:10px">
+                            <label class="detail-label" id="open-label">Open</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart-sect">
+                    <canvas id="myChart"></canvas>
+                </div>
             </div>
         </div>
     </div>
