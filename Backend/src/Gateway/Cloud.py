@@ -1,13 +1,8 @@
 from Model.Stock import Stock
-from Model.JSON_Converter import JSON_Converter
-import json
 from pubnub.callbacks import SubscribeCallback
-from pubnub.enums import PNStatusCategory
 from pubnub.pnconfiguration import PNConfiguration
 from pubnub.pubnub import PubNub
 from Model.Database import Database
-from time import sleep
-import time
 import csv
 
 import math
@@ -59,15 +54,14 @@ class MySubscribeCallback(SubscribeCallback):
                         "total": len(originalAsset),
                         "data": originalAsset[i].toJSON()
                     }).pn_async(my_publish_callback)
-                    #sleep(0.05)
 
 
             elif("Prediction" in controlCommand["operation"]):
                 pubnub.publish().channel('FinanceSub').message({
                     "requester": "Server",
                     "operation": "ReturnStockPredictions" if (assetType == "stock") else "ReturnETFPredictions",
-                    assetType: controlCommand[assetType],
-                    "data": JSON_Converter.convertStockToJSON(database.get(assetType, controlCommand[assetType]))
+                    "assetType": controlCommand[assetType],
+                    "data": Stock("Your", "mama", {"open": "4", "cclose": "5"})
                 }).pn_async(my_publish_callback)
             else:
                 print("OOPS something went wrong")

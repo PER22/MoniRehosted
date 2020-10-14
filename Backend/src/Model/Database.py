@@ -2,7 +2,6 @@ from Model.Stock import Stock
 import csv
 import numpy as np
 import os
-import json
 import math
 
 
@@ -95,15 +94,21 @@ class Database:
 
         print("Importing Stocks")
         #Use stock tickers to create an object for each ticker:
+        total = len(self.stock_ticker_list)
+        current = 1
         for each_ticker1 in self.stock_ticker_list:
 
             with open(self.stocks_directory + str(each_ticker1) + ".us.txt", "r") as f:
                 data1 = list(csv.DictReader(f))
 
             self.Stocks[each_ticker1] = Stock("", each_ticker1, data1)
+            self.printCompletion(total, current)
+            current += 1
 
         print("Importing Stocks Complete\n\nImporting ETFs")
 
+        total = len(self.etf_ticker_list)
+        current = 1
         #Use ETF tickers to create an object for each:
         for each_ticker2 in self.etf_ticker_list:
 
@@ -111,6 +116,8 @@ class Database:
                 data2 = list(csv.DictReader(f))
 
             self.ETFs[each_ticker2] = Stock("", each_ticker2, data2)
+            self.printCompletion(total, current)
+            current += 1
 
         self.loaded = True
 
@@ -174,37 +181,6 @@ class Database:
 
 
     #-=-=-=- Helper Function -=-=-=-=-=-
-    def createDummyStock(self):
-        dirname = (os.path.dirname(__file__))[:-9] #adrd
-        filename = os.path.join(dirname, 'data/ETFs/amjl.us.txt')
-
-        with open(filename, 'r') as f:
-            reader = csv.reader(f, delimiter=',')
-            headers = next(reader)
-            data = np.array(list(reader))
-
-        #data[:,1:6] = np.round(np.array(data[:,1:6].astype(float)*100), 3)
-        data[:,0:6] = np.array(data[:,0:6].astype(str))
-        data = data[:,0:6]
-
-        chunks = 0
-        chunk_size = 0
-
-        for i in range(1, 200):
-            if(len(data) % i == 0):
-                chunks = int(len(data) / i)
-                chunk_size = i
-
-        print(chunks)
-        chunked_data = np.split(data, chunks)
-
-        tempStock = []
-
-        for i in range(chunks):
-            tempStock.append(Stock("Tesla", "TSLA", chunked_data[i].tolist()))
-
-        return(tempStock)
-
     def createDummyLabels(self):
 
         labels = [{"name": "Tesla", "label": "TSLA", "price":"12"},
@@ -234,3 +210,25 @@ class Database:
                   {"name": "Xcel Energy", "label": "XEL", "price":"653"}]
 
         return(labels)
+
+    def printCompletion(self, total, current):
+        if(int(total / 10) == current):
+            print("10% Complete")
+        elif(int(total / 10) * 2 == current):
+            print("20% Complete")
+        elif(int(total / 10) * 3 == current):
+            print("30% Complete")
+        elif(int(total / 10) * 4 == current):
+            print("40% Complete")
+        elif(int(total / 2) == current):
+            print("50% Complete")
+        elif(int(total / 10) * 6 == current):
+            print("60% Complete")
+        elif(int(total / 10) * 7 == current):
+            print("70% Complete")
+        elif(int(total / 10) * 8 == current):
+            print("80% Complete")
+        elif(int(total / 10) * 9 == current):
+            print("90% Complete")
+        elif(total == current):
+            print("100% Complete")
