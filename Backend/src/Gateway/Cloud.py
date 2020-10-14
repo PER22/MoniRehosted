@@ -8,6 +8,9 @@ from pubnub.pubnub import PubNub
 from Model.Database import Database
 from time import sleep
 import time
+import csv
+
+import math
 import os
 
 def my_publish_callback(envelope, status):
@@ -20,6 +23,7 @@ class MySubscribeCallback(SubscribeCallback):
     def __init__(self):
         global database
         database = Database()
+        database.load()
 
     def presence(self, pubnub, presence):
         pass
@@ -44,16 +48,18 @@ class MySubscribeCallback(SubscribeCallback):
 
             elif("Data" in controlCommand["operation"]):
                 originalAsset = database.get(assetType, controlCommand[assetType])
-                #originalAsset = (database.get(assetType, "amjl"))
+                #originalAsset = testReturn()
                 for i in range(len(originalAsset)):
                     print(str(i) + ". Chunk")
+                    print(originalAsset[i].toJSON())
+                    #print(str(originalAsset[i].toJSON()) + "\n\n\n\n")
                     pubnub.publish().channel('FinanceSub').message({
                         "requester": "Server",
                         "operation": "ReturnStockData" if (assetType == "stock") else "ReturnETFData",
                         "assetType": controlCommand[assetType],
                         "part": i,
                         "total": len(originalAsset),
-                        "data": originalAsset[0].toJSON()
+                        "data": originalAsset[i].toJSON()
                     }).pn_async(my_publish_callback)
                     #sleep(0.05)
 
@@ -80,3 +86,33 @@ class Cloud:
 
         pubnub.add_listener(MySubscribeCallback())
         pubnub.subscribe().channels("FinanceSub").execute()
+
+
+
+
+
+def testReturn():
+    dirname = (os.path.dirname(__file__))[:-11] #adrd
+    filename = os.path.join(dirname, 'data/Stocks/vz.us.txt')
+    refferenceVal = 200 #3494
+
+    with open(filename, 'r') as f:
+        reader = csv.reader(f, delimiter=',')
+        headers = next(reader)
+        data = list(reader)
+
+    rowsLeftover = len(data)
+    total = len(data)
+    numChunks = int(math.ceil(rowsLeftover / refferenceVal))
+
+    chunkList = []
+
+    for i in range(numChunks):
+        if(refferenceVal <= rowsLeftover):
+            chunkList.append(Stock("Penis", "pns", data[total-rowsLeftover: refferenceVal * (i + 1)]))
+            rowsLeftover -= refferenceVal
+        else:
+            chunkList.append(Stock("Penis", "pns", data[total-rowsLeftover: total -1]))
+
+
+    return(chunkList)

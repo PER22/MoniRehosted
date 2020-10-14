@@ -3,6 +3,7 @@ import csv
 import numpy as np
 import os
 import json
+import math
 
 
 class Database:
@@ -41,24 +42,25 @@ class Database:
 
         name = asset.name
         label = asset.label
-        data = np.array(asset.data)
+        data = asset.data
 
-        chunks = 0
+        refferenceVal = 200 #3494
+        rowsLeftover = len(data)
+        total = len(data)
+        numChunks = int(math.ceil(rowsLeftover / refferenceVal))
 
-        for i in range(1, 200):
-            if(len(data) % i == 0):
-                chunks = int(len(data) / i)
+        chunkList = []
 
-        print(chunks)
-        chunked_data = np.split(data, chunks)
-
-        tempStock = []
-
-        # for i in range(chunks):
-        #     tempStock.append(Stock(name, label, chunked_data[i].tolist()))
+        for i in range(numChunks):
+            if(refferenceVal <= rowsLeftover):
+                chunkList.append(Stock(name, label, data[total-rowsLeftover: refferenceVal * (i + 1)]))
+                rowsLeftover -= refferenceVal
+            else:
+                chunkList.append(Stock(name, label, data[total-rowsLeftover: total -1]))
 
         print("Returning Data")
-        return(tempStock)
+        return(chunkList)
+
 
     #getLabels returns the first $amount (for example 100) names, label and closing price of assetType
     #assetType is either ETF or Stocks
@@ -75,6 +77,57 @@ class Database:
 
 
 
+
+
+    # def load(self):
+    #     print("Getting File Names")
+    #     #scan stocks directory,
+    #     #Grab all stock tickers
+    #     unformatted_stock_file_names = os.listdir(self.stocks_directory)
+    #     for each in unformatted_stock_file_names:
+    #         if(".DS_Store" not in each):
+    #             self.stock_ticker_list.append(each.replace(".us.txt", ""))
+    #
+    #
+    #     #scan ETFs directory,
+    #     #Grab all ETF tickers
+    #     unformatted_etf_file_names = os.listdir(self.etfs_directory)
+    #     for each in unformatted_etf_file_names:
+    #         if(".DS_Store" not in each):
+    #             self.etf_ticker_list.append(each.replace(".us.txt", ""))
+    #
+    #     print("Importing Stocks")
+    #     #Use stock tickers to create an object for each ticker:
+    #     for each_ticker in self.stock_ticker_list:
+    #         self.Stocks[each_ticker] = Stock(each_ticker)
+    #
+    #         #Open file in overwrite mode
+    #         file = open(self.stocks_directory + str(each_ticker) + ".us.txt", "r")
+    #         file_contents = str(file.read())
+    #         lines = file_contents.splitlines();
+    #         for i in range (1,len(lines)):
+    #             row = str(lines[i]).split(",")
+    #             self.Stocks[each_ticker].data.append({'Date': row[0],'Open': row[1],'High': row[2],'Low': row[3],'Close': row[4],'Volume': row[5],'OpenInt': row[6]})
+    #         file.close()
+    #
+    #     print("Importing Stocks Complete\n\nImporting ETFs")
+    #
+    #     #Use ETF tickers to create an object for each:
+    #     for each_ticker in self.etf_ticker_list:
+    #         self.ETFs[each_ticker] = Stock(each_ticker)
+    #         file = open(self.etfs_directory + str(each_ticker) + ".us.txt", "r")
+    #         file_contents = str(file.read())
+    #         lines = file_contents.splitlines();
+    #         for i in range (1,len(lines)):
+    #             row = str(lines[i]).split(",")
+    #             self.ETFs[each_ticker].data.append({'Date': row[0],'Open': row[1],'High': row[2],'Low': row[3],'Close': row[4],'Volume': row[5],'OpenInt': row[6]})
+    #         file.close()
+    #
+    #     self.loaded = True
+    #
+    #     print("Importing ETFs Complete\n\n")
+    #
+    #     return (self.stock_ticker_list, self.Stocks, self.etf_ticker_list, self.ETFs)
 
 
     def load(self):
@@ -96,39 +149,32 @@ class Database:
 
         print("Importing Stocks")
         #Use stock tickers to create an object for each ticker:
-        for each_ticker in self.stock_ticker_list:
-            self.Stocks[each_ticker] = Stock(each_ticker)
+        for each_ticker1 in self.stock_ticker_list:
 
-            #Open file in overwrite mode
-            file = open(self.stocks_directory + str(each_ticker) + ".us.txt", "r")
-            file_contents = str(file.read())
-            lines = file_contents.splitlines();
-            for i in range (1,len(lines)):
-                row = str(lines[i]).split(",")
-                self.Stocks[each_ticker].data.append({'Date': row[0],'Open': row[1],'High': row[2],'Low': row[3],'Close': row[4],'Volume': row[5],'OpenInt': row[6]})
-            file.close()
+            with open(self.stocks_directory + str(each_ticker1) + ".us.txt", "r") as f:
+                reader = csv.reader(f, delimiter=',')
+                #headers1 = next(reader)
+                data1 = list(reader)
+
+                self.Stocks[each_ticker1] = Stock("", each_ticker1, data1)
 
         print("Importing Stocks Complete\n\nImporting ETFs")
 
         #Use ETF tickers to create an object for each:
-        for each_ticker in self.etf_ticker_list:
-            self.ETFs[each_ticker] = Stock(each_ticker)
-            file = open(self.etfs_directory + str(each_ticker) + ".us.txt", "r")
-            file_contents = str(file.read())
-            lines = file_contents.splitlines();
-            for i in range (1,len(lines)):
-                row = str(lines[i]).split(",")
-                self.ETFs[each_ticker].data.append({'Date': row[0],'Open': row[1],'High': row[2],'Low': row[3],'Close': row[4],'Volume': row[5],'OpenInt': row[6]})
-            file.close()
+        for each_ticker2 in self.etf_ticker_list:
+
+            with open(self.etfs_directory + str(each_ticker2) + ".us.txt", "r") as f:
+                reader = csv.reader(f, delimiter=',')
+                headers2 = next(reader)
+                data2 = list(reader)
+
+                self.ETFs[each_ticker2] = Stock("", each_ticker2, data2)
 
         self.loaded = True
 
         print("Importing ETFs Complete\n\n")
 
         return (self.stock_ticker_list, self.Stocks, self.etf_ticker_list, self.ETFs)
-
-
-
 
 
 
