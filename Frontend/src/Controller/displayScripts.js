@@ -1,6 +1,5 @@
-function displayStock() {
-    document.getElementById('selectedStockName').innerHTML = getPortfolioTitle();
-    loadStocksFromServer();
+async function displayStock() {
+    //document.getElementById('selectedStockName').innerHTML = getPortfolioTitle();
     displayStockChart();
     displayStockList();
 }
@@ -9,8 +8,8 @@ function displayStockChart() {
     var data = getStocksInPortfolio();
     var dates = getDatesInPortfolio();
     var lows = getLowsInPortfolio();
-    console.log(data);
-    console.log(lows);
+    //console.log(data);
+    //console.log(lows);
 
     var ctx = document.getElementById('myChart').getContext('2d');
     var myChart = new Chart(ctx, {
@@ -38,19 +37,36 @@ function displayStockChart() {
 
 function displayStockList() {
     var stockHeader = document.getElementById('stockHeader');
-    var data = getDatesInPortfolio();
-    var list = "<ol>";
-    for (var i = 0; i < data.length; i++) {
-        list += "<li onclick=displayStockChart()>Tesla - " + data[i] + "</li>";
-    }
-    list += "</ol>";
-    console.log(list);
-    stockHeader.innerHTML = list;
+    var boxContol = "";
+    var index = 0;
+    console.log("Displaying Stock List");
+    getStocksInPortfolio().forEach(stock => {
+        if (index < 20) {
+            boxContol +=
+                "<div>" +
+                "<div class=\"stock-selection-summary\" onclick=displayStockChart()>" +
+                "<div class=\"stock-selection-left\">" +
+                "<div class=\"stock-selection-summary-stock-name\">" +
+                "<label class=\"detail-label\" id=\"stock-selection-name-label\">" + stock.name + "</label>" +
+                " </div>" +
+                " <div class=\"stock-selection-summary-short-name\">" +
+                " <label class=\"detail-label-small\" id=\"stock-selection-short-name-label\">" + stock.label + "</label>" +
+                " </div>" +
+                " </div>" +
+                " <div class=\"stock-selection-summary-price\">" +
+                "<label class=\"detail-label-small\" id=\"stock-selection-summary-price-label\">$" + stock.data + "</label>" +
+                "</div>" +
+                "</div>";
+        }
+        index++;
+
+    });
+    stockHeader.innerHTML = boxContol;
 }
 
 function appendStock(stock, table) {
     let rows = table.getElementsByTagName("tr");
-    console.log(rows)
+    //console.log(rows)
     let row = table.insertRow(rows.length);
 
     let br = row.insertCell(0);

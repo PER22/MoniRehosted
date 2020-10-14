@@ -1,13 +1,12 @@
 /* UNIVERSAL */
 body {
-  background: linear-gradient(#ffffff 80%, #f2f2f2);
-  background-attachment: fixed;
+	background-attachment: fixed;
 	background-position: center top;
 	background-repeat: no-repeat;
 	background-size: 100vw auto;
-
-  font-family: 'Raleway', sans-serif;
-  font-family: 'Montserrat', sans-serif;
+	background-color: #373c42;
+	font-family: 'Raleway', sans-serif;
+	font-family: 'Montserrat', sans-serif;
 }
 
 h1 {
@@ -37,9 +36,9 @@ p {
 }
 
 form {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1.25em;
-    color: #4F4F4F;
+	font-family: 'Montserrat', sans-serif;
+	font-size: 1.25em;
+	background-color: #000;
 }
 
 button {
@@ -56,12 +55,11 @@ ol {
 	list-style-type: none;
 }
 
-/*Header*/
-.top-bar-logo {
-  width: auto;
-  height: 100px;
+li {
+
 }
 
+/*Header*/
 .top-bar {
   height: 10vh;
   min-height: 20px;
@@ -69,14 +67,12 @@ ol {
 }
 
 .stock-information {
-  width: 80vw;
+  width: 70vw;
   text-align: center;
-
-  padding: 5px;
 }
 
 /*Portfolio Section*/
-.portfolio {
+.portfolio-container {
   min-width: 90%;
   min-width: 90vw;
 
@@ -95,8 +91,6 @@ ol {
   display: flex;
   margin-top: 2vh;
   padding-top: 2vh;
-
-  border-top: 1px solid gray;
 }
 
 .portfolio-content table{
@@ -104,32 +98,88 @@ ol {
 }
 
 /* Stocks Section (Left Side)*/
-.stock-sect {
+.stock-selection-sect {
+	padding-top: 40px;
+	height: 600px;
 	width: 20%;
 	float: left;
+	overflow: auto;
+	overflow-x: hidden;
 }
 
-.stock-sect table {
-  margin-left: auto;
-  margin-right: auto;
+.stock-selection-summary {
+	padding: 7px;
+	display: flex;
+	flex-direction: row;
+	border-top: 1px solid black;
 }
-
-.stock-sect tr {
-  min-height: 0px;
-
-  padding-left: auto;
-  padding-right: auto;
+.stock-selection-left{
+	min-width: 160px;
 }
+.stock-selection-summary-stock-name {
+}
+.stock-selection-summary-short-name{
 
+}
+.stock-selection-summary-price {
+	float: right;
+}
 /* Analytics Section (Right Side)*/
 .analytics-sect {
 	width: 80%;
-	height: 1-;
 	float: right;
+	padding-left: 15px;
+}
+
+.stock-header-sect {
+	height: 10%;
 }
 
 
+.stock-details-sect {
+	border-top: 1px solid gray;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+}
 
+.stock-details-price {
+	font-size: 45px;
+	border-right: 1px solid gray;
+}
 
+.stock-details-close-open {
+	border-right: 1px solid gray;
+	padding-left: 30px;
+	padding-top: 5px;
+	padding-right: 30px;
+}
 
+.chart-sect {
+	border: 1px solid gray;
+	padding: 10px;
+	height: 80%;
+}
+/*
+div:active {
+	border: 0px;
+}
 
+*/
+/*Control Classes*/
+.header-label {
+	color: white;
+	font-size: 50px;
+	font-weight: bold;
+}
+.detail-label {
+	color: #D8D8D8;
+}
+.detail-label-small {
+	color: #D8D8D8;
+	font-size: 14px;
+}
+.detail-label-large {
+	color: white;
+	padding: 10px;
+}

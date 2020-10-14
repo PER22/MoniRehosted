@@ -45,6 +45,16 @@ class Portfolio {
         this.stocks = generateStock();
     }
 
+    importStocks(portfolio) {
+        portfolio.forEach(stock => {
+            let add = new Stock();
+            add.setName(stock.name);
+            add.setLabel(stock.label);
+            add.setData(stock.price);
+            this.stocks.push(add);
+        });
+    }
+
     generateStock() {
         var stocks = []
         for (var i = 0; i < 1; i++) {
@@ -60,7 +70,7 @@ class Portfolio {
             }
             stocks[i] = new Stock('Telsa', 'TSLA', data);
         }
-        console.log(this.dates);
+        //console.log(this.dates);
         return stocks;
     }
 }

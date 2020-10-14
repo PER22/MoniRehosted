@@ -3,10 +3,28 @@
 ********************************************************** */
 
 class Stock{
-    constructor(name, label, data){
-        this.name = name;
-        this.label = label;
-        this.data =data;
+	constructor(name, label, data) {
+		this.name = name;
+		this.label = label;
+		this.data = data;
+	}
+	setName(name) {
+		this.name = name;
+	}
+	getName() {
+		return this.name;
+	}
+	setLabel(label) {
+		this.label = label;
+	}
+	getLabel() {
+		return this.label;
+	}
+	setData(data) {
+		this.data = data;
+	}
+	getData() {
+		return this.data;
     }
 }
 
@@ -18,8 +36,8 @@ class StockData{
         this.low = low;
         this.close = close;
         this.volume = volume;
-    }
-	
+	}
+
 	setDate(date){
 		this.date = date;
 	}
