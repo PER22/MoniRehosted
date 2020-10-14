@@ -64,9 +64,25 @@ class Database:
     #getLabels returns the first $amount (for example 100) names, label and closing price of assetType
     #assetType is either ETF or Stocks
     #amount is the amount of stock labels, names and closing price we want to return
-    def getLabels(self, assetType, amount):
-        print("Type: " + str(assetType) + " | Amount: " + str(amount))
-        return(self.createDummyLabels())
+    def getLabels(self, assetType, letter):
+        print("Type: " + str(assetType) + " | Letter: " + str(letter))
+        temp = []
+        stockList = []
+
+        # temporary list contains all stock/element that start with "letter"
+        if str(assetType).lower() == 'stock':
+            temp = [element for element in self.stock_ticker_list if element[0].lower() == str(letter).lower()]
+
+            for i in range(len(temp)):
+                stockList.append(dict(name='Tesla', label=temp[i], price=self.Stocks[temp[i]]['price']))
+        else:
+            temp = [element for element in self.etf_ticker_list if element[0].lower() == str(letter).lower()]
+
+            for i in range(len(temp)):
+                stockList.append(dict(name='Tesla', label=temp[i], price=self.Stocks[temp[i]]['price']))
+
+        # "name": "Tesla", "label": "TSLA", "price": "12"
+        return (stockList)
 
 
 
@@ -84,6 +100,8 @@ class Database:
             if(".DS_Store" not in each):
                 self.stock_ticker_list.append(each.replace(".us.txt", ""))
 
+        # sort etf_ticker_list
+        self.etf_ticker_list.sort()
 
         #scan ETFs directory,
         #Grab all ETF tickers
@@ -91,6 +109,9 @@ class Database:
         for each in unformatted_etf_file_names:
             if(".DS_Store" not in each):
                 self.etf_ticker_list.append(each.replace(".us.txt", ""))
+
+        # sort stock_ticker_list
+        self.stock_ticker_list.sort()
 
         print("Importing Stocks")
         #Use stock tickers to create an object for each ticker:
