@@ -1,0 +1,4 @@
+function initializePortfolio() {
+    loadStocksFromServer();
+    displayStock();
+}
