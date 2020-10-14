@@ -37,7 +37,8 @@ class Database:
     #label is 4 char shortcut of asset name
     def get(self, assetType, label):
         print("Type: " + str(assetType) + " | Label: " + str(label))
-        return(self.createDummyStock())
+
+        return((self.Stock[label.tolower()] if(assetType == "Stock") else (self.ETFs[label.tolower()])).toJSON())
 
     #getLabels returns the first $amount (for example 100) names, label and closing price of assetType
     #assetType is either ETF or Stocks
@@ -57,6 +58,7 @@ class Database:
 
 
     def load(self):
+        print("Getting File Names")
         #scan stocks directory,
         #Grab all stock tickers
         unformatted_stock_file_names = os.listdir(self.stocks_directory)
@@ -70,20 +72,21 @@ class Database:
         for each in unformatted_etf_file_names:
             self.etf_ticker_list.append(each.replace(".us.txt", ""))
 
+        print("Importing Stocks")
         #Use stock tickers to create an object for each ticker:
         for each_ticker in self.stock_ticker_list:
             self.Stocks[each_ticker] = Stock(each_ticker)
-            
+
             #Open file in overwrite mode
             file = open(self.stocks_directory + str(each_ticker) + ".us.txt", "r")
             file_contents = str(file.read())
             lines = file_contents.splitlines();
             for i in range (1,len(lines)):
-                comma_sep_vals = str(lines[i]).split(",")
-                self.Stocks[each_ticker].data.append(comma_sep_vals)
+                row = str(lines[i]).split(",")
+                self.Stocks[each_ticker].data.append({'Date': row[0],'Open': row[1],'High': row[2],'Low': row[3],'Close': row[4],'Volume': row[5],'OpenInt': row[6]})
             file.close()
 
-
+        print("Importing Stocks Complete\n\nImporting ETFs")
 
         #Use ETF tickers to create an object for each:
         for each_ticker in self.etf_ticker_list:
@@ -92,11 +95,14 @@ class Database:
             file_contents = str(file.read())
             lines = file_contents.splitlines();
             for i in range (1,len(lines)):
-                comma_sep_vals = str(lines[i]).split(",")
-                self.ETFs[each_ticker].data.append(comma_sep_vals)
+                row = str(lines[i]).split(",")
+                self.ETFs[each_ticker].data.append({'Date': row[0],'Open': row[1],'High': row[2],'Low': row[3],'Close': row[4],'Volume': row[5],'OpenInt': row[6]})
             file.close()
 
         self.loaded = True
+
+        print("Importing ETFs Complete\n\n")
+
         return (self.stock_ticker_list, self.Stocks, self.etf_ticker_list, self.ETFs)
 
 
