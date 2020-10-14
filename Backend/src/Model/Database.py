@@ -197,9 +197,30 @@ class Database:
 
     def createDummyLabels(self):
 
-        labels = [["Tesla", "TSLA", "41"],
-                  ["Tesla", "TSLA", "41"],
-                  ["Tesla", "TSLA", "41"],
-                  ["Tesla", "TSLA", "41"]]
+        labels = [{"name": "Tesla", "label": "TSLA", "price":"12"},
+                  {"name": "Facebook", "label": "FB", "price":"55"},
+                  {"name": "Microsoft", "label": "MSFT", "price":"23"},
+                  {"name": "Google", "label": "GOOG", "price":"234"},
+                  {"name": "Intel", "label": "INTC", "price":"41"},
+                  {"name": "TSMC", "label": "TSM", "price":"41"},
+                  {"name": "Amazon", "label": "AMZ", "price":"234"},
+                  {"name": "AMD", "label": "AMD", "price":"432"},
+                  {"name": "Amgen", "label": "AMGN", "price":"56"},
+                  {"name": "Analog Devices Inc", "label": "AMGN", "price":"234"},
+                  {"name": "American Airlines", "label": "AAL", "price":"32"},
+                  {"name": "Applied Materials Inc", "label": "AMAT", "price":"54"},
+                  {"name": "Autodesk", "label": "ADSK", "price":"32"},
+                  {"name": "Broadcom", "label": "AVGO", "price":"12"},
+                  {"name": "Baidu", "label": "BIDU", "price":"34"},
+                  {"name": "Cerner Group", "label": "CERN", "price":"123"},
+                  {"name": "Comcast Corp", "label": "CMCSA", "price":"43"},
+                  {"name": "CSX Corp", "label": "CSX", "price":"410"},
+                  {"name": "J.B. Hunt", "label": "JBHT", "price":"465"},
+                  {"name": "lululemon", "label": "LULU", "price":"4451"},
+                  {"name": "Mariot International", "label": "MAR", "price":"324"},
+                  {"name": "Netflix", "label": "NFLX", "price":"123"},
+                  {"name": "Xillinx", "label": "XLNX", "price":"213"},
+                  {"name": "Wynn Resorts", "label": "Wynn", "price":"342"},
+                  {"name": "Xcel Energy", "label": "XEL", "price":"653"}]
 
         return(labels)
