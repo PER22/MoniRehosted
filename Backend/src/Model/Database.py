@@ -74,12 +74,18 @@ class Database:
             temp = [element for element in self.stock_ticker_list if element[0].lower() == str(letter).lower()]
 
             for i in range(len(temp)):
-                stockList.append(dict(name='Tesla', label=temp[i], price=self.Stocks[temp[i]]['price']))
+                stockData = self.Stocks[temp[i]].data
+
+                if(len(stockData) != 0):
+                    stockList.append(dict(name='Tesla', label=temp[i], price=stockData[-1]['Open']))
         else:
             temp = [element for element in self.etf_ticker_list if element[0].lower() == str(letter).lower()]
 
             for i in range(len(temp)):
-                stockList.append(dict(name='Tesla', label=temp[i], price=self.Stocks[temp[i]]['price']))
+                etfData = self.ETFs[temp[i]].data
+
+                if(len(etfData) != 0):
+                    stockList.append(dict(name='Tesla', label=temp[i], price=etfData[-1]['Open']))
 
         # "name": "Tesla", "label": "TSLA", "price": "12"
         return (stockList)
