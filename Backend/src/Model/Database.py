@@ -26,7 +26,7 @@ class Database:
         #ETFs directory
         self.etfs_directory = data_directory + "ETFs" + os.sep
 
-        self.load()
+        #self.load()
 
 
 
@@ -37,8 +37,28 @@ class Database:
     #label is 4 char shortcut of asset name
     def get(self, assetType, label):
         print("Type: " + str(assetType) + " | Label: " + str(label))
+        asset = (self.Stocks[str(label).lower()]) if(str(assetType).lower() == "stock") else (self.ETFs[str(label).lower()])
 
-        return((self.Stock[label.tolower()] if(assetType == "Stock") else (self.ETFs[label.tolower()])).toJSON())
+        name = asset.name
+        label = asset.label
+        data = np.array(asset.data)
+
+        chunks = 0
+
+        for i in range(1, 200):
+            if(len(data) % i == 0):
+                chunks = int(len(data) / i)
+
+        print(chunks)
+        chunked_data = np.split(data, chunks)
+
+        tempStock = []
+
+        # for i in range(chunks):
+        #     tempStock.append(Stock(name, label, chunked_data[i].tolist()))
+
+        print("Returning Data")
+        return(tempStock)
 
     #getLabels returns the first $amount (for example 100) names, label and closing price of assetType
     #assetType is either ETF or Stocks
@@ -63,14 +83,16 @@ class Database:
         #Grab all stock tickers
         unformatted_stock_file_names = os.listdir(self.stocks_directory)
         for each in unformatted_stock_file_names:
-            self.stock_ticker_list.append(each.replace(".us.txt", ""))
+            if(".DS_Store" not in each):
+                self.stock_ticker_list.append(each.replace(".us.txt", ""))
 
 
         #scan ETFs directory,
         #Grab all ETF tickers
         unformatted_etf_file_names = os.listdir(self.etfs_directory)
         for each in unformatted_etf_file_names:
-            self.etf_ticker_list.append(each.replace(".us.txt", ""))
+            if(".DS_Store" not in each):
+                self.etf_ticker_list.append(each.replace(".us.txt", ""))
 
         print("Importing Stocks")
         #Use stock tickers to create an object for each ticker:
@@ -165,8 +187,8 @@ class Database:
 
     #-=-=-=- Helper Function -=-=-=-=-=-
     def createDummyStock(self):
-        dirname = (os.path.dirname(__file__))[:-3]
-        filename = os.path.join(dirname, 'data/ETFs/adrd.us.txt')
+        dirname = (os.path.dirname(__file__))[:-9] #adrd
+        filename = os.path.join(dirname, 'data/ETFs/amjl.us.txt')
 
         with open(filename, 'r') as f:
             reader = csv.reader(f, delimiter=',')

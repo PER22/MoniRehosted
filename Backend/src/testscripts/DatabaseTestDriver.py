@@ -5,6 +5,7 @@ from Model.Database import Database
 
 #Other Variables
 database = Database()
+database.load()
 
 # #This method let's the user ctrl-c out of the program
 # def signal_handler(sig, frame):
@@ -12,7 +13,8 @@ database = Database()
 
 if __name__ == '__main__':
 
-    print(database.ETFs["aadr"].toJSON())
+    print(len(database.get("etf", "amjl")))
+    print(len(Database().createDummyStock()))
 
     #Makes sure you can exit the program
     # signal.signal(signal.SIGINT, signal_handler)
