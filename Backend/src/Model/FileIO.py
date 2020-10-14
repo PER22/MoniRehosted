@@ -7,7 +7,7 @@
 #Imports Only
 import os
 from os.path import dirname
-from Stock import Stock 
+from Model.Stock import Stock
 import time
 
 
@@ -27,12 +27,13 @@ class FileIO:
         self.all_etfs = {}
     
         #go to correct file location to see the different companies.
-        current_working_directory = os.getcwd()
-        data_directory = os.path.dirname(current_working_directory) + os.sep + "data" + os.sep
+        dirname = (os.path.dirname(__file__))[:-8]
+        dataDirectory = os.path.join(dirname, 'data') + os.sep
+
         #Stocks directory
-        self.stocks_directory = data_directory + "Stocks" + os.sep
+        self.stocks_directory = dataDirectory + "Stocks" + os.sep
         #ETFs directory
-        self.etfs_directory = data_directory + "ETFs" + os.sep
+        self.etfs_directory = dataDirectory + "ETFs" + os.sep
         
 
         

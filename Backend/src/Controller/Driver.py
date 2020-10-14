@@ -2,7 +2,7 @@
 import signal
 import sys
 from time import sleep
-from Cloud import Cloud
+from Gateway.Cloud import Cloud
 
 #Other Variables
 cloud = Cloud()

@@ -1,7 +1,7 @@
 import json
 from collections import namedtuple
 from json import JSONEncoder
-from Stock import Stock
+from Model.Stock import Stock
 
 class JSON_Converter:
 

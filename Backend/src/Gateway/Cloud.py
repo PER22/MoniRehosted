@@ -1,11 +1,11 @@
-from Stock import Stock
-from JSON_Converter import JSON_Converter
+from Model.Stock import Stock
+from Model.JSON_Converter import JSON_Converter
 import json
 from pubnub.callbacks import SubscribeCallback
 from pubnub.enums import PNStatusCategory
 from pubnub.pnconfiguration import PNConfiguration
 from pubnub.pubnub import PubNub
-from Database import Database
+from Model.Database import Database
 from time import sleep
 import time
 import os
