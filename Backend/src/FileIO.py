@@ -66,7 +66,6 @@ class FileIO:
             file = open(self.etfs_directory + str(each_ticker) + ".us.txt", "r")
             file_contents = str(file.read())
             lines = file_contents.splitlines();
-            count_rows_processed += len(lines)
             for i in range (1,len(lines)):
                 comma_sep_vals = str(lines[i]).split(",")
                 self.all_etfs[each_ticker].data.append(comma_sep_vals)
@@ -77,7 +76,7 @@ class FileIO:
     
     #I can't see a reason to save them all to file again, but here it is.
     def save_all_assets(self):
-        if self.loaded == false:
+        if self.loaded == False:
             print("FileIO.save_all() can not be called before calling FileIO.load()")
             return
         #save Stocks

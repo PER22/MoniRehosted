@@ -19,7 +19,7 @@ class MySubscribeCallback(SubscribeCallback):
 
     def __init__(self):
         global database
-        database = Database([], [])
+        database = Database()
 
     def presence(self, pubnub, presence):
         pass
