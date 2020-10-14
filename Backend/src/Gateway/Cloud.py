@@ -51,13 +51,11 @@ class MySubscribeCallback(SubscribeCallback):
                 #originalAsset = testReturn()
                 for i in range(len(originalAsset)):
                     print(str(i) + ". Chunk")
-                    print(originalAsset[i].toJSON())
-                    #print(str(originalAsset[i].toJSON()) + "\n\n\n\n")
                     pubnub.publish().channel('FinanceSub').message({
                         "requester": "Server",
                         "operation": "ReturnStockData" if (assetType == "stock") else "ReturnETFData",
                         "assetType": controlCommand[assetType],
-                        "part": i,
+                        "part": (i + 1),
                         "total": len(originalAsset),
                         "data": originalAsset[i].toJSON()
                     }).pn_async(my_publish_callback)
@@ -94,12 +92,10 @@ class Cloud:
 def testReturn():
     dirname = (os.path.dirname(__file__))[:-11] #adrd
     filename = os.path.join(dirname, 'data/Stocks/vz.us.txt')
-    refferenceVal = 200 #3494
+    refferenceVal = 120 #3494
 
     with open(filename, 'r') as f:
-        reader = csv.reader(f, delimiter=',')
-        headers = next(reader)
-        data = list(reader)
+        data = list(csv.DictReader(f))
 
     rowsLeftover = len(data)
     total = len(data)

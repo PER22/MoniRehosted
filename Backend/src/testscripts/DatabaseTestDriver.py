@@ -60,22 +60,24 @@ filename = os.path.join(dirname, 'data/Stocks/vz.us.txt')
 refferenceVal = 3494
 
 with open(filename, 'r') as f:
-    reader = csv.reader(f, delimiter=',')
-    headers = next(reader)
-    data = list(reader)
+    reader = csv.DictReader(f)
+    #headers = next(reader)
+    #data = list(reader)
+    for row in reader:
+        print(row)
 
-rowsLeftover = len(data)
-total = len(data)
-numChunks = int(math.ceil(rowsLeftover / refferenceVal))
+# rowsLeftover = len(data)
+# total = len(data)
+# numChunks = int(math.ceil(rowsLeftover / refferenceVal))
+#
+# chunkList = []
+#
+# for i in range(numChunks):
+#     if(refferenceVal <= rowsLeftover):
+#         chunkList.append(Stock("Penis", "pns", data[total-rowsLeftover: refferenceVal * (i + 1)]))
+#         rowsLeftover -= refferenceVal
+#     else:
+#         chunkList.append(Stock("Penis", "pns", data[total-rowsLeftover: total -1]))
 
-chunkList = []
-
-for i in range(numChunks):
-    if(refferenceVal <= rowsLeftover):
-        chunkList.append(Stock("Penis", "pns", data[total-rowsLeftover: refferenceVal * (i + 1)]))
-        rowsLeftover -= refferenceVal
-    else:
-        chunkList.append(Stock("Penis", "pns", data[total-rowsLeftover: total -1]))
-
-
+#print(chunkList[2].toString())
 

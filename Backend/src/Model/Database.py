@@ -44,7 +44,7 @@ class Database:
         label = asset.label
         data = asset.data
 
-        refferenceVal = 200 #3494
+        refferenceVal = 120 #3494
         rowsLeftover = len(data)
         total = len(data)
         numChunks = int(math.ceil(rowsLeftover / refferenceVal))
@@ -76,60 +76,6 @@ class Database:
 
 
 
-
-
-
-    # def load(self):
-    #     print("Getting File Names")
-    #     #scan stocks directory,
-    #     #Grab all stock tickers
-    #     unformatted_stock_file_names = os.listdir(self.stocks_directory)
-    #     for each in unformatted_stock_file_names:
-    #         if(".DS_Store" not in each):
-    #             self.stock_ticker_list.append(each.replace(".us.txt", ""))
-    #
-    #
-    #     #scan ETFs directory,
-    #     #Grab all ETF tickers
-    #     unformatted_etf_file_names = os.listdir(self.etfs_directory)
-    #     for each in unformatted_etf_file_names:
-    #         if(".DS_Store" not in each):
-    #             self.etf_ticker_list.append(each.replace(".us.txt", ""))
-    #
-    #     print("Importing Stocks")
-    #     #Use stock tickers to create an object for each ticker:
-    #     for each_ticker in self.stock_ticker_list:
-    #         self.Stocks[each_ticker] = Stock(each_ticker)
-    #
-    #         #Open file in overwrite mode
-    #         file = open(self.stocks_directory + str(each_ticker) + ".us.txt", "r")
-    #         file_contents = str(file.read())
-    #         lines = file_contents.splitlines();
-    #         for i in range (1,len(lines)):
-    #             row = str(lines[i]).split(",")
-    #             self.Stocks[each_ticker].data.append({'Date': row[0],'Open': row[1],'High': row[2],'Low': row[3],'Close': row[4],'Volume': row[5],'OpenInt': row[6]})
-    #         file.close()
-    #
-    #     print("Importing Stocks Complete\n\nImporting ETFs")
-    #
-    #     #Use ETF tickers to create an object for each:
-    #     for each_ticker in self.etf_ticker_list:
-    #         self.ETFs[each_ticker] = Stock(each_ticker)
-    #         file = open(self.etfs_directory + str(each_ticker) + ".us.txt", "r")
-    #         file_contents = str(file.read())
-    #         lines = file_contents.splitlines();
-    #         for i in range (1,len(lines)):
-    #             row = str(lines[i]).split(",")
-    #             self.ETFs[each_ticker].data.append({'Date': row[0],'Open': row[1],'High': row[2],'Low': row[3],'Close': row[4],'Volume': row[5],'OpenInt': row[6]})
-    #         file.close()
-    #
-    #     self.loaded = True
-    #
-    #     print("Importing ETFs Complete\n\n")
-    #
-    #     return (self.stock_ticker_list, self.Stocks, self.etf_ticker_list, self.ETFs)
-
-
     def load(self):
         print("Getting File Names")
         #scan stocks directory,
@@ -152,11 +98,9 @@ class Database:
         for each_ticker1 in self.stock_ticker_list:
 
             with open(self.stocks_directory + str(each_ticker1) + ".us.txt", "r") as f:
-                reader = csv.reader(f, delimiter=',')
-                #headers1 = next(reader)
-                data1 = list(reader)
+                data1 = list(csv.DictReader(f))
 
-                self.Stocks[each_ticker1] = Stock("", each_ticker1, data1)
+            self.Stocks[each_ticker1] = Stock("", each_ticker1, data1)
 
         print("Importing Stocks Complete\n\nImporting ETFs")
 
@@ -164,11 +108,9 @@ class Database:
         for each_ticker2 in self.etf_ticker_list:
 
             with open(self.etfs_directory + str(each_ticker2) + ".us.txt", "r") as f:
-                reader = csv.reader(f, delimiter=',')
-                headers2 = next(reader)
-                data2 = list(reader)
+                data2 = list(csv.DictReader(f))
 
-                self.ETFs[each_ticker2] = Stock("", each_ticker2, data2)
+            self.ETFs[each_ticker2] = Stock("", each_ticker2, data2)
 
         self.loaded = True
 
