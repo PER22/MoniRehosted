@@ -1,4 +1,5 @@
 var myPortfolio = new Portfolio();
+//const{Stock, StockData} = require('./Model/Stock')
 
 /*Function that access myPortfolio*/
 function getPortfolioTitle() {
@@ -44,7 +45,7 @@ function getSideBarData() {
                 "requester": "Client",
                 "operation": "GetStockLabels",
                 "amount": "100"
-            }
+            }  
         }
         pubnub.publish(publishPayload, function (status, response) {
             //console.log(status, response);
@@ -83,7 +84,7 @@ function getData() {
         publishKey: "pub-c-7cd0dca0-eb36-44f8-bfef-d692af28f7d4",
         subscribeKey: "sub-c-01442846-0b27-11eb-8b70-9ebeb8f513a7"
     })
-
+    var stock = new Stock()
     function publishSampleMessage() {
         console.log("Publish to a channel 'FinanceSub'");
         // With the right payload, you can publish a message, add a reaction to a message,
@@ -96,6 +97,7 @@ function getData() {
                 "stock": "TSLA"
             }
         }
+
         pubnub.publish(publishPayload, function (status, response) {
             //console.log(status, response);
         })
@@ -110,6 +112,10 @@ function getData() {
         message: function (msg) {
             //console.log(msg.message);
             if (msg.message.requester == "Server") {
+                stock.label = msg.message.assetType
+                stock.name = msg.message.data.name
+                msg.message.data.data.forEach(element => {stock.data.push(element)})
+                //stock.data.push(msg.message.data.data)
                 console.log(msg.message)
                 console.log("imported");
             }
@@ -124,4 +130,14 @@ function getData() {
     pubnub.subscribe({
         channels: ['FinanceSub']
     });
+    /*
+    stock.data.sort(function(a,b){
+        var dateA = new Date(a.Date), dateB = new Date(b.Date);
+        return dateA - dateB;
+    });
+    */
+    
+   
+    myPortfolio.addStock(stock)
 };
+

@@ -3,10 +3,17 @@
 ********************************************************** */
 
 class Stock{
+	/*
 	constructor(name, label, data) {
 		this.name = name;
 		this.label = label;
 		this.data = data;
+	}
+	*/
+	constructor() {
+		this.name = "";
+		this.label = "";
+		this.data = [];
 	}
 	setName(name) {
 		this.name = name;
