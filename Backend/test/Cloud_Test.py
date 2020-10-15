@@ -1,5 +1,5 @@
 from unittest import TestCase
 
 
-class TestCloud(TestCase):
+class Cloud_Test(TestCase):
     pass

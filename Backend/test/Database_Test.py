@@ -7,7 +7,18 @@ class Database_Test(TestCase):
     database.load()
 
     def test_load(self):
+        self.database.load()
         self.assertEqual(True, True)
 
-    def test_save(self):
-        self.assertEqual(True, True)
+    def test_get_ETF(self):
+        etf =  self.database.get("etf", "aadr")
+
+        self.assertEqual(len(etf), 14)
+
+    def test_get_Stock(self):
+        stock = self.database.get("stock", "a")
+
+        self.assertEqual(len(stock), 38)
+
+    def test_get_Stock(self):
+        self.assertEqual(self.database.getLabels("etf", "a"), self.database.createDummyLabels())

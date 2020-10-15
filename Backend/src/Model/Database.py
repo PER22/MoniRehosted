@@ -37,7 +37,7 @@ class Database:
     #label is 4 char shortcut of asset name
     def get(self, assetType, label):
         print("Type: " + str(assetType) + " | Label: " + str(label))
-        asset = (self.Stocks[str(label).lower()]) if(str(assetType).lower() == "stock") else (self.ETFs[str(label).lower()])
+        asset = (self.Stocks[str(label).lower()]) if("stock" in str(assetType).lower()) else (self.ETFs[str(label).lower()])
 
         name = asset.name
         label = asset.label
