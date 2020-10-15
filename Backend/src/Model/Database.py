@@ -1,4 +1,4 @@
-from Model.Stock import Stock
+from Backend.src.Model.Stock import Stock
 import csv
 import numpy as np
 import os
@@ -88,7 +88,8 @@ class Database:
                     stockList.append(dict(name='Tesla', label=temp[i], price=etfData[-1]['Open']))
 
         # "name": "Tesla", "label": "TSLA", "price": "12"
-        return (stockList)
+        #return (stockList)
+        return(self.createDummyLabels())
 
 
 
