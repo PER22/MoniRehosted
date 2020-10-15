@@ -58,6 +58,16 @@ ol {
 li {
 
 }
+button {
+	background-color: gray;
+	border: none;
+	color: white;
+	padding: 6px 20px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+}
 
 /*Header*/
 .top-bar {
@@ -152,6 +162,13 @@ li {
 	border-right: 1px solid gray;
 	padding-left: 30px;
 	padding-top: 5px;
+	padding-right: 30px;
+}
+
+.stock-details-3 {
+	border-right: 1px solid gray;
+	padding-left: 50px;
+	padding-top: 11px;
 	padding-right: 30px;
 }
 

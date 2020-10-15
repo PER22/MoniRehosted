@@ -1,10 +1,15 @@
 async function displayStock() {
     //document.getElementById('selectedStockName').innerHTML = getPortfolioTitle();
     displayStockChart();
-    displayStockList();
+   // displayStockList();
 }
 
-function displayStockChart() {
+function displayStockChart(e) {
+    if (!e)
+        e = window.event;
+    var sender = e.srcElement || e.target;
+
+    //getData();
     var data = getStocksInPortfolio();
     var dates = getDatesInPortfolio();
     var lows = getLowsInPortfolio();
@@ -44,9 +49,9 @@ function displayStockList() {
         if (index < 20) {
             boxContol +=
                 "<div>" +
-                "<div class=\"stock-selection-summary\" onclick=displayStockChart()>" +
+                "<div class=\"stock-selection-summary\" onclick=displayStockChart(event)>" +
                 "<div class=\"stock-selection-left\">" +
-                "<div class=\"stock-selection-summary-stock-name\">" +
+                "<div class=\"stock-selection-summary-stock-name\" data-tag='1337'>" +
                 "<label class=\"detail-label\" id=\"stock-selection-name-label\">" + stock.name + "</label>" +
                 " </div>" +
                 " <div class=\"stock-selection-summary-short-name\">" +
@@ -62,6 +67,7 @@ function displayStockList() {
 
     });
     stockHeader.innerHTML = boxContol;
+    var stockHeader = document.getElementById('load-button').remove();
 }
 
 function appendStock(stock, table) {

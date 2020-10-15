@@ -44,7 +44,7 @@ function getSideBarData() {
             message: {
                 "requester": "Client",
                 "operation": "GetStockLabels",
-                "amount": "100"
+                "amount": "a"
             }  
         }
         pubnub.publish(publishPayload, function (status, response) {
@@ -77,8 +77,8 @@ function getSideBarData() {
     });
 };
 
-function getData() {
-
+function getData(label) {
+    
     // Update this block with your publish/subscribe keys
     pubnub = new PubNub({
         publishKey: "pub-c-7cd0dca0-eb36-44f8-bfef-d692af28f7d4",
@@ -94,7 +94,7 @@ function getData() {
             message: {
                 "requester": "Client",
                 "operation": "GetStockData",
-                "stock": "TSLA"
+                "stock": label
             }
         }
 
