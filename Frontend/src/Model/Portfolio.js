@@ -33,7 +33,7 @@ class Portfolio {
 
     //Stocks functions
     addStock(stock) {
-        this.stocks.add(stock);
+        this.stocks.push(stock);
     }
     setStocksArray(stocks) {
         this.stocks = stocks;
