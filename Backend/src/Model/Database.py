@@ -6,7 +6,7 @@ import math
 
 
 class Database:
-    def __init__(self):
+    def __init__(self, etfFolderName = "ETFs", stocksFolderName = "Stocks"):
         #create empty lists for tickers and pricelists
         self.stock_ticker_list = []
         self.etf_ticker_list = []
@@ -22,9 +22,9 @@ class Database:
 
         print(data_directory)
         #Stocks directory
-        self.stocks_directory = data_directory + "Stocks" + os.sep
+        self.stocks_directory = data_directory + stocksFolderName + os.sep
         #ETFs directory
-        self.etfs_directory = data_directory + "ETFs" + os.sep
+        self.etfs_directory = data_directory + etfFolderName + os.sep
 
         #self.load()
 

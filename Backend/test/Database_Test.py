@@ -1,9 +1,9 @@
 from unittest import TestCase
-from Model.Database import Database
-from Model.Stock import Stock
+from Backend.src.Model.Database import Database
+from Backend.src.Model.Stock import Stock
 
 class Database_Test(TestCase):
-    database = Database()
+    database = Database("ETFs1", "Stocks1")
     database.load()
 
     def test_load(self):
