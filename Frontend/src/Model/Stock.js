@@ -32,6 +32,20 @@ class Stock{
 	}
 	getData() {
 		return this.data;
+	}
+	getStockDates() {
+		var stockDates = []
+		for (var i = 0; i < this.data.length; i++) {
+			stockDates.push(this.data[i].getDate());
+		}
+		return stockDates;
+	}
+	getClosingPrices() {
+		var closingPrices = []
+		for (var i = 0; i < this.data.length; i++) {
+			closingPrices.push(this.data[i].getClose());
+		}
+		return closingPrices;
     }
 }
 
