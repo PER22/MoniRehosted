@@ -33,13 +33,14 @@ class Stock{
 	getData() {
 		return this.data;
 	}
-
 	//pushed data to be sorted
-	pushedData(elements){
-		this.data.push(elements);
+	AddStockDetailFromServer(element){
+		var stockData = new StockData(element.Date, element.Open, element.High, element.Low, element.Close, element.OpenInt, element.Volume)
+
+		this.data.push(stockData);
 		this.data.sort((a, b) => {
-			if(a.Date > b.Date) return 1;
-			else if(a.Date < b.Date) return -1;
+			if(a.date > b.date) return 1;
+			else if(a.date < b.date) return -1;
 			else return 0;
 		});
 

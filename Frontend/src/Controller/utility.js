@@ -115,7 +115,7 @@ function getData() {
                 stock.label = msg.message.assetType
                 stock.name = msg.message.data.name
                 //msg.message.data.data.forEach(element => {stock.data.push(element)})
-                msg.message.data.data.forEach(element => {stock.pushedData(element)})
+                msg.message.data.data.forEach(element => {stock.AddStockDetailFromServer(element)})
                 //stock.data.push(msg.message.data.data)
                 console.log(msg.message)
                 console.log("imported");
