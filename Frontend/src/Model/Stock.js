@@ -32,7 +32,18 @@ class Stock{
 	}
 	getData() {
 		return this.data;
-    }
+	}
+
+	//pushed data to be sorted
+	pushedData(elements){
+		this.data.push(elements);
+		this.data.sort((a, b) => {
+			if(a.Date > b.Date) return 1;
+			else if(a.Date < b.Date) return -1;
+			else return 0;
+		});
+
+	}
 }
 
 class StockData{

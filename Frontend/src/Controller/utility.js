@@ -114,7 +114,8 @@ function getData() {
             if (msg.message.requester == "Server") {
                 stock.label = msg.message.assetType
                 stock.name = msg.message.data.name
-                msg.message.data.data.forEach(element => {stock.data.push(element)})
+                //msg.message.data.data.forEach(element => {stock.data.push(element)})
+                msg.message.data.data.forEach(element => {stock.pushedData(element)})
                 //stock.data.push(msg.message.data.data)
                 console.log(msg.message)
                 console.log("imported");
@@ -130,14 +131,7 @@ function getData() {
     pubnub.subscribe({
         channels: ['FinanceSub']
     });
-    /*
-    stock.data.sort(function(a,b){
-        var dateA = new Date(a.Date), dateB = new Date(b.Date);
-        return dateA - dateB;
-    });
-    */
-    
-   
+
     myPortfolio.addStock(stock)
 };
 
