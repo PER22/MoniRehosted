@@ -33,6 +33,20 @@ class Stock{
 	getData() {
 		return this.data;
 	}
+  
+	//pushed data to be sorted
+	AddStockDetailFromServer(element){
+		var stockData = new StockData(element.Date, element.Open, element.High, element.Low, element.Close, element.OpenInt, element.Volume)
+
+		this.data.push(stockData);
+		this.data.sort((a, b) => {
+			if(a.date > b.date) return 1;
+			else if(a.date < b.date) return -1;
+			else return 0;
+		});
+
+	}
+
 	getStockDates() {
 		var stockDates = []
 		for (var i = 0; i < this.data.length; i++) {

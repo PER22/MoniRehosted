@@ -82,6 +82,7 @@ class Portfolio {
                     (Math.random() * 600), (Math.random() * 200));
             }
             stocks[i] = new Stock('Telsa', 'TSLA', data);
+            
         }
         //console.log(this.dates);
         return stocks;
