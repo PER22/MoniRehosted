@@ -9,7 +9,7 @@ function getPortfolioTitle() {
 function loadStocksFromServer() {
     myPortfolio = new Portfolio();
     myPortfolio.setName("Tester");
-    getSideBarData();
+    getSideBarData(displayStockList);
 }
 
 //Returns stocks array from myPortfolio
@@ -27,7 +27,18 @@ function getLowsInPortfolio() {
     return myPortfolio.getLows();
 }
 
-function getSideBarData() {
+//Returns array of closing values for a given ticker
+function getClosingValuesByTicker(ticker) {
+    var stock = myPortfolio.getStockByTicker(ticker);
+    return stock.getClosingPrices();
+}
+//Returns array of dates for a given ticker
+function getClosingValuesByTicker(ticker) {
+    var stock = myPortfolio.getStockByTicker(ticker);
+    return stock.getStockDates();
+}
+
+function getSideBarData(_callback) {
 
     // Update this block with your publish/subscribe keys
     pubnub = new PubNub({
@@ -44,7 +55,7 @@ function getSideBarData() {
             message: {
                 "requester": "Client",
                 "operation": "GetStockLabels",
-                "amount": "100"
+                "amount": "a"
             }  
         }
         pubnub.publish(publishPayload, function (status, response) {
@@ -63,6 +74,7 @@ function getSideBarData() {
             if (msg.message.requester == "Server") {
                 myPortfolio.importStocks(msg.message.data);
                 console.log("imported");               
+                displayStockList();
             }
         },
         presence: function (presenceEvent) {
@@ -77,8 +89,62 @@ function getSideBarData() {
     });
 };
 
-function getData() {
+function getStockDataByTicker(ticker, _callback) {
+    //Initialize Stock object
+    var stock = new Stock()
+    // Update this block with your publish/subscribe keys
+    pubnub = new PubNub({
+        publishKey: "pub-c-7cd0dca0-eb36-44f8-bfef-d692af28f7d4",
+        subscribeKey: "sub-c-01442846-0b27-11eb-8b70-9ebeb8f513a7"
+    })
 
+    //Publishes data request to server
+    function publishSampleMessage() {
+        console.log("Publish to a channel 'FinanceSub'");
+        var publishPayload = {
+            channel: "FinanceSub",
+            message: {
+                "requester": "Client",
+                "operation": "GetStockData",
+                "stock": ticker
+            }
+        }
+        pubnub.publish(publishPayload, function (status, response) {
+        });
+    }
+
+    //Listener to wait for response from server
+    pubnub.addListener({
+        status: function (statusEvent) {
+            if (statusEvent.category === "PNConnectedCategory") {
+                publishSampleMessage();
+            }
+        },
+        message: function (msg) {
+
+            if (msg.message.requester == "Server") {
+                stock = myPortfolio.getStockByTicker(ticker);
+                stock.setData([]);
+                msg.message.data.data.forEach(element => { stock.data.push(element) })
+                console.log("imported " + ticker + " data");
+                _callback(ticker);
+            }
+        },
+        presence: function (presenceEvent) {
+        }
+    })
+
+    console.log("Subscribing...");
+
+    pubnub.subscribe({
+        channels: ['FinanceSub']
+    });
+
+    myPortfolio.addStock(stock)
+}
+
+function getData(label) {
+    
     // Update this block with your publish/subscribe keys
     pubnub = new PubNub({
         publishKey: "pub-c-7cd0dca0-eb36-44f8-bfef-d692af28f7d4",
@@ -94,10 +160,9 @@ function getData() {
             message: {
                 "requester": "Client",
                 "operation": "GetStockData",
-                "stock": "TSLA"
+                "stock": label
             }
         }
-
         pubnub.publish(publishPayload, function (status, response) {
             //console.log(status, response);
         })

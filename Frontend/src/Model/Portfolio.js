@@ -31,7 +31,11 @@ class Portfolio {
         return this.lows;
     }
 
-    //Stocks functions
+    /*
+     * 
+     *  Stocks functions
+     * 
+    */
     addStock(stock) {
         this.stocks.push(stock);
     }
@@ -44,7 +48,6 @@ class Portfolio {
     async populateStocksFromServer() {
         this.stocks = generateStock();
     }
-
     importStocks(portfolio) {
         portfolio.forEach(stock => {
             let add = new Stock();
@@ -53,6 +56,16 @@ class Portfolio {
             add.setData(stock.price);
             this.stocks.push(add);
         });
+    }
+    getStockByTicker(ticker) {
+        var stockFound = new Stock();
+        for (var i = 0; i < this.stocks.length; i++) {
+            if (this.stocks[i].getLabel() == ticker) {
+                stockFound = this.stocks[i];
+                break;
+            }
+        }
+        return stockFound;
     }
 
     generateStock() {
