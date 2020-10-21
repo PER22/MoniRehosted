@@ -33,20 +33,18 @@ class Stock{
 	getData() {
 		return this.data;
 	}
-  
-	//pushed data to be sorted
-	AddStockDetailFromServer(element){
-		var stockData = new StockData(element.Date, element.Open, element.High, element.Low, element.Close, element.OpenInt, element.Volume)
-
-		this.data.push(stockData);
+	sortDataByDate() {
 		this.data.sort((a, b) => {
-			if(a.date > b.date) return 1;
-			else if(a.date < b.date) return -1;
+			if (a.date > b.date) return 1;
+			else if (a.date < b.date) return -1;
 			else return 0;
 		});
-
 	}
-
+	//Turns json element into StockData object and adds to data array.
+	addStockDetailFromServer(element){
+		var stockData = new StockData(element.Date, element.Open, element.High, element.Low, element.Close, element.OpenInt, element.Volume)
+		this.data.push(stockData);
+	}
 	getStockDates() {
 		var stockDates = []
 		for (var i = 0; i < this.data.length; i++) {
@@ -60,7 +58,28 @@ class Stock{
 			closingPrices.push(this.data[i].getClose());
 		}
 		return closingPrices;
-    }
+	}
+	getOpeningPrices() {
+		var openingPrices = []
+		for (var i = 0; i < this.data.length; i++) {
+			openingPrices.push(this.data[i].getOpen());
+		}
+		return openingPrices;
+	}
+	getLowPrices() {
+		var lowPrices = []
+		for (var i = 0; i < this.data.length; i++) {
+			lowPrices.push(this.data[i].getLow());
+		}
+		return lowPrices;
+	}
+	getHighPrices() {
+		var highPrices = []
+		for (var i = 0; i < this.data.length; i++) {
+			highPrices.push(this.data[i].getHigh());
+		}
+		return highPrices;
+	}
 }
 
 class StockData{
@@ -90,6 +109,12 @@ class StockData{
 	}
 	getLow() {
 		return this.low;
+	}
+	setHigh(high) {
+		this.high = high;
+	}
+	getHigh() {
+		return this.high;
 	}
 	setClose(close) {
 		this.close = close;

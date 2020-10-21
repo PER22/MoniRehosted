@@ -3,8 +3,6 @@ class Portfolio {
         this.name;
         this.owner;
         this.stocks = [];
-        this.dates = [];
-        this.lows = [];
     }
     setName(name) {
         this.name = name;

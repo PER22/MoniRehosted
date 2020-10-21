@@ -13,6 +13,7 @@
     <script src="../Controller/inits.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
     <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.29.9.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
     <!-- Stylesheets -->
     <link rel="stylesheet" type="text/css" href="style/default.css">
 
@@ -22,15 +23,33 @@
     <!--Portfolio Section-->
     <div class="portfolio-container">
         <div class="portfolio-content" id="portfolio">
-            <!-- Stock Selection Section-->
-            <div class="stock-selection-sect" id="stockHeader">
-               
-            </div>
 
+            <!--Stock Selection Section -->
+            <div class="left-header-sect">
+                <!--Logo Header Section-->
+                <div class="logo-header-sect">
+
+                </div>
+                <!-- Stock List Section-->
+                <div class="stock-selection-sect" id="stockHeader">
+
+                </div>
+            </div>
+            
             <!-- Stock Viewing Section-->
             <div class="analytics-sect">
                 <div class="stock-header-sect">
-                    <label class="header-label">Tesla, Inc.</label>
+                    <label class="header-label" id="selected-stock-name"></label>
+                    <div class="select-stock-chart-type">
+                        <input type="radio" id="closing" name="chart-type" value="closing" checked>
+                        <label class="detail-label" for="closing">Closing Prices</label><br>
+                        <input type="radio" id="opening" name="chart-type" value="opening">
+                        <label class="detail-label" for="opening">Opening Prices</label><br>
+                        <input type="radio" id="high" name="chart-type" value="high">
+                        <label class="detail-label" for="high">Highs</label>
+                        <input type="radio" id="low" name="chart-type" value="low">
+                        <label class="detail-label" for="low">Lows</label>
+                    </div>
                 </div>
                 <div class="stock-details-sect">
                     <div class="stock-details-price">

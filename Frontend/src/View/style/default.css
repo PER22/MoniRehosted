@@ -4,7 +4,7 @@ body {
 	background-position: center top;
 	background-repeat: no-repeat;
 	background-size: 100vw auto;
-	background-color: #373c42;
+	background-color: black;
 	font-family: 'Raleway', sans-serif;
 	font-family: 'Montserrat', sans-serif;
 }
@@ -83,15 +83,11 @@ button {
 
 /*Portfolio Section*/
 .portfolio-container {
-  min-width: 90%;
-  min-width: 90vw;
-
-  padding: 0;
-
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 3vh;
-  margin-bottom: 3vh;
+	min-width: 90%;
+	min-width: 90vw;
+	padding: 0;
+	border-radius: 25px;
+	background: #373c42;
 }
 
 .portfolio-content {
@@ -99,8 +95,6 @@ button {
   min-height: 79vh;
 
   display: flex;
-  margin-top: 2vh;
-  padding-top: 2vh;
 }
 
 .portfolio-content table{
@@ -108,20 +102,27 @@ button {
 }
 
 /* Stocks Section (Left Side)*/
+.left-header-sect{
+
+}
+.logo-header-sect {
+	background-color: #373c42;
+	height: 10%;
+}
 .stock-selection-sect {
-	padding-top: 40px;
-	height: 600px;
-	width: 20%;
+	padding-top: 10px;
+	height: 86%;
+	width: 100%;
 	float: left;
 	overflow: auto;
-	overflow-x: hidden;
+	overflow-x: hidden;	
 }
 
 .stock-selection-summary {
 	padding: 7px;
 	display: flex;
 	flex-direction: row;
-	border-top: 1px solid black;
+	border-bottom: 1px solid black;
 }
 .stock-selection-left{
 	min-width: 160px;
@@ -145,6 +146,11 @@ button {
 	height: 10%;
 }
 
+.select-stock-chart-type {
+	padding-top: 10px;
+	display: flex;
+	flex-direction: row;
+}
 
 .stock-details-sect {
 	border-top: 1px solid gray;
@@ -173,7 +179,7 @@ button {
 }
 
 .chart-sect {
-	border: 1px solid gray;
+	border-top: 1px solid gray;
 	padding: 10px;
 	height: 80%;
 }

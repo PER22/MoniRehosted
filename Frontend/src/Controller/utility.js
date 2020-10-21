@@ -27,15 +27,53 @@ function getLowsInPortfolio() {
     return myPortfolio.getLows();
 }
 
+//Returns Stock.name value for a given ticker
+function getStockTitleByTicker(ticker) {
+    var stock = myPortfolio.getStockByTicker(ticker);
+    return stock.getName();
+}
+//Returns array of dates for a given ticker
+function getClosingDatesByTicker(ticker) {
+    var stock = myPortfolio.getStockByTicker(ticker);
+    return stock.getStockDates();
+}
 //Returns array of closing values for a given ticker
 function getClosingValuesByTicker(ticker) {
     var stock = myPortfolio.getStockByTicker(ticker);
     return stock.getClosingPrices();
 }
-//Returns array of dates for a given ticker
+//Returns array of opening values for a given ticker
+function getOpeningValuesByTicker(ticker) {
+    var stock = myPortfolio.getStockByTicker(ticker);
+    return stock.getClosingPrices();
+}
+//Returns array of high values for a given ticker
+function getHighValuesByTicker(ticker) {
+    var stock = myPortfolio.getStockByTicker(ticker);
+    return stock.getClosingPrices();
+}
+//Returns array of low values for a given ticker
 function getClosingValuesByTicker(ticker) {
     var stock = myPortfolio.getStockByTicker(ticker);
-    return stock.getStockDates();
+    return stock.getClosingPrices();
+}
+
+
+function getChartValuesByTicker(valueType, ticker) {
+    var valuesArray = [];
+    if (valueType == "closing") {
+        valuesArray = getClosingValuesByTicker(ticker);
+    }
+    else if (valueType == "opening") {
+        valuesArray = getOpeningValuesByTicker(ticker);
+    }
+    else if (valueType == "high") {
+        valuesArray = getHighValuesByTicker(ticker);
+    }
+    else if (valueType == "low") {
+        valuesArray = getLowValuesByTicker(ticker);
+    }
+    return valuesArray;
 }
 
 function getSideBarData(_callback) {
@@ -56,7 +94,7 @@ function getSideBarData(_callback) {
                 "requester": "Client",
                 "operation": "GetStockLabels",
                 "amount": "a"
-            }  
+            }
         }
         pubnub.publish(publishPayload, function (status, response) {
             //console.log(status, response);
@@ -73,7 +111,7 @@ function getSideBarData(_callback) {
             //console.log(msg.message);
             if (msg.message.requester == "Server") {
                 myPortfolio.importStocks(msg.message.data);
-                console.log("imported");               
+                console.log("imported");
                 displayStockList();
             }
         },
@@ -91,7 +129,8 @@ function getSideBarData(_callback) {
 
 function getStockDataByTicker(ticker, _callback) {
     //Initialize Stock object
-    var stock = new Stock()
+    var stock = new Stock();
+    var indx = 0;
     // Update this block with your publish/subscribe keys
     pubnub = new PubNub({
         publishKey: "pub-c-7cd0dca0-eb36-44f8-bfef-d692af28f7d4",
@@ -121,13 +160,20 @@ function getStockDataByTicker(ticker, _callback) {
             }
         },
         message: function (msg) {
-
             if (msg.message.requester == "Server") {
                 stock = myPortfolio.getStockByTicker(ticker);
                 stock.setData([]);
-                msg.message.data.data.forEach(element => { stock.data.push(element) })
+                msg.message.data.data.forEach(element => { stock.addStockDetailFromServer(element) })
+                stock.sortDataByDate();
                 console.log("imported " + ticker + " data");
-                _callback(ticker);
+                indx++;
+                if (indx == msg.message.total) {
+                    myPortfolio.addStock(stock);
+                    _callback(ticker);                 
+                }
+            }
+            else {
+                var test = msg.message.data;
             }
         },
         presence: function (presenceEvent) {
@@ -140,11 +186,12 @@ function getStockDataByTicker(ticker, _callback) {
         channels: ['FinanceSub']
     });
 
-    myPortfolio.addStock(stock)
+   
+    console.log(myPortfolio);
 }
 
 function getData(label) {
-    
+
     // Update this block with your publish/subscribe keys
     pubnub = new PubNub({
         publishKey: "pub-c-7cd0dca0-eb36-44f8-bfef-d692af28f7d4",
@@ -179,9 +226,7 @@ function getData(label) {
             if (msg.message.requester == "Server") {
                 stock.label = msg.message.assetType
                 stock.name = msg.message.data.name
-                //msg.message.data.data.forEach(element => {stock.data.push(element)})
-                msg.message.data.data.forEach(element => {stock.AddStockDetailFromServer(element)})
-                //stock.data.push(msg.message.data.data)
+                msg.message.data.data.forEach(element => { stock.AddStockDetailFromServer(element) })
                 console.log(msg.message)
                 console.log("imported");
             }

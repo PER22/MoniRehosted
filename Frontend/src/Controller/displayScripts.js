@@ -1,5 +1,5 @@
 async function displayStock() {
-    //document.getElementById('selectedStockName').innerHTML = getPortfolioTitle();
+
     displayStockChart();
     // displayStockList();
 }
@@ -9,11 +9,18 @@ function handleChartDisplay(e) {
         e = window.event;
     var sender = e.srcElement || e.target;
     var ticker = sender.id.split("-")[1];
+    setCursor("wait");
     getStockDataByTicker(ticker, displayStockChart);
 }
 function displayStockChart(ticker) {
-    var closingValues = getClosingValuesByTicker(ticker);
-    var dateValues = getClosingValuesByTicker(ticker);
+    console.log("Displaying Chart");
+    //Set stock title
+    document.getElementById('selected-stock-name').innerHTML = getStockTitleByTicker(ticker);
+    //Gather chart values
+    var selectedRadioValue = getSelectedRadioButtonValue();
+    var chartValues = getChartValuesByTicker(selectedRadioValue, ticker);
+    var dateValues = getClosingDatesByTicker(ticker);
+    //Fill chart
     var ctx = document.getElementById('myChart').getContext('2d');
     var myChart = new Chart(ctx, {
         type: 'line',
@@ -21,7 +28,7 @@ function displayStockChart(ticker) {
             labels: dateValues,
             datasets: [{
                 label: 'Stock',
-                data: closingValues,
+                data: chartValues,
                 borderWidth: 1
             }],
             options: {
@@ -36,6 +43,18 @@ function displayStockChart(ticker) {
             }
         }
     });
+    setCursor("default");
+}
+
+function getSelectedRadioButtonValue() {
+    var selectedRadioValue = "";
+    var radios = document.getElementsByName('chart-type');
+    for (var i = 0; i < radios.length; i++) {
+        if (radios[i].checked) {
+            selectedRadioValue = radios[i].value;
+        }
+    }
+    return selectedRadioValue;
 }
 
 function displayStockList() {
@@ -67,12 +86,10 @@ function displayStockList() {
     var stockHeader = document.getElementById('load-button').remove();
 }
 
-function appendStock(stock, table) {
-    let rows = table.getElementsByTagName("tr");
-    //console.log(rows)
-    let row = table.insertRow(rows.length);
-
-    let br = row.insertCell(0);
-
-    br.innerHTML = '<br>'
+//https://stackoverflow.com/questions/192900/wait-cursor-over-entire-html-page
+function setCursor(cursor) {
+    var x = document.querySelectorAll("*");
+    for (var i = 0; i < x.length; i++) {
+        x[i].style.cursor = cursor;
+    }
 }
