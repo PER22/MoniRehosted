@@ -1,8 +1,8 @@
-from Model.Stock import Stock
+from Backend.src.Model.Stock import Stock
 from pubnub.callbacks import SubscribeCallback
 from pubnub.pnconfiguration import PNConfiguration
 from pubnub.pubnub import PubNub
-from Model.Database import Database
+from Backend.src.Model.Database import Database
 import csv
 
 import math

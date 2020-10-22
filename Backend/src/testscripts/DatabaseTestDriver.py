@@ -1,13 +1,13 @@
 import signal
 import sys
 from time import sleep
-from Model.Database import Database
+from Backend.src.Model.Database import Database
 import csv
 import numpy as np
 import os
 import json
 import math
-from Model.Stock  import Stock
+from Backend.src.Model.Stock  import Stock
 
 database = Database()
 
