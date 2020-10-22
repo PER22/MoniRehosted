@@ -11,6 +11,7 @@ function displayStockChart(ticker) {
     //Set stock title
     document.getElementById('selected-stock-name').innerHTML = getStockTitleByTicker(ticker);
     //Gather chart values
+    var prevClosingValue = getStockInPortfolioByTicker(ticker).getPriceChangeFromPreviousDay();
     var selectedRadioValue = getSelectedRadioButtonValue();
     var chartValues = getChartValuesByTicker(selectedRadioValue, ticker);
     var dateValues = getClosingDatesByTicker(ticker);

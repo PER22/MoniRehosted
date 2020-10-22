@@ -15,6 +15,10 @@ function loadStocksFromServer() {
 function getStocksInPortfolio() {
     return myPortfolio.getStocks();
 }
+//Returns stock object from myPortfolio
+function getStockInPortfolioByTicker(ticker) {
+    return myPortfolio.getStockByTicker(ticker);
+}
 //Returns dates array from myPortfolio
 function getDatesInPortfolio() {
     return myPortfolio.getDates();
