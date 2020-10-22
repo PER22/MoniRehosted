@@ -1,5 +1,4 @@
 var myPortfolio = new Portfolio();
-//const{Stock, StockData} = require('./Model/Stock')
 
 /*Function that access myPortfolio*/
 function getPortfolioTitle() {
@@ -75,6 +74,11 @@ function getChartValuesByTicker(valueType, ticker) {
     }
     return valuesArray;
 }
+
+//
+// Server Access Functions 
+//  vvvvvvvvvvvvvvvvvvvvv
+
 
 function getSideBarData(_callback) {
 
@@ -163,7 +167,7 @@ function getStockDataByTicker(ticker, _callback) {
             if (msg.message.requester == "Server") {
                 stock = myPortfolio.getStockByTicker(ticker);
                 stock.setData([]);
-                msg.message.data.data.forEach(element => { stock.addStockDetailFromServer(element) })
+                msg.message.data.data.forEach(element => { stock.addStockDetailFromServer(element) });
                 stock.sortDataByDate();
                 console.log("imported " + ticker + " data");
                 indx++;

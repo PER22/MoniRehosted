@@ -1,9 +1,3 @@
-async function displayStock() {
-
-    displayStockChart();
-    // displayStockList();
-}
-
 function handleChartDisplay(e) {
     if (!e)
         e = window.event;
@@ -45,18 +39,6 @@ function displayStockChart(ticker) {
     });
     setCursor("default");
 }
-
-function getSelectedRadioButtonValue() {
-    var selectedRadioValue = "";
-    var radios = document.getElementsByName('chart-type');
-    for (var i = 0; i < radios.length; i++) {
-        if (radios[i].checked) {
-            selectedRadioValue = radios[i].value;
-        }
-    }
-    return selectedRadioValue;
-}
-
 function displayStockList() {
     var stockHeader = document.getElementById('stockHeader');
     var boxContol = "";
@@ -84,6 +66,21 @@ function displayStockList() {
     });
     stockHeader.innerHTML = boxContol;
     var stockHeader = document.getElementById('load-button').remove();
+}
+
+//
+// Utility functions
+//
+
+function getSelectedRadioButtonValue() {
+    var selectedRadioValue = "";
+    var radios = document.getElementsByName('chart-type');
+    for (var i = 0; i < radios.length; i++) {
+        if (radios[i].checked) {
+            selectedRadioValue = radios[i].value;
+        }
+    }
+    return selectedRadioValue;
 }
 
 //https://stackoverflow.com/questions/192900/wait-cursor-over-entire-html-page
