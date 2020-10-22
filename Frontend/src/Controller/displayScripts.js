@@ -15,6 +15,7 @@ function displayStockChart(ticker) {
     var selectedRadioValue = getSelectedRadioButtonValue();
     var chartValues = getChartValuesByTicker(selectedRadioValue, ticker);
     var dateValues = getClosingDatesByTicker(ticker);
+    //consol.log("\n\n\n\t\t" + (prevClosingValue.contains("-")) ? "#FF0000" : "#00FF00")
     //Fill chart
     var ctx = document.getElementById('myChart').getContext('2d');
     var myChart = new Chart(ctx, {
@@ -22,16 +23,16 @@ function displayStockChart(ticker) {
         data: {
             labels: dateValues,
             datasets: [{
-                label: ticker,
+                //label: ticker,
                 fill: false,
                 data: chartValues,
-                borderColor: "#bae755",
-                borderDash: [5, 5],
-                backgroundColor: "#e755ba",
-                pointBackgroundColor: "#55bae7",
-                pointBorderColor: "#55bae7",
-                pointHoverBackgroundColor: "#55bae7",
-                pointHoverBorderColor: "#55bae7",
+                //borderColor: "#FF0000",
+                //borderDash: [5, 5],
+                //backgroundColor: "#FF0000",
+                //pointBackgroundColor: "#55bae7",
+                //pointBorderColor: "#55bae7",
+                //pointHoverBackgroundColor: "#55bae7",
+                //pointHoverBorderColor: "#0000FF",
                 borderWidth: 1
             }],
             options: {
