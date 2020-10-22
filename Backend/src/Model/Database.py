@@ -1,4 +1,5 @@
-from Model.Stock import Stock
+from Backend.src.Model.Stock import Stock
+from threading import Thread
 import csv
 import numpy as np
 import os
@@ -6,7 +7,7 @@ import math
 
 
 class Database:
-    def __init__(self):
+    def __init__(self, etfFolderName = "ETFs", stocksFolderName = "Stocks"):
         #create empty lists for tickers and pricelists
         self.stock_ticker_list = []
         self.etf_ticker_list = []
@@ -22,9 +23,9 @@ class Database:
 
         print(data_directory)
         #Stocks directory
-        self.stocks_directory = data_directory + "Stocks" + os.sep
+        self.stocks_directory = data_directory + stocksFolderName + os.sep
         #ETFs directory
-        self.etfs_directory = data_directory + "ETFs" + os.sep
+        self.etfs_directory = data_directory + etfFolderName + os.sep
 
         #self.load()
 
@@ -37,7 +38,7 @@ class Database:
     #label is 4 char shortcut of asset name
     def get(self, assetType, label):
         print("Type: " + str(assetType) + " | Label: " + str(label))
-        asset = (self.Stocks[str(label).lower()]) if(str(assetType).lower() == "stock") else (self.ETFs[str(label).lower()])
+        asset = (self.Stocks[str(label).lower()]) if("stock" in str(assetType).lower()) else (self.ETFs[str(label).lower()])
 
         name = asset.name
         label = asset.label
@@ -88,7 +89,8 @@ class Database:
                     stockList.append(dict(name='Tesla', label=temp[i], price=etfData[-1]['Open']))
 
         # "name": "Tesla", "label": "TSLA", "price": "12"
-        return (stockList)
+        #return (stockList)
+        return(self.createDummyLabels())
 
 
 
@@ -98,6 +100,26 @@ class Database:
 
 
     def load(self):
+        self.getFilenames()
+
+        thread1 = Thread(target = self.importStocks)
+        thread2 = Thread(target = self.importETFs)
+
+        thread1.start()
+        thread2.start()
+
+        thread1.join()
+        thread2.join()
+
+        self.loaded = True
+
+        print("Importing ETFs Complete\n\n")
+
+        return (self.stock_ticker_list, self.Stocks, self.etf_ticker_list, self.ETFs)
+
+
+
+    def getFilenames(self):
         print("Getting File Names")
         #scan stocks directory,
         #Grab all stock tickers
@@ -119,7 +141,8 @@ class Database:
         # sort stock_ticker_list
         self.stock_ticker_list.sort()
 
-        print("Importing Stocks")
+    def importStocks(self):
+        print("\t\t\t\tImporting Stocks")
         #Use stock tickers to create an object for each ticker:
         total = len(self.stock_ticker_list)
         current = 1
@@ -129,10 +152,15 @@ class Database:
                 data1 = list(csv.DictReader(f))
 
             self.Stocks[each_ticker1] = Stock("", each_ticker1, data1)
-            self.printCompletion(total, current)
+            self.printCompletion(total, current, 1)
             current += 1
 
-        print("Importing Stocks Complete\n\nImporting ETFs")
+        print("Importing Stocks Complete\n")
+
+
+
+    def importETFs(self):
+        print("Importing ETFs")
 
         total = len(self.etf_ticker_list)
         current = 1
@@ -143,21 +171,12 @@ class Database:
                 data2 = list(csv.DictReader(f))
 
             self.ETFs[each_ticker2] = Stock("", each_ticker2, data2)
-            self.printCompletion(total, current)
+            self.printCompletion(total, current, 0)
             current += 1
 
         self.loaded = True
 
         print("Importing ETFs Complete\n\n")
-
-        return (self.stock_ticker_list, self.Stocks, self.etf_ticker_list, self.ETFs)
-
-
-
-
-
-
-
 
 
 
@@ -238,24 +257,25 @@ class Database:
 
         return(labels)
 
-    def printCompletion(self, total, current):
+    def printCompletion(self, total, current, thread = 0):
+        space = str("" if thread == 0 else "\t\t\t\t")
         if(int(total / 10) == current):
-            print("10% Complete")
+            print(space + "10% Complete")
         elif(int(total / 10) * 2 == current):
-            print("20% Complete")
+            print(space + "20% Complete")
         elif(int(total / 10) * 3 == current):
-            print("30% Complete")
+            print(space + "30% Complete")
         elif(int(total / 10) * 4 == current):
-            print("40% Complete")
+            print(space + "40% Complete")
         elif(int(total / 2) == current):
-            print("50% Complete")
+            print(space + "50% Complete")
         elif(int(total / 10) * 6 == current):
-            print("60% Complete")
+            print(space + "60% Complete")
         elif(int(total / 10) * 7 == current):
-            print("70% Complete")
+            print(space + "70% Complete")
         elif(int(total / 10) * 8 == current):
-            print("80% Complete")
+            print(space + "80% Complete")
         elif(int(total / 10) * 9 == current):
-            print("90% Complete")
+            print(space + "90% Complete")
         elif(total == current):
-            print("100% Complete")
+            print(space + "100% Complete")
