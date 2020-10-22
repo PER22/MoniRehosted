@@ -20,6 +20,6 @@ class Stock:
     def toJSON(self):
         return{
             "name": self.name,
-            "name": self.label,
+            "label": self.label,
             "data": self.data
         }
