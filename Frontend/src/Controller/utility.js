@@ -45,17 +45,17 @@ function getClosingValuesByTicker(ticker) {
 //Returns array of opening values for a given ticker
 function getOpeningValuesByTicker(ticker) {
     var stock = myPortfolio.getStockByTicker(ticker);
-    return stock.getClosingPrices();
+    return stock.getOpeningPrices();
 }
 //Returns array of high values for a given ticker
 function getHighValuesByTicker(ticker) {
     var stock = myPortfolio.getStockByTicker(ticker);
-    return stock.getClosingPrices();
+    return stock.getHighPrices();
 }
 //Returns array of low values for a given ticker
-function getClosingValuesByTicker(ticker) {
+function getLowValuesByTicker(ticker) {
     var stock = myPortfolio.getStockByTicker(ticker);
-    return stock.getClosingPrices();
+    return stock.getLowPrices();
 }
 //Sets Portfolio date range based off selected date-picker-button
 function setDateRangeByDatePickerButton(datePickerButtonValue) {
@@ -63,6 +63,8 @@ function setDateRangeByDatePickerButton(datePickerButtonValue) {
 }
 
 function getChartValuesByTicker(valueType, ticker) {
+    var startDate = myPortfolio.getStartDate();
+    var endDate = myPortfolio.getEndDate();
     var valuesArray = [];
     if (valueType == "closing") {
         valuesArray = getClosingValuesByTicker(ticker);
