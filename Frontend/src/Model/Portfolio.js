@@ -3,6 +3,8 @@ class Portfolio {
         this.name;
         this.owner;
         this.stocks = [];
+        this.startDate;
+        this.endDate;
     }
     setName(name) {
         this.name = name;
@@ -16,17 +18,52 @@ class Portfolio {
     getOwner() {
         return this.owner;
     }
-    setDates(dates) {
-        this.dates = dates;
+    setStartDate(startDate) {
+        this.startDate = startDate;
     }
-    getDates() {
-        return this.dates;
+    getStartDate() {
+        return this.startDate;
+    }
+    setEndDate(endDate) {
+        this.endDate = endDate;
+    }
+    getEndDate() {
+        return this.endDate;
     }
     setLows(lows) {
         this.lows = lows;
     }
     getLows() {
         return this.lows;
+    }
+    //Sets startDate and endDate depending on selected datePickerButton
+    setPortfolioDateRange(datePickerButtonValue) {        
+        if (datePickerButtonValue == "1W") {            
+        }
+        else if (datePickerButtonValue == "1M") {
+
+        }
+        else if (datePickerButtonValue == "3M") {
+
+        }
+        else if (datePickerButtonValue == "6M") {
+
+        }
+        else if (datePickerButtonValue == "1Y") {
+
+        }
+        else if (datePickerButtonValue == "2Y") {
+
+        }
+        else if (datePickerButtonValue == "5Y") {
+
+        }
+        else if (datePickerButtonValue == "10Y") {
+
+        }
+        else if (datePickerButtonValue == "ALL") {
+
+        }
     }
 
     /*
@@ -51,7 +88,8 @@ class Portfolio {
             let add = new Stock();
             add.setName(stock.name);
             add.setLabel(stock.label);
-            add.setData(stock.price);
+            add.setPrice(stock.price);
+            add.setPriceChangeFromPreviousDay(stock.change);
             this.stocks.push(add);
         });
     }
@@ -80,7 +118,7 @@ class Portfolio {
                     (Math.random() * 600), (Math.random() * 200));
             }
             stocks[i] = new Stock('Telsa', 'TSLA', data);
-            
+
         }
         //console.log(this.dates);
         return stocks;

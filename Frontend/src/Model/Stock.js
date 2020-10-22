@@ -3,17 +3,13 @@
 ********************************************************** */
 
 class Stock{
-	/*
-	constructor(name, label, data) {
-		this.name = name;
-		this.label = label;
-		this.data = data;
-	}
-	*/
 	constructor() {
 		this.name = "";
 		this.label = "";
+		this.price = 0;
 		this.data = [];
+		this.priceChangeFromPreviousDay = 0;
+		this.loaded = false;
 	}
 	setName(name) {
 		this.name = name;
@@ -32,6 +28,24 @@ class Stock{
 	}
 	getData() {
 		return this.data;
+	}
+	setPrice(price) {
+		this.price = price;
+	}
+	getPrice() {
+		return this.price;
+	}
+	setPriceChangeFromPreviousDay(priceChangeFromPreviousDay) {
+		this.priceChangeFromPreviousDay = priceChangeFromPreviousDay;
+	}
+	getPriceChangeFromPreviousDay() {
+		return this.priceChangeFromPreviousDay;
+	}
+	setLoaded(loaded) {
+		this.loaded = loaded;
+	}
+	isLoaded() {
+		return this.loaded;
 	}
 	sortDataByDate() {
 		this.data.sort((a, b) => {
@@ -89,7 +103,7 @@ class StockData{
         this.high = high;
         this.low = low;
         this.close = close;
-        this.volume = volume;
+		this.volume = volume;
 	}
 
 	setDate(date){

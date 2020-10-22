@@ -178,6 +178,14 @@ button {
 	padding-right: 30px;
 }
 
+.date-selection-sect {
+	border-top: 1px solid gray;
+	border-bottom: 1px solid gray;
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+}
+
 .chart-sect {
 	border-top: 1px solid gray;
 	padding: 10px;
@@ -189,6 +197,8 @@ div:active {
 }
 
 */
+
+
 /*Control Classes*/
 .header-label {
 	color: white;
@@ -205,4 +215,15 @@ div:active {
 .detail-label-large {
 	color: white;
 	padding: 10px;
+}
+.date-picker-button {
+	color: #D8D8D8;
+	font-size: 20px;
+	border-radius: 25px;
+	background: #373c42;
+	padding-top: 10px;
+	padding-left: 20px;
+}
+.date-picker-button:focus {
+		outline: 0;
 }

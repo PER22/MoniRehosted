@@ -21,8 +21,16 @@ function displayStockChart(ticker) {
         data: {
             labels: dateValues,
             datasets: [{
-                label: 'Stock',
+                label: ticker,
+                fill: false,
                 data: chartValues,
+                borderColor: "#bae755",
+                borderDash: [5, 5],
+                backgroundColor: "#e755ba",
+                pointBackgroundColor: "#55bae7",
+                pointBorderColor: "#55bae7",
+                pointHoverBackgroundColor: "#55bae7",
+                pointHoverBorderColor: "#55bae7",
                 borderWidth: 1
             }],
             options: {
@@ -48,18 +56,22 @@ function displayStockList() {
         if (index < 20) {
             boxContol +=
                 "<div onclick=handleChartDisplay(event)>" +
-                "<div class=\"stock-selection-summary\" id=\"outer-" + stock.label + "\">" +
-                "<div class=\"stock-selection-left\" id=\"left-" + stock.label + "\">" +
-                "<div class=\"stock-selection-summary-stock-name\"id=\"divName-" + stock.label + "\">" +
-                "<label class=\"detail-label\" id=\"fullName-" + stock.label + "\">" + stock.name + "</label>" +
-                " </div>" +
-                " <div class=\"stock-selection-summary-short-name\" id=\"ticker-" + stock.label + "\">" +
-                " <label class=\"detail-label-small\" id=\"shortName-" + stock.label + "\">" + stock.label + "</label>" +
-                " </div>" +
-                " </div>" +
-                " <div class=\"stock-selection-summary-price\" id=\"price-" + stock.label + "\">" +
-                "<label class=\"detail-label-small\" id=\"labelPrice-" + stock.label + "\">$" + stock.data + "</label>" +
-                "</div>" +
+                "   <div class=\"stock-selection-summary\" id=\"outer-" + stock.label + "\">" +
+                "       <div class=\"stock-selection-left\" id=\"left-" + stock.label + "\">" +
+                "           <div class=\"stock-selection-summary-stock-name\"id=\"divName-" + stock.label + "\">" +
+                "               <label class=\"detail-label\" id=\"fullName-" + stock.label + "\">" + stock.name + "</label>" +
+                "           </div>" +
+                "           <div class=\"stock-selection-summary-short-name\" id=\"ticker-" + stock.label + "\">" +
+                "               <label class=\"detail-label-small\" id=\"shortName-" + stock.label + "\">" + stock.label + "</label>" +
+                "           </div>" +
+                "      </div>" +
+                "      <div class=\"stock-selection-summary-price\" id=\"price-" + stock.label + "\">" +
+                "           <label class=\"detail-label-small\" id=\"labelPrice-" + stock.label + "\">$" + stock.price + "</label>" +
+                "      </div>" +
+                "      <div class=\"stock-selection-summary-price\" id=\"price-" + stock.label + "\">" +
+                "           <label class=\"detail-label-small\" id=\"labelPrice-" + stock.label + "\">$" + stock.price + "</label>" +
+                "      </div>" +
+                "   </div>" +
                 "</div>";
         }
         index++;
@@ -88,5 +100,26 @@ function setCursor(cursor) {
     var x = document.querySelectorAll("*");
     for (var i = 0; i < x.length; i++) {
         x[i].style.cursor = cursor;
+    }
+}
+
+function setDatePickerBackcolor(e) {
+    console.log(myPortfolio);
+    if (!e)
+        e = window.event;
+    var sender = e.srcElement || e.target;
+    var dateButtons = document.getElementsByName('datePicker');
+    for (var i = 0; i < dateButtons.length; i++) {
+        if (dateButtons[i] == sender) {
+            dateButtons[i].style.background = '#FFFFFF';
+            dateButtons[i].style.fontWeight = "bold";
+            dateButtons[i].style.color = 'black';
+            dateButtons[i].style.borderColor = 'black';
+        }
+        else {
+            dateButtons[i].style.background = '#373c42';
+            dateButtons[i].style.fontWeight = "normal";
+            dateButtons[i].style.color = '#D8D8D8';
+        }
     }
 }

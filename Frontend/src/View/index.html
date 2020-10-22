@@ -51,7 +51,7 @@
                         <label class="detail-label" for="low">Lows</label>
                     </div>
                 </div>
-                <div class="stock-details-sect">
+                <!--<div class="stock-details-sect">
                     <div class="stock-details-price">
                         <label class="detail-label-large" id="current-price-label">276.05</label>
                     </div>
@@ -64,10 +64,23 @@
                         </div>
                     </div>
                     <div class="stock-details-3">
-                       
+
                     </div>
-                    
+
+                </div>-->
+                <!-- Date Picker Section -->
+                <div class="date-selection-sect">
+                    <button id="button-1W" class="date-picker-button" onclick="setDatePickerBackcolor(event)" name="datePicker">1W</button>
+                    <button id="button-1M" class="date-picker-button" onclick="setDatePickerBackcolor(event)" name="datePicker">1M</button>
+                    <button id="button-3M" class="date-picker-button" onclick="setDatePickerBackcolor(event)" name="datePicker">3M</button>
+                    <button id="button-6M" class="date-picker-button" onclick="setDatePickerBackcolor(event)" name="datePicker">6M</button>
+                    <button id="button-1Y" class="date-picker-button" onclick="setDatePickerBackcolor(event)" name="datePicker">1Y</button>
+                    <button id="button-2Y" class="date-picker-button" onclick="setDatePickerBackcolor(event)" name="datePicker">2Y</button>
+                    <button id="button-5Y" class="date-picker-button" onclick="setDatePickerBackcolor(event)" name="datePicker">5Y</button>
+                    <button id="button-10Y" class="date-picker-button" onclick="setDatePickerBackcolor(event)" name="datePicker">10Y</button>
+                    <button id="button-ALL" class="date-picker-button" onclick="setDatePickerBackcolor(event)" name="datePicker">ALL</button>
                 </div>
+                <!--Chart Section-->
                 <div class="chart-sect">
                     <canvas id="myChart"></canvas>
                 </div>

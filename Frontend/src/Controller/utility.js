@@ -15,17 +15,14 @@ function loadStocksFromServer() {
 function getStocksInPortfolio() {
     return myPortfolio.getStocks();
 }
-
 //Returns dates array from myPortfolio
 function getDatesInPortfolio() {
     return myPortfolio.getDates();
 }
-
 //Returns array of lows from myPortfolio
 function getLowsInPortfolio() {
     return myPortfolio.getLows();
 }
-
 //Returns Stock.name value for a given ticker
 function getStockTitleByTicker(ticker) {
     var stock = myPortfolio.getStockByTicker(ticker);
@@ -57,7 +54,6 @@ function getClosingValuesByTicker(ticker) {
     return stock.getClosingPrices();
 }
 
-
 function getChartValuesByTicker(valueType, ticker) {
     var valuesArray = [];
     if (valueType == "closing") {
@@ -74,6 +70,8 @@ function getChartValuesByTicker(valueType, ticker) {
     }
     return valuesArray;
 }
+
+
 
 //
 // Server Access Functions 
@@ -116,7 +114,8 @@ function getSideBarData(_callback) {
             if (msg.message.requester == "Server") {
                 myPortfolio.importStocks(msg.message.data);
                 console.log("imported");
-                displayStockList();
+                console.log(msg.message);
+                displayStockList();               
             }
         },
         presence: function (presenceEvent) {
@@ -132,6 +131,11 @@ function getSideBarData(_callback) {
 };
 
 function getStockDataByTicker(ticker, _callback) {
+    //Return if stock data is already loaded
+    if (myPortfolio.getStockByTicker(ticker).isLoaded()) {
+        _callback(ticker);
+        return;
+    }
     //Initialize Stock object
     var stock = new Stock();
     var indx = 0;
@@ -166,13 +170,13 @@ function getStockDataByTicker(ticker, _callback) {
         message: function (msg) {
             if (msg.message.requester == "Server") {
                 stock = myPortfolio.getStockByTicker(ticker);
-                stock.setData([]);
+                if (stock.getData() == null) stock.setData([]);
                 msg.message.data.data.forEach(element => { stock.addStockDetailFromServer(element) });
-                stock.sortDataByDate();
+                stock.sortDataByDate();               
                 console.log("imported " + ticker + " data");
                 indx++;
                 if (indx == msg.message.total) {
-                    myPortfolio.addStock(stock);
+                    stock.setLoaded(true);
                     _callback(ticker);                 
                 }
             }
