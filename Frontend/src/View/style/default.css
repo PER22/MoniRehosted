@@ -132,7 +132,14 @@ button {
 .stock-selection-summary-short-name{
 
 }
+.stock-selection-right {
+	display: flex;
+	flex-direction: column;
+}
 .stock-selection-summary-price {
+	float: right;
+}
+.stock-selection-change-value {
 	float: right;
 }
 /* Analytics Section (Right Side)*/

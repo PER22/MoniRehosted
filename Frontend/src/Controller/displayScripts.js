@@ -65,12 +65,14 @@ function displayStockList() {
                 "               <label class=\"detail-label-small\" id=\"shortName-" + stock.label + "\">" + stock.label + "</label>" +
                 "           </div>" +
                 "      </div>" +
-                "      <div class=\"stock-selection-summary-price\" id=\"price-" + stock.label + "\">" +
-                "           <label class=\"detail-label-small\" id=\"labelPrice-" + stock.label + "\">$" + stock.price + "</label>" +
-                "      </div>" +
-                "      <div class=\"stock-selection-summary-price\" id=\"price-" + stock.label + "\">" +
-                "           <label class=\"detail-label-small\" id=\"labelPrice-" + stock.label + "\">$" + stock.price + "</label>" +
-                "      </div>" +
+                "      <div class=\"stock-selection-right\" id=\"right-" + stock.label + "\">" +
+                "           <div class=\"stock-selection-summary-price\" id=\"price-" + stock.label + "\">" +
+                "               <label class=\"detail-label-small\" id=\"labelPrice-" + stock.label + "\">$" + stock.price + "</label>" +
+                "           </div>" +
+                "           <div class=\".stock-selection-change-value\" id=\"change-" + stock.label + "\">" +
+                "               <label class=\"detail-label-small\" id=\"labelChange-" + stock.label + "\">" + stock.priceChangeFromPreviousDay + "%</label>" +
+                "           </div>" +
+                "       </div>" +
                 "   </div>" +
                 "</div>";
         }
