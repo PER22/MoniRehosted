@@ -4,7 +4,7 @@ body {
 	background-position: center top;
 	background-repeat: no-repeat;
 	background-size: 100vw auto;
-	background-color: #373c42;
+	background-color: black;
 	font-family: 'Raleway', sans-serif;
 	font-family: 'Montserrat', sans-serif;
 }
@@ -58,6 +58,16 @@ ol {
 li {
 
 }
+button {
+	background-color: gray;
+	border: none;
+	color: white;
+	padding: 6px 20px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+}
 
 /*Header*/
 .top-bar {
@@ -73,15 +83,11 @@ li {
 
 /*Portfolio Section*/
 .portfolio-container {
-  min-width: 90%;
-  min-width: 90vw;
-
-  padding: 0;
-
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 3vh;
-  margin-bottom: 3vh;
+	min-width: 90%;
+	min-width: 90vw;
+	padding: 0;
+	border-radius: 25px;
+	background: #373c42;
 }
 
 .portfolio-content {
@@ -89,8 +95,6 @@ li {
   min-height: 79vh;
 
   display: flex;
-  margin-top: 2vh;
-  padding-top: 2vh;
 }
 
 .portfolio-content table{
@@ -98,20 +102,27 @@ li {
 }
 
 /* Stocks Section (Left Side)*/
+.left-header-sect{
+
+}
+.logo-header-sect {
+	background-color: #373c42;
+	height: 10%;
+}
 .stock-selection-sect {
-	padding-top: 40px;
-	height: 600px;
-	width: 20%;
+	padding-top: 10px;
+	height: 86%;
+	width: 100%;
 	float: left;
 	overflow: auto;
-	overflow-x: hidden;
+	overflow-x: hidden;	
 }
 
 .stock-selection-summary {
 	padding: 7px;
 	display: flex;
 	flex-direction: row;
-	border-top: 1px solid black;
+	border-bottom: 1px solid black;
 }
 .stock-selection-left{
 	min-width: 160px;
@@ -121,7 +132,14 @@ li {
 .stock-selection-summary-short-name{
 
 }
+.stock-selection-right {
+	display: flex;
+	flex-direction: column;
+}
 .stock-selection-summary-price {
+	float: right;
+}
+.stock-selection-change-value {
 	float: right;
 }
 /* Analytics Section (Right Side)*/
@@ -135,6 +153,11 @@ li {
 	height: 10%;
 }
 
+.select-stock-chart-type {
+	padding-top: 10px;
+	display: flex;
+	flex-direction: row;
+}
 
 .stock-details-sect {
 	border-top: 1px solid gray;
@@ -155,8 +178,23 @@ li {
 	padding-right: 30px;
 }
 
+.stock-details-3 {
+	border-right: 1px solid gray;
+	padding-left: 50px;
+	padding-top: 11px;
+	padding-right: 30px;
+}
+
+.date-selection-sect {
+	border-top: 1px solid gray;
+	border-bottom: 1px solid gray;
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+}
+
 .chart-sect {
-	border: 1px solid gray;
+	border-top: 1px solid gray;
 	padding: 10px;
 	height: 80%;
 }
@@ -166,6 +204,8 @@ div:active {
 }
 
 */
+
+
 /*Control Classes*/
 .header-label {
 	color: white;
@@ -182,4 +222,15 @@ div:active {
 .detail-label-large {
 	color: white;
 	padding: 10px;
+}
+.date-picker-button {
+	color: #D8D8D8;
+	font-size: 20px;
+	border-radius: 25px;
+	background: #373c42;
+	padding-top: 10px;
+	padding-left: 20px;
+}
+.date-picker-button:focus {
+		outline: 0;
 }
