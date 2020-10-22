@@ -53,6 +53,10 @@ function getClosingValuesByTicker(ticker) {
     var stock = myPortfolio.getStockByTicker(ticker);
     return stock.getClosingPrices();
 }
+//Sets Portfolio date range based off selected date-picker-button
+function setDateRangeByDatePickerButton(datePickerButtonValue) {
+    myPortfolio.setPortfolioDateRange(datePickerButtonValue);
+}
 
 function getChartValuesByTicker(valueType, ticker) {
     var valuesArray = [];

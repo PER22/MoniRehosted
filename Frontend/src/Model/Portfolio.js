@@ -38,31 +38,34 @@ class Portfolio {
     }
     //Sets startDate and endDate depending on selected datePickerButton
     setPortfolioDateRange(datePickerButtonValue) {        
-        if (datePickerButtonValue == "1W") {            
+        var d = new Date();
+        startDate = Date.getDate();
+        if (datePickerButtonValue == "1W") {
+            stopDate.setDate(d.getDate() - 7);
         }
         else if (datePickerButtonValue == "1M") {
-
+            stopDate.setDate(d.getDate() - 31);
         }
         else if (datePickerButtonValue == "3M") {
-
+            stopDate.setDate(d.getDate() - 93);
         }
         else if (datePickerButtonValue == "6M") {
-
+            stopDate.setDate(d.getDate() - 183);
         }
         else if (datePickerButtonValue == "1Y") {
-
+            stopDate.setDate(d.getDate() - 365);
         }
         else if (datePickerButtonValue == "2Y") {
-
+            stopDate.setDate(d.getDate() - 730);
         }
         else if (datePickerButtonValue == "5Y") {
-
+            stopDate.setDate(d.getDate() - 1825);
         }
         else if (datePickerButtonValue == "10Y") {
-
+            stopDate.setDate(d.getDate() - 3650);
         }
         else if (datePickerButtonValue == "ALL") {
-
+            stopDate.setDate(d.getDate() - 18250);
         }
     }
 

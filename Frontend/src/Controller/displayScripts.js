@@ -34,7 +34,6 @@ function displayStockChart(ticker) {
                 borderWidth: 1
             }],
             options: {
-                responsive: true,
                 scales: {
                     yAxes: [{
                         ticks: {
@@ -82,6 +81,13 @@ function displayStockList() {
     var stockHeader = document.getElementById('load-button').remove();
 }
 
+function handleFilterDateRange(e) {
+    var sender = e.srcElement || e.target;
+    var dateRangeValue = sender.value;
+    setDatePickerBackcolor(sender);
+    setDateRangeByDatePickerButton(dateRangeValue);
+}
+
 //
 // Utility functions
 //
@@ -105,11 +111,7 @@ function setCursor(cursor) {
     }
 }
 
-function setDatePickerBackcolor(e) {
-    console.log(myPortfolio);
-    if (!e)
-        e = window.event;
-    var sender = e.srcElement || e.target;
+function setDatePickerBackcolor(sender) {
     var dateButtons = document.getElementsByName('datePicker');
     for (var i = 0; i < dateButtons.length; i++) {
         if (dateButtons[i] == sender) {
