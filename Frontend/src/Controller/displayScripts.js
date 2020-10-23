@@ -26,11 +26,11 @@ function displayStockChart(ticker) {
                 //label: ticker,
                 fill: false,
                 data: chartValues,
-                //borderColor: "#FF0000",
+                borderColor: "#FF0000",
                 //borderDash: [5, 5],
                 //backgroundColor: "#FF0000",
                 //pointBackgroundColor: "#55bae7",
-                //pointBorderColor: "#55bae7",
+                pointBorderColor: "#000000",
                 //pointHoverBackgroundColor: "#55bae7",
                 //pointHoverBorderColor: "#0000FF",
                 borderWidth: 1
