@@ -104,52 +104,52 @@ class Stock{
 	}
 }
 
-class StockData{
-    constructor(date, open, high, low, close, volume){
+class StockData {
+    constructor(date, open, high, low, close, volume) {
         this.date = date;
         this.open = open;
         this.high = high;
         this.low = low;
         this.close = close;
-		this.volume = volume;
-	}
+        this.volume = volume;
+    }
 
-	setDate(date){
-		this.date = date;
-	}
-	getDate() {
-		return this.date;
-	}
-	setOpen(open) {
-		this.open = open;
-	}
-	getOpen() {
-		return this.open;
-	}
-	setLow(low){
-		this.low = low;
-	}
-	getLow() {
-		return this.low;
-	}
-	setHigh(high) {
-		this.high = high;
-	}
-	getHigh() {
-		return this.high;
-	}
-	setClose(close) {
-		this.close = close;
-	}
-	getClose() {
-		return this.close;
-	}
-	setVolume(volume) {
-		this.volume = volume;
-	}
-	getVolume() {
-		return this.volume;
-	}
+    setDate(date) {
+        this.date = date;
+    }
+    getDate() {
+        return this.date;
+    }
+    setOpen(open) {
+        this.open = open;
+    }
+    getOpen() {
+        return this.open;
+    }
+    setLow(low) {
+        this.low = low;
+    }
+    getLow() {
+        return this.low;
+    }
+    setHigh(high) {
+        this.high = high;
+    }
+    getHigh() {
+        return this.high;
+    }
+    setClose(close) {
+        this.close = close;
+    }
+    getClose() {
+        return this.close;
+    }
+    setVolume(volume) {
+        this.volume = volume;
+    }
+    getVolume() {
+        return this.volume;
+    }
 }
 
 //module.exports = {Stock, StockData}
