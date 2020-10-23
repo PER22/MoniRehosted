@@ -1,5 +1,5 @@
 /* *********************************************************
- 
+
 ********************************************************** */
 
 class Stock{
@@ -56,7 +56,7 @@ class Stock{
 	}
 	//Turns json element into StockData object and adds to data array.
 	addStockDetailFromServer(element){
-		var stockData = new StockData(element.Date, element.Open, element.High, element.Low, element.Close, element.OpenInt, element.Volume)
+		var stockData = new StockData(element.Date, element.Open, element.High, element.Low, element.Close, element.Volume, element.OpenInt)
 		this.data.push(stockData);
 	}
 	getStockDates() {
@@ -73,12 +73,20 @@ class Stock{
 		}
 		return closingPrices;
 	}
-	getOpeningPrices() {
-		var openingPrices = []
+
+  getClosingPrices() {
+		var closingPrices = []
 		for (var i = 0; i < this.data.length; i++) {
-			openingPrices.push(this.data[i].getOpen());
+			closingPrices.push(this.data[i].getClose());
 		}
-		return openingPrices;
+		return closingPrices;
+	}
+	getVolumes() {
+		var volumes = []
+		for (var i = 0; i < this.data.length; i++) {
+			volumes.push(this.data[i].getVolume());
+		}
+		return volumes;
 	}
 	getLowPrices() {
 		var lowPrices = []

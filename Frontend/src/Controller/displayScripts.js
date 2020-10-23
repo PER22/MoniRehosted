@@ -14,13 +14,15 @@ function displayStockChart(ticker) {
     var prevClosingValue = getStockInPortfolioByTicker(ticker).getPriceChangeFromPreviousDay();
     var selectedRadioValue = getSelectedRadioButtonValue();
     var chartValues = getChartValuesByTicker(selectedRadioValue, ticker);
+    var volumes = getChartVolumeByTicker(selectedRadioValue, ticker);
     var dateValues = getClosingDatesByTicker(ticker);
     //consol.log("\n\n\n\t\t" + (prevClosingValue.contains("-")) ? "#FF0000" : "#00FF00")
     //Fill chart
     var ctx = document.getElementById('myChart').getContext('2d');
 
-    console.log(Math.max(...chartValues));
-
+    for(var i = 0, length = volumes.length; i < length; i++){
+        volumes[i] = volumes[i]/1000000;
+    }
     var gradient = ctx.createLinearGradient(0, 0, 0, Math.max(...chartValues) * 2);
     var lineColor = "#FFFFFF"
 
@@ -35,24 +37,31 @@ function displayStockChart(ticker) {
     }
 
     var myChart = new Chart(ctx, {
-        type: 'line',
+        type: 'bar',
         data: {
             labels: dateValues,
             datasets: [{
+              label: 'Bar Dataset',
+              data: volumes,
+              backgroundColor : 'black',
+              order: 2
+            },{
                 //label: ticker,
+                type: 'line',
                 fill: true,
                 data: chartValues,
                 borderColor: lineColor,
                 backgroundColor : gradient,
-                //borderDash: [5, 5],
-                //pointBackgroundColor: "#55bae7",
-                //pointBorderColor: "#000000",
-                //pointHoverBackgroundColor: "#55bae7",
                 pointHoverBorderColor: "#0000FF",
                 pointRadius: 0,
-                borderWidth: 1
+                borderWidth: 1,
+                order: 1
             }],
             options: {
+              tooltips: {
+                  mode: 'nearest',
+                  mode: 'x'
+                },
                 scales: {
                     yAxes: [{
                         ticks: {
