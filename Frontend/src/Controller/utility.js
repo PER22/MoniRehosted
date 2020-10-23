@@ -61,6 +61,15 @@ function getLowValuesByTicker(ticker) {
 function setDateRangeByDatePickerButton(datePickerButtonValue) {
     myPortfolio.setPortfolioDateRange(datePickerButtonValue);
 }
+//Sets Portfolio date range based off selected date-picker-button
+function setDateRangeByDatePickerButton(datePickerButtonValue) {
+    myPortfolio.setPortfolioDateRange(datePickerButtonValue);
+}
+//Sets Portfolio date range based off selected date-picker-button
+function getVolumeValuesByTicker(datePickerButtonValue) {
+    var stock = myPortfolio.getStockByTicker(datePickerButtonValue);
+    return stock.getVolumes();
+}
 
 function getChartValuesByTicker(valueType, ticker) {
     var startDate = myPortfolio.getStartDate();
@@ -81,10 +90,14 @@ function getChartValuesByTicker(valueType, ticker) {
     return valuesArray;
 }
 
+function getChartVolumeByTicker(valueType, ticker) {
+    return getVolumeValuesByTicker(ticker);
+}
+
 
 
 //
-// Server Access Functions 
+// Server Access Functions
 //  vvvvvvvvvvvvvvvvvvvvv
 
 
@@ -125,7 +138,7 @@ function getSideBarData(_callback) {
                 myPortfolio.importStocks(msg.message.data);
                 console.log("imported");
                 console.log(msg.message);
-                displayStockList();               
+                displayStockList();
             }
         },
         presence: function (presenceEvent) {
@@ -182,12 +195,12 @@ function getStockDataByTicker(ticker, _callback) {
                 stock = myPortfolio.getStockByTicker(ticker);
                 if (stock.getData() == null) stock.setData([]);
                 msg.message.data.data.forEach(element => { stock.addStockDetailFromServer(element) });
-                stock.sortDataByDate();               
+                stock.sortDataByDate();
                 console.log("imported " + ticker + " data");
                 indx++;
                 if (indx == msg.message.total) {
                     stock.setLoaded(true);
-                    _callback(ticker);                 
+                    _callback(ticker);
                 }
             }
             else {
@@ -204,7 +217,7 @@ function getStockDataByTicker(ticker, _callback) {
         channels: ['FinanceSub']
     });
 
-   
+
     console.log(myPortfolio);
 }
 
@@ -262,4 +275,3 @@ function getData(label) {
 
     myPortfolio.addStock(stock)
 };
-
