@@ -18,21 +18,34 @@ function displayStockChart(ticker) {
     //consol.log("\n\n\n\t\t" + (prevClosingValue.contains("-")) ? "#FF0000" : "#00FF00")
     //Fill chart
     var ctx = document.getElementById('myChart').getContext('2d');
+
+    console.log(String(prevClosingValue));
+
+    var gradient = ctx.createLinearGradient(0, 0, 0, 400);
+    if(false){
+      gradient.addColorStop(0, 'rgba(255,0,0,0.6)');
+      gradient.addColorStop(1, 'rgba(255,0,0,0)');
+    } else {
+      gradient.addColorStop(0, 'rgba(0,255,0,0.6)');
+      gradient.addColorStop(1, 'rgba(0,255,0,0)');
+    }
+
     var myChart = new Chart(ctx, {
         type: 'line',
         data: {
             labels: dateValues,
             datasets: [{
                 //label: ticker,
-                fill: false,
+                fill: true,
                 data: chartValues,
                 borderColor: "#FF0000",
+                backgroundColor : gradient,
                 //borderDash: [5, 5],
-                //backgroundColor: "#FF0000",
                 //pointBackgroundColor: "#55bae7",
-                pointBorderColor: "#000000",
+                //pointBorderColor: "#000000",
                 //pointHoverBackgroundColor: "#55bae7",
-                //pointHoverBorderColor: "#0000FF",
+                pointHoverBorderColor: "#0000FF",
+                pointRadius: 0,
                 borderWidth: 1
             }],
             options: {
