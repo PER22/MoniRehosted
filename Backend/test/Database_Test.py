@@ -12,6 +12,7 @@ class Database_Test(TestCase):
 
     def test_get_ETF(self):
         etf =  self.database.get("etf", "aadr")
+        print(etf[0].toJSON())
 
         self.assertEqual(len(etf), 14)
 
@@ -20,5 +21,14 @@ class Database_Test(TestCase):
 
         self.assertEqual(len(stock), 38)
 
+    def test_get_Stock_name(self):
+        stock = self.database.get("stock", "a")
+
+        self.assertEqual(str(stock[0].name), "Agilent Technologies, Inc.")
+
     def test_get_Stock(self):
         self.assertEqual(self.database.getLabels("etf", "a"), self.database.createDummyLabels())
+
+    def test_getStockName(self):
+        stock = str(self.database.get_symbol("TSLA"))
+        self.assertEqual(stock, "Tesla, Inc.")

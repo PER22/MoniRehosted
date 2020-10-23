@@ -1,4 +1,5 @@
 from Backend.src.Model.Stock import Stock
+import requests
 from threading import Thread
 import csv
 import numpy as np
@@ -40,7 +41,8 @@ class Database:
         print("Type: " + str(assetType) + " | Label: " + str(label))
         asset = (self.Stocks[str(label).lower()]) if("stock" in str(assetType).lower()) else (self.ETFs[str(label).lower()])
 
-        name = asset.name
+        name = asset.name if (asset.name != "") else self.storeLabel(asset.label, ("stock" if("stock" in str(assetType).lower()) else "etf"))
+        print("\n\n\n\t\t\t" + str(name) + "\n\n\n")
         label = asset.label
         data = asset.data
 
@@ -60,6 +62,19 @@ class Database:
 
         print("Returning Data")
         return(chunkList)
+
+    def storeLabel(self, label, type):
+        nameOfCompany = self.get_symbol(label.upper())
+
+        print("\n\n\n\t\t\t" + str(nameOfCompany) + "\n\n\n")
+
+        if type == "stock":
+            self.Stocks[label].name = nameOfCompany
+        else:
+            self.ETFs[label].name = nameOfCompany
+
+        return(nameOfCompany)
+
 
 
     #getLabels returns the first $amount (for example 100) names, label and closing price of assetType
@@ -157,8 +172,6 @@ class Database:
 
         print("Importing Stocks Complete\n")
 
-
-
     def importETFs(self):
         print("Importing ETFs")
 
@@ -179,7 +192,14 @@ class Database:
         print("Importing ETFs Complete\n\n")
 
 
+    def get_symbol(self, symbol):
+        url = "http://d.yimg.com/autoc.finance.yahoo.com/autoc?query={}&region=1&lang=en".format(symbol)
 
+        result = requests.get(url).json()
+
+        for x in result['ResultSet']['Result']:
+            if x['symbol'] == symbol:
+                return x['name']
 
 
     #I can't see a reason to save them all to file again, but here it is.
@@ -229,31 +249,31 @@ class Database:
     #-=-=-=- Helper Function -=-=-=-=-=-
     def createDummyLabels(self):
 
-        labels = [{"name": "Tesla", "label": "TSLA", "price":"12"},
-                  {"name": "Facebook", "label": "FB", "price":"55"},
-                  {"name": "Microsoft", "label": "MSFT", "price":"23"},
-                  {"name": "Google", "label": "GOOG", "price":"234"},
-                  {"name": "Intel", "label": "INTC", "price":"41"},
-                  {"name": "TSMC", "label": "TSM", "price":"41"},
-                  {"name": "Amazon", "label": "AMZ", "price":"234"},
-                  {"name": "AMD", "label": "AMD", "price":"432"},
-                  {"name": "Amgen", "label": "AMGN", "price":"56"},
-                  {"name": "Analog Devices Inc", "label": "AMGN", "price":"234"},
-                  {"name": "American Airlines", "label": "AAL", "price":"32"},
-                  {"name": "Applied Materials Inc", "label": "AMAT", "price":"54"},
-                  {"name": "Autodesk", "label": "ADSK", "price":"32"},
-                  {"name": "Broadcom", "label": "AVGO", "price":"12"},
-                  {"name": "Baidu", "label": "BIDU", "price":"34"},
-                  {"name": "Cerner Group", "label": "CERN", "price":"123"},
-                  {"name": "Comcast Corp", "label": "CMCSA", "price":"43"},
-                  {"name": "CSX Corp", "label": "CSX", "price":"410"},
-                  {"name": "J.B. Hunt", "label": "JBHT", "price":"465"},
-                  {"name": "lululemon", "label": "LULU", "price":"4451"},
-                  {"name": "Mariot International", "label": "MAR", "price":"324"},
-                  {"name": "Netflix", "label": "NFLX", "price":"123"},
-                  {"name": "Xillinx", "label": "XLNX", "price":"213"},
-                  {"name": "Wynn Resorts", "label": "Wynn", "price":"342"},
-                  {"name": "Xcel Energy", "label": "XEL", "price":"653"}]
+        labels = [{"name": "Tesla", "label": "TSLA", "price":"12", "change": "-1.41"},
+                  {"name": "Facebook", "label": "FB", "price":"55", "change": "-0.54"},
+                  {"name": "Microsoft", "label": "MSFT", "price":"23", "change": "+2.40"},
+                  {"name": "Google", "label": "GOOG", "price":"234", "change": "-0.35"},
+                  {"name": "Intel", "label": "INTC", "price":"41", "change": "-1.91"},
+                  {"name": "TSMC", "label": "TSM", "price":"41", "change": "-0.62"},
+                  {"name": "Amazon", "label": "AMZ", "price":"234", "change": "-0.65"},
+                  {"name": "AMD", "label": "AMD", "price":"432", "change": "-0.79"},
+                  {"name": "Amgen", "label": "AMGN", "price":"56", "change": "-2.58"},
+                  {"name": "Analog Devices Inc", "label": "AMGN", "price":"234", "change": "-0.46"},
+                  {"name": "American Airlines", "label": "AAL", "price":"32", "change": "+1.34"},
+                  {"name": "Applied Materials Inc", "label": "AMAT", "price":"54", "change": "+0.07"},
+                  {"name": "Autodesk", "label": "ADSK", "price":"32", "change": "-1.97"},
+                  {"name": "Broadcom", "label": "AVGO", "price":"12", "change": "+0.07"},
+                  {"name": "Baidu", "label": "BIDU", "price":"34", "change": "-1.97"},
+                  {"name": "Cerner Group", "label": "CERN", "price":"123", "change": "-0.27"},
+                  {"name": "Comcast Corp", "label": "CMCSA", "price":"43", "change": "+0.73"},
+                  {"name": "CSX Corp", "label": "CSX", "price":"410", "change": "+0.17"},
+                  {"name": "J.B. Hunt", "label": "JBHT", "price":"465", "change": "-0.87"},
+                  {"name": "lululemon", "label": "LULU", "price":"4451", "change": "-0.57"},
+                  {"name": "Mariot International", "label": "MAR", "price":"324", "change": "-0.28"},
+                  {"name": "Netflix", "label": "NFLX", "price":"123", "change": "-0.40"},
+                  {"name": "Xillinx", "label": "XLNX", "price":"213", "change": "+1.65"},
+                  {"name": "Wynn Resorts", "label": "Wynn", "price":"342", "change": "+0.98"},
+                  {"name": "Xcel Energy", "label": "XEL", "price":"653", "change": "+3.54"}]
 
         return(labels)
 
