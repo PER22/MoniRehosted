@@ -255,7 +255,7 @@ class Database:
                   {"name": "Google", "label": "GOOG", "price":"234", "change": "-0.35"},
                   {"name": "Intel", "label": "INTC", "price":"41", "change": "-1.91"},
                   {"name": "TSMC", "label": "TSM", "price":"41", "change": "-0.62"},
-                  {"name": "Amazon", "label": "AMZ", "price":"234", "change": "-0.65"},
+                  {"name": "Amazon", "label": "AMZN", "price":"234", "change": "-0.65"},
                   {"name": "AMD", "label": "AMD", "price":"432", "change": "-0.79"},
                   {"name": "Amgen", "label": "AMGN", "price":"56", "change": "-2.58"},
                   {"name": "Analog Devices Inc", "label": "AMGN", "price":"234", "change": "-0.46"},

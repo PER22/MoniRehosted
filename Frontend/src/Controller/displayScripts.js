@@ -19,15 +19,19 @@ function displayStockChart(ticker) {
     //Fill chart
     var ctx = document.getElementById('myChart').getContext('2d');
 
-    console.log(String(prevClosingValue));
+    console.log(Math.max(...chartValues));
 
-    var gradient = ctx.createLinearGradient(0, 0, 0, 400);
-    if(false){
-      gradient.addColorStop(0, 'rgba(255,0,0,0.6)');
-      gradient.addColorStop(1, 'rgba(255,0,0,0)');
+    var gradient = ctx.createLinearGradient(0, 0, 0, Math.max(...chartValues) * 2);
+    var lineColor = "#FFFFFF"
+
+    if(parseFloat(prevClosingValue) < 1){
+      gradient.addColorStop(0, 'rgba(255,0,0,0.7)');
+      gradient.addColorStop(1, 'rgba(255,0,0,0.1)');
+      lineColor = "#FF0000";
     } else {
-      gradient.addColorStop(0, 'rgba(0,255,0,0.6)');
-      gradient.addColorStop(1, 'rgba(0,255,0,0)');
+      gradient.addColorStop(0, 'rgba(0,255,0, 0.7)');
+      gradient.addColorStop(1, 'rgba(0,255,0, 0.1)');
+      lineColor = "#00FF00";
     }
 
     var myChart = new Chart(ctx, {
@@ -38,7 +42,7 @@ function displayStockChart(ticker) {
                 //label: ticker,
                 fill: true,
                 data: chartValues,
-                borderColor: "#FF0000",
+                borderColor: lineColor,
                 backgroundColor : gradient,
                 //borderDash: [5, 5],
                 //pointBackgroundColor: "#55bae7",
