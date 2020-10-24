@@ -16,17 +16,17 @@ function displayStockChart(ticker) {
     var chartValues = getChartValuesByTicker(selectedRadioValue, ticker);
     var volumes = getChartVolumeByTicker(selectedRadioValue, ticker);
     var dateValues = getClosingDatesByTicker(ticker);
-    //consol.log("\n\n\n\t\t" + (prevClosingValue.contains("-")) ? "#FF0000" : "#00FF00")
+
     //Fill chart
     var ctx = document.getElementById('myChart').getContext('2d');
 
     for(var i = 0, length = volumes.length; i < length; i++){
-        volumes[i] = volumes[i]/1000000;
+        volumes[i] = volumes[i]/10000000;
     }
     var gradient = ctx.createLinearGradient(0, 0, 0, Math.max(...chartValues) * 2);
     var lineColor = "#FFFFFF"
 
-    if(parseFloat(prevClosingValue) < 1){
+    if(parseFloat(prevClosingValue) < 0){
       gradient.addColorStop(0, 'rgba(255,0,0,0.7)');
       gradient.addColorStop(1, 'rgba(255,0,0,0.1)');
       lineColor = "#FF0000";
@@ -41,12 +41,12 @@ function displayStockChart(ticker) {
         data: {
             labels: dateValues,
             datasets: [{
-              label: 'Bar Dataset',
+              label: 'Volume',
               data: volumes,
               backgroundColor : 'black',
               order: 2
             },{
-                //label: ticker,
+                label: String(selectedRadioValue) + ' Price',
                 type: 'line',
                 fill: true,
                 data: chartValues,
