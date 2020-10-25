@@ -159,3 +159,24 @@ function setDatePickerBackcolor(sender) {
         }
     }
 }
+
+function setETFStockPickerBackColor(e){
+     console.log(myPortfolio);
+    if (!e)
+        e = window.event;
+    var sender = e.srcElement || e.target;
+    var dateButtons = document.getElementsByName('ETForStockPicker');
+    for (var i = 0; i < dateButtons.length; i++) {
+        if (dateButtons[i] == sender) {
+            dateButtons[i].style.background = '#FFFFFF';
+            dateButtons[i].style.fontWeight = "bold";
+            dateButtons[i].style.color = 'black';
+            dateButtons[i].style.borderColor = 'black';
+        }
+        else {
+            dateButtons[i].style.background = '#373c42';
+            dateButtons[i].style.fontWeight = "normal";
+            dateButtons[i].style.color = '#D8D8D8';
+        }
+    }
+}

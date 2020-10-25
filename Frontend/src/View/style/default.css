@@ -234,3 +234,26 @@ div:active {
 .date-picker-button:focus {
 		outline: 0;
 }
+
+#etf-stock-selector-sect{
+    width: 250px;
+    vertical-align: bottom;
+    margin: 0px 0px 15px 20px;
+    border-top: 1px solid gray;
+	border-bottom: 2px solid gray;
+}
+
+
+
+.etf-stock-picker-button{
+    color: #D8D8D8;
+	font-size: 20px;
+	border-radius: 25px;
+	background: #373c42;
+	margin : 0px 10px 4px 10px;;    
+    
+}
+
+.etf-stock-picker-button:focus {
+		outline: 0;
+}
