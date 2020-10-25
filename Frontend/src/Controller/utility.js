@@ -35,35 +35,64 @@ function getStockTitleByTicker(ticker) {
 //Returns array of dates for a given ticker
 function getClosingDatesByTicker(ticker) {
     var stock = myPortfolio.getStockByTicker(ticker);
-    return stock.getStockDates();
+    return stock.getStockDates(myPortfolio.getStartDate(), myPortfolio.getEndDate());
 }
 //Returns array of closing values for a given ticker
 function getClosingValuesByTicker(ticker) {
     var stock = myPortfolio.getStockByTicker(ticker);
-    return stock.getClosingPrices();
+    return stock.getClosingPrices(myPortfolio.getStartDate(), myPortfolio.getEndDate());
 }
 //Returns array of opening values for a given ticker
 function getOpeningValuesByTicker(ticker) {
     var stock = myPortfolio.getStockByTicker(ticker);
-    return stock.getOpeningPrices();
+    return stock.getOpeningPrices(myPortfolio.getStartDate(), myPortfolio.getEndDate());
 }
 //Returns array of high values for a given ticker
 function getHighValuesByTicker(ticker) {
     var stock = myPortfolio.getStockByTicker(ticker);
-    return stock.getHighPrices();
+    return stock.getHighPrices(myPortfolio.getStartDate(), myPortfolio.getEndDate());
 }
 //Returns array of low values for a given ticker
 function getLowValuesByTicker(ticker) {
     var stock = myPortfolio.getStockByTicker(ticker);
-    return stock.getLowPrices();
+    return stock.getLowPrices(myPortfolio.getStartDate(), myPortfolio.getEndDate());
+}
+//Returns array of volume values for a given ticker
+function getChartVolumeByTicker(valueType, ticker) {
+    var stock = myPortfolio.getStockByTicker(ticker);
+    return stock.getVolumes(myPortfolio.getStartDate(), myPortfolio.getEndDate());
 }
 //Sets Portfolio date range based off selected date-picker-button
 function setDateRangeByDatePickerButton(datePickerButtonValue) {
-    myPortfolio.setPortfolioDateRange(datePickerButtonValue);
+    //myPortfolio.setPortfolioDateRange(datePickerButtonValue);
 }
-//Sets Portfolio date range based off selected date-picker-button
-function setDateRangeByDatePickerButton(datePickerButtonValue) {
-    myPortfolio.setPortfolioDateRange(datePickerButtonValue);
+//Sets date filter for pulling data to display on chart
+function setDateFilterValue(datePickerButtonValue) {
+    myPortfolio.setDateFilter(datePickerButtonValue);
+}
+//Sets date range for current active stock
+function setActiveStockDateRange() {
+    myPortfolio.setEndDate(myPortfolio.stocks[myPortfolio.getActiveStockIndex()].data[myPortfolio.stocks[myPortfolio.getActiveStockIndex()].data.length - 1].getDate());
+    myPortfolio.setStartDateBasedOnEndDate();
+}
+//Sets endDate depending on final day in dataset, startDate by offsetting endDate by whichever button is clicked
+function setDateRangeByTicker(ticker) {
+    var stock = myPortfolio.getStockByTicker(ticker);
+    myPortfolio.setEndDate(stock.getData()[stock.getData().length - 1].getDate());
+}
+//Sets stock currently being displayed by ticker
+function setActiveStock(ticker) {
+    if (ticker == "") {
+        myPortfolio.setActiveStockIndex(0);
+       
+    }
+    else {
+        setActiveStockIndexByTicker(ticker);
+    }
+}
+//Returns label of stock being currently displayed
+function getActiveStockTicker() {
+    return myPortfolio.getActiveStockTicker();
 }
 //Sets Portfolio date range based off selected date-picker-button
 function getVolumeValuesByTicker(datePickerButtonValue) {
@@ -72,8 +101,6 @@ function getVolumeValuesByTicker(datePickerButtonValue) {
 }
 
 function getChartValuesByTicker(valueType, ticker) {
-    var startDate = myPortfolio.getStartDate();
-    var endDate = myPortfolio.getEndDate();
     var valuesArray = [];
     if (valueType == "closing") {
         valuesArray = getClosingValuesByTicker(ticker);
@@ -89,12 +116,6 @@ function getChartValuesByTicker(valueType, ticker) {
     }
     return valuesArray;
 }
-
-function getChartVolumeByTicker(valueType, ticker) {
-    return getVolumeValuesByTicker(ticker);
-}
-
-
 
 //
 // Server Access Functions
@@ -138,7 +159,7 @@ function getSideBarData(_callback) {
                 myPortfolio.importStocks(msg.message.data);
                 console.log("imported");
                 console.log(msg.message);
-                displayStockList();
+                _callback();
             }
         },
         presence: function (presenceEvent) {

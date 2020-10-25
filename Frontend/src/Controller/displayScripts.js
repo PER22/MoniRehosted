@@ -4,11 +4,13 @@ function handleChartDisplay(e) {
     var sender = e.srcElement || e.target;
     var ticker = sender.id.split("-")[1];
     setCursor("wait");
+    setActiveStock(ticker);
     getStockDataByTicker(ticker, displayStockChart);
 }
 function displayStockChart(ticker) {
     console.log("Displaying Chart");
-    //Set stock title
+    //Set stock title and initial date range
+    setActiveStockDateRange();
     document.getElementById('selected-stock-name').innerHTML = getStockTitleByTicker(ticker);
     //Gather chart values
     var prevClosingValue = getStockInPortfolioByTicker(ticker).getPriceChangeFromPreviousDay();
@@ -20,20 +22,20 @@ function displayStockChart(ticker) {
     //Fill chart
     var ctx = document.getElementById('myChart').getContext('2d');
 
-    for(var i = 0, length = volumes.length; i < length; i++){
-        volumes[i] = volumes[i]/10000000;
+    for (var i = 0, length = volumes.length; i < length; i++) {
+        volumes[i] = volumes[i] / 1000000;
     }
     var gradient = ctx.createLinearGradient(0, 0, 0, Math.max(...chartValues) * 2);
     var lineColor = "#FFFFFF"
 
-    if(parseFloat(prevClosingValue) < 0){
-      gradient.addColorStop(0, 'rgba(255,0,0,0.7)');
-      gradient.addColorStop(1, 'rgba(255,0,0,0.1)');
-      lineColor = "#FF0000";
+    if (parseFloat(prevClosingValue) < 0) {
+        gradient.addColorStop(0, 'rgba(255,0,0,0.7)');
+        gradient.addColorStop(1, 'rgba(255,0,0,0.1)');
+        lineColor = "#FF0000";
     } else {
-      gradient.addColorStop(0, 'rgba(0,255,0, 0.7)');
-      gradient.addColorStop(1, 'rgba(0,255,0, 0.1)');
-      lineColor = "#00FF00";
+        gradient.addColorStop(0, 'rgba(0,255,0, 0.7)');
+        gradient.addColorStop(1, 'rgba(0,255,0, 0.1)');
+        lineColor = "#00FF00";
     }
 
     var myChart = new Chart(ctx, {
@@ -41,26 +43,26 @@ function displayStockChart(ticker) {
         data: {
             labels: dateValues,
             datasets: [{
-              label: 'Volume',
-              data: volumes,
-              backgroundColor : 'black',
-              order: 2
-            },{
+                label: 'Volume',
+                data: volumes,
+                backgroundColor: 'black',
+                order: 2
+            }, {
                 label: String(selectedRadioValue) + ' Price',
                 type: 'line',
                 fill: true,
                 data: chartValues,
                 borderColor: lineColor,
-                backgroundColor : gradient,
+                backgroundColor: gradient,
                 pointHoverBorderColor: "#0000FF",
                 pointRadius: 0,
                 borderWidth: 1,
                 order: 1
             }],
             options: {
-              tooltips: {
-                  mode: 'nearest',
-                  mode: 'x'
+                tooltips: {
+                    mode: 'nearest',
+                    mode: 'x'
                 },
                 scales: {
                     yAxes: [{
@@ -106,14 +108,16 @@ function displayStockList() {
         index++;
     });
     stockHeader.innerHTML = boxContol;
-    var stockHeader = document.getElementById('load-button').remove();
+    setDatePickerBackcolor(document.getElementById('button-1W'))
+    getStockDataByTicker(getActiveStockTicker(), displayStockChart);
 }
 
 function handleFilterDateRange(e) {
     var sender = e.srcElement || e.target;
-    var dateRangeValue = sender.value;
+    var dateRangeValue = sender.innerHTML;
     setDatePickerBackcolor(sender);
-    setDateRangeByDatePickerButton(dateRangeValue);
+    setDateFilterValue(dateRangeValue);
+    displayStockChart(getActiveStockTicker());
 }
 
 //
