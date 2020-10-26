@@ -9,7 +9,7 @@ database = Database("ETFs1", "Stocks1")
 database.load()
 
 #define the ticker symbol
-tickerSymbol = 'a'
+tickerSymbol = 'aaba'
 
 #load the Stock from the database
 stock = database.Stocks[tickerSymbol]
@@ -18,22 +18,27 @@ stock = database.Stocks[tickerSymbol]
 startingDate = stock.data[-1]['Date']
 endningDate = today = date.today()
 
-#get data on this ticker
-tickerData = yf.Ticker(tickerSymbol.upper())
+#Don't update anything if there is nothing to update
+if(startingDate != endningDate):
 
-#get the historical prices for this ticker
-tickerDf = tickerData.history(period='1d', start=startingDate, end=endningDate)
+    #get data on this ticker
+    tickerData = yf.Ticker(tickerSymbol.upper())
 
-print("Length of Stock data before update: " + str(len(stock.data)))
+    #get the historical prices for this ticker
+    tickerDf = tickerData.history(period='1d', start=startingDate, end=endningDate)
+
+    print("Length of Stock data before update: " + str(len(stock.data)))
 
 
-for j in range(len(tickerDf)):
-    stock.data.append({'Date': '2017-11-10',
-                       'Open': tickerDf.iloc[j]['Open'],
-                       'High': tickerDf.iloc[j]['High'],
-                       'Low': tickerDf.iloc[j]['Low'],
-                       'Close': tickerDf.iloc[j]['Close'],
-                       'Volume': tickerDf.iloc[j]['Volume'],
-                       'OpenInt': '0'})
+    for j in range(len(tickerDf)):
+        stock.data.append({'Date': '2017-11-10',
+                           'Open': tickerDf.iloc[j]['Open'],
+                           'High': tickerDf.iloc[j]['High'],
+                           'Low': tickerDf.iloc[j]['Low'],
+                           'Close': tickerDf.iloc[j]['Close'],
+                           'Volume': tickerDf.iloc[j]['Volume'],
+                           'OpenInt': '0'})
 
-print("Length of Stock data after update: " + str(len(stock.data)))
+    print("Length of Stock data after update: " + str(len(stock.data)))
+else:
+    print("Nothing to update")
