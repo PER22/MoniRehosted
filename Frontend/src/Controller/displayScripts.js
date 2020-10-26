@@ -108,7 +108,8 @@ function displayStockList() {
         index++;
     });
     stockHeader.innerHTML = boxContol;
-    setDatePickerBackcolor(document.getElementById('button-1W'))
+    setDatePickerBackcolor(document.getElementById('button-1W'));
+    setETFStockPickerBackColor(document.getElementById('button-stock'));
     getStockDataByTicker(getActiveStockTicker(), displayStockChart);
 }
 
@@ -118,6 +119,12 @@ function handleFilterDateRange(e) {
     setDatePickerBackcolor(sender);
     setDateFilterValue(dateRangeValue);
     displayStockChart(getActiveStockTicker());
+}
+
+function handleSwapStockAndETF(e) {
+    var sender = e.srcElement || e.target;
+    setETFStockPickerBackColor(sender);
+    //filter by etf/stock
 }
 
 //
@@ -160,11 +167,8 @@ function setDatePickerBackcolor(sender) {
     }
 }
 
-function setETFStockPickerBackColor(e){
+function setETFStockPickerBackColor(sender){
      console.log(myPortfolio);
-    if (!e)
-        e = window.event;
-    var sender = e.srcElement || e.target;
     var dateButtons = document.getElementsByName('ETForStockPicker');
     for (var i = 0; i < dateButtons.length; i++) {
         if (dateButtons[i] == sender) {
