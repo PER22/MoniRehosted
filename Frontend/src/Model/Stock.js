@@ -73,9 +73,6 @@ class Stock {
     getClosingPrices(startDate, endDate) {
         var closingPrices = []
         for (var i = 0; i < this.data.length; i++) {
-            console.log(stockDate);
-            console.log(startDateVal);
-            console.log(endDateVal);
             var stockDate = Date.parse(this.data[i].getDate());
             var startDateVal = Date.parse(startDate);
             var endDateVal = Date.parse(endDate);

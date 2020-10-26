@@ -87,7 +87,7 @@ function setActiveStock(ticker) {
        
     }
     else {
-        setActiveStockIndexByTicker(ticker);
+        myPortfolio.setActiveStockIndexByTicker(ticker);
     }
 }
 //Returns label of stock being currently displayed
