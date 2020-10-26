@@ -1,15 +1,39 @@
 import yfinance as yf
+from Backend.src.Model.Database import Database
+from Backend.src.Model.Stock import Stock
 import numpy as np
+from datetime import date
+
+#Start the database and load in the data
+database = Database("ETFs1", "Stocks1")
+database.load()
 
 #define the ticker symbol
-tickerSymbol = 'MSFT'
+tickerSymbol = 'a'
+
+#load the Stock from the database
+stock = database.Stocks[tickerSymbol]
+
+#get starting and ending date
+startingDate = stock.data[-1]['Date']
+endningDate = today = date.today()
 
 #get data on this ticker
-tickerData = yf.Ticker(tickerSymbol)
+tickerData = yf.Ticker(tickerSymbol.upper())
 
 #get the historical prices for this ticker
-tickerDf = tickerData.history(period='1d', start='2010-1-1', end='2020-1-25')
+tickerDf = tickerData.history(period='1d', start=startingDate, end=endningDate)
 
-#see your data
-print(np.array(tickerDf)[0, 1:6])
-print(tickerDf.iloc[0])
+print("Length of Stock data before update: " + str(len(stock.data)))
+
+
+for j in range(len(tickerDf)):
+    stock.data.append({'Date': '2017-11-10',
+                       'Open': tickerDf.iloc[j]['Open'],
+                       'High': tickerDf.iloc[j]['High'],
+                       'Low': tickerDf.iloc[j]['Low'],
+                       'Close': tickerDf.iloc[j]['Close'],
+                       'Volume': tickerDf.iloc[j]['Volume'],
+                       'OpenInt': '0'})
+
+print("Length of Stock data after update: " + str(len(stock.data)))
