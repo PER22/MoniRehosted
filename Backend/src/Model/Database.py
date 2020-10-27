@@ -1,10 +1,12 @@
 from Backend.src.Model.Stock import Stock
+import yfinance as yf
 import requests
 from threading import Thread
 import csv
 import numpy as np
 import os
 import math
+from datetime import date
 
 
 class Database:
@@ -40,6 +42,20 @@ class Database:
     def get(self, assetType, label):
         print("Type: " + str(assetType) + " | Label: " + str(label))
         asset = (self.Stocks[str(label).lower()]) if("stock" in str(assetType).lower()) else (self.ETFs[str(label).lower()])
+
+        #get starting and ending date
+        startingDate = str(asset.data[-1]['Date'])
+        endningDate = str(date.today())
+
+        #Don't update anything if there is nothing to update
+
+        if(startingDate != endningDate):
+            print("Updating data")
+            self.updateData(assetType, label)
+            self.updateCSV(assetType, label)
+        else:
+            print("Nothing to update")
+
 
         name = asset.name if (asset.name != "") else self.storeLabel(asset.label, ("stock" if("stock" in str(assetType).lower()) else "etf"))
         print("\n\n\n\t\t\t" + str(name) + "\n\n\n")
@@ -201,47 +217,52 @@ class Database:
             if x['symbol'] == symbol:
                 return x['name']
 
+    def updateData(self, assetType, label):
+        asset = (self.Stocks[str(label).lower()]) if("stock" in str(assetType).lower()) else (self.ETFs[str(label).lower()])
 
-    #I can't see a reason to save them all to file again, but here it is.
-    def save_all_assets(self):
-        if self.loaded == False:
-            print("FileIO.save_all() can not be called before calling FileIO.load()")
-            return
-        #save Stocks
-        for each_ticker in self.Stocks:
-            file_object = open(self.stocks_directory + each_ticker + ".us.txt",'w')
-            file_to_build = "Date,Open,High,Low,Close,Volume,OpenInt\n"
-            for each_entry in self.Stocks[each_ticker].data:
-                line_to_build = ""
-                for i in range(6):
-                    line_to_build = line_to_build + str(self.Stocks[each_ticker].data[each_entry][i]) + ", "
-                line_to_build = line_to_build + str(self.Stocks[each_ticker].data[each_entry][6]) + "\n"
-                file_to_build += line_to_build
-            file_object.write(file_to_build)
-            file_object.close()
-        #save all ETFs
-        for each_ticker in self.ETFs:
-            file_object = open(self.etfs_directory + each_ticker + ".us.txt",'w')
-            #build file for individual ETF
-            file_to_build = "Date,Open,High,Low,Close,Volume,OpenInt\n"
-            for each_entry in self.ETFs[each_ticker].data:
-                #Build 1 days worth of data
-                line_to_build = ""
-                for i in range(6):
-                    line_to_build = line_to_build + str(self.ETFs[each_ticker].data[each_entry][i]) + ", "
-                line_to_build = line_to_build + str(self.ETFs[each_ticker].data[each_entry][6]) + "\n"
-                #append line to file
-                file_to_build += line_to_build
-            file_object.write(file_to_build)
-            file_object.close()
+        #get starting and ending date
+        startingDate = asset.data[-1]['Date']
+        endningDate = date.today()
+
+        #get data on this ticker
+        tickerData = yf.Ticker(label.upper())
+
+        #get the historical prices for this ticker
+        tickerDf = tickerData.history(period='1d', start=startingDate, end=endningDate)
+
+        print("Length of Stock data before update: " + str(len(asset.data)))
+
+        #incase it is monday and the exchange is not closed yet
+        if(str(tickerDf.iloc[-1].name).split()[0] != str(asset.data[-1]['Date'])):
+
+            for j in range(len(tickerDf)):
+                asset.data.append({'Date': str(tickerDf.iloc[j].name).split()[0],
+                                   'Open': str(round(tickerDf.iloc[j]['Open'], 2)),
+                                   'High': str(round(tickerDf.iloc[j]['High'], 2)),
+                                   'Low': str(round(tickerDf.iloc[j]['Low'], 2)),
+                                   'Close': str(round(tickerDf.iloc[j]['Close'], 2)),
+                                   'Volume': str(round(tickerDf.iloc[j]['Volume'], 2)),
+                                   'OpenInt': '0'})
+
+        print("Length of Stock data after update: " + str(len(asset.data)))
 
 
+    def updateCSV(self, assetType, label):
+        csv_columns = ['Date', 'Open', 'High', 'Low', 'Close', 'Volume', 'OpenInt']
+        asset = (self.Stocks[str(label).lower()]) if("stock" in str(assetType).lower()) else (self.ETFs[str(label).lower()])
+        dir = (self.stocks_directory if("stock" in str(assetType).lower()) else self.etfs_directory)
 
+        csv_file = (dir + label + ".us.txt")
 
-
-
-
-
+        print(csv_file)
+        try:
+            with open(csv_file, 'w') as csvfile:
+                writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
+                writer.writeheader()
+                for data in asset.data:
+                    writer.writerow(data)
+        except IOError:
+            print("I/O error")
 
 
 
