@@ -4,6 +4,7 @@ from pubnub.pnconfiguration import PNConfiguration
 from pubnub.pubnub import PubNub
 from Backend.src.Model.Database import Database
 import csv
+from pubnub.exceptions import PubNubException
 
 import math
 import os
@@ -27,46 +28,49 @@ class MySubscribeCallback(SubscribeCallback):
     def message(self, pubnub, message):
         controlCommand = message.message
         print(message)
-        if(controlCommand["requester"] == "Client"):
-            assetType = ("stock" if ("stock" in controlCommand["operation"].lower()) else "etf")
-            #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-            #-=-=-=-=-=-=-=- Stocks -=-=-==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-            #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-            if("Labels" in controlCommand["operation"]):
-                pubnub.publish().channel('FinanceSub').message({
-                    "requester": "Server",
-                    "operation": "ReturnStockLabels" if (assetType == "stock") else "ReturnETFLabels",
-                    "amount": controlCommand["amount"],
-                    "data": database.getLabels(assetType, controlCommand["amount"])
-                }).pn_async(my_publish_callback)
-
-
-            elif("Data" in controlCommand["operation"]):
-                originalAsset = database.get(assetType, controlCommand[assetType])
-                #originalAsset = testReturn()
-                for i in range(len(originalAsset)):
-                    print(str(i) + ". Chunk")
+        try:
+            if(controlCommand["requester"] == "Client"):
+                assetType = ("stock" if ("stock" in controlCommand["operation"].lower()) else "etf")
+                #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+                #-=-=-=-=-=-=-=- Stocks -=-=-==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+                #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+                if("Labels" in controlCommand["operation"]):
                     pubnub.publish().channel('FinanceSub').message({
                         "requester": "Server",
-                        "operation": "ReturnStockData" if (assetType == "stock") else "ReturnETFData",
-                        "assetType": controlCommand[assetType],
-                        "part": (i + 1),
-                        "total": len(originalAsset),
-                        "data": originalAsset[i].toJSON()
+                        "operation": "ReturnStockLabels" if (assetType == "stock") else "ReturnETFLabels",
+                        "amount": controlCommand["amount"],
+                        "data": database.getLabels(assetType, controlCommand["amount"])
                     }).pn_async(my_publish_callback)
 
 
-            elif("Prediction" in controlCommand["operation"]):
-                pubnub.publish().channel('FinanceSub').message({
-                    "requester": "Server",
-                    "operation": "ReturnStockPredictions" if (assetType == "stock") else "ReturnETFPredictions",
-                    "assetType": controlCommand[assetType],
-                    "data": Stock("Your", "mama", {"open": "4", "cclose": "5"})
-                }).pn_async(my_publish_callback)
+                elif("Data" in controlCommand["operation"]):
+                    originalAsset = database.get(assetType, controlCommand[assetType])
+                    #originalAsset = testReturn()
+                    for i in range(len(originalAsset)):
+                        print(str(i) + ". Chunk")
+                        pubnub.publish().channel('FinanceSub').message({
+                            "requester": "Server",
+                            "operation": "ReturnStockData" if (assetType == "stock") else "ReturnETFData",
+                            "assetType": controlCommand[assetType],
+                            "part": (i + 1),
+                            "total": len(originalAsset),
+                            "data": originalAsset[i].toJSON()
+                        }).pn_async(my_publish_callback)
+
+
+                elif("Prediction" in controlCommand["operation"]):
+                    pubnub.publish().channel('FinanceSub').message({
+                        "requester": "Server",
+                        "operation": "ReturnStockPredictions" if (assetType == "stock") else "ReturnETFPredictions",
+                        "assetType": controlCommand[assetType],
+                        "data": Stock("Your", "mama", {"open": "4", "cclose": "5"})
+                    }).pn_async(my_publish_callback)
+                else:
+                    print("OOPS something went wrong")
             else:
-                print("OOPS something went wrong")
-        else:
-            pass
+                pass
+        except PubNubException as e:
+            print("\n\nThere was an error with the request\n\n")
 
 class Cloud:
     def __init__(self):
