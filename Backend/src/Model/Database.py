@@ -115,7 +115,7 @@ class Database:
                 self.Stocks[temp[i]].name = name
 
                 if (len(stockData) != 0):
-                    stockList.append(dict(name=name, label=temp[i], price=stockData[-1]['Open'], change=str(round(float(stockData[-1]['Closing'])-float(stockData[-1]['Close']),2))))
+                    stockList.append(dict(name=name, label=temp[i], price=stockData[-1]['Open'], change=str(round(float(stockData[-1]['Close'])-float(stockData[-1]['Close']),2))))
         else:
             temp = [element for element in self.etf_ticker_list if element[0].lower() == str(letter).lower()]
 
