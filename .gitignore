@@ -158,3 +158,6 @@ version
 Frontend/node_modules/*
 *.pyc
 Frontend/node_modules/.bin/*
+Frontend/.vs/VSWorkspaceState.json
+Frontend/.vs/Frontend/v16/.suo
+Frontend/.vs/slnx.sqlite
