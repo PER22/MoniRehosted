@@ -41,43 +41,46 @@ class Database:
     #label is 4 char shortcut of asset name
     def get(self, assetType, label):
         print("Type: " + str(assetType) + " | Label: " + str(label))
-        asset = (self.Stocks[str(label).lower()]) if("stock" in str(assetType).lower()) else (self.ETFs[str(label).lower()])
+        if((str(label).lower() in self.Stocks) or (str(label).lower() in self.ETFs)):
+            asset = (self.Stocks[str(label).lower()]) if("stock" in str(assetType).lower()) else (self.ETFs[str(label).lower()])
 
-        #get starting and ending date
-        startingDate = str(asset.data[-1]['Date'])
-        endningDate = str(date.today())
+            #get starting and ending date
+            startingDate = str(asset.data[-1]['Date'])
+            endningDate = str(date.today())
 
-        #Don't update anything if there is nothing to update
+            #Don't update anything if there is nothing to update
 
-        if(startingDate != endningDate):
-            print("Updating data")
-            self.updateData(assetType, label)
-            self.updateCSV(assetType, label)
-        else:
-            print("Nothing to update")
-
-
-        name = asset.name if (asset.name != "") else self.storeLabel(asset.label, ("stock" if("stock" in str(assetType).lower()) else "etf"))
-        print("\n\n\n\t\t\t" + str(name) + "\n\n\n")
-        label = asset.label
-        data = asset.data
-
-        refferenceVal = 120 #3494
-        rowsLeftover = len(data)
-        total = len(data)
-        numChunks = int(math.ceil(rowsLeftover / refferenceVal))
-
-        chunkList = []
-
-        for i in range(numChunks):
-            if(refferenceVal <= rowsLeftover):
-                chunkList.append(Stock(name, label, data[total-rowsLeftover: refferenceVal * (i + 1)]))
-                rowsLeftover -= refferenceVal
+            if(startingDate != endningDate):
+                print("Updating data")
+                self.updateData(assetType, label)
+                self.updateCSV(assetType, label)
             else:
-                chunkList.append(Stock(name, label, data[total-rowsLeftover: total -1]))
+                print("Nothing to update")
 
-        print("Returning Data")
-        return(chunkList)
+
+            name = asset.name if (asset.name != "") else self.storeLabel(asset.label, ("stock" if("stock" in str(assetType).lower()) else "etf"))
+            print("\n\n\n\t\t\t" + str(name) + "\n\n\n")
+            label = asset.label
+            data = asset.data
+
+            refferenceVal = 120 #3494
+            rowsLeftover = len(data)
+            total = len(data)
+            numChunks = int(math.ceil(rowsLeftover / refferenceVal))
+
+            chunkList = []
+
+            for i in range(numChunks):
+                if(refferenceVal <= rowsLeftover):
+                    chunkList.append(Stock(name, label, data[total-rowsLeftover: refferenceVal * (i + 1)]))
+                    rowsLeftover -= refferenceVal
+                else:
+                    chunkList.append(Stock(name, label, data[total-rowsLeftover: total -1]))
+
+            print("Returning Data")
+            return(chunkList)
+        else:
+            return([Stock("Error", "Error", None)])
 
     def storeLabel(self, label, type):
         nameOfCompany = self.get_symbol(label.upper())
