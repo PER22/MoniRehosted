@@ -10,6 +10,8 @@ from datetime import date
 
 
 class Database:
+
+    #-=-=-=- Startup -=-=-=-=-=-
     def __init__(self, etfFolderName = "ETFs", stocksFolderName = "Stocks"):
         #create empty lists for tickers and pricelists
         self.stock_ticker_list = []
@@ -32,13 +34,26 @@ class Database:
 
         #self.load()
 
+    def load(self):
+        self.getFilenames()
+
+        thread1 = Thread(target = self.importStocks)
+        thread2 = Thread(target = self.importETFs)
+
+        thread1.start()
+        thread2.start()
+
+        thread1.join()
+        thread2.join()
+
+        self.loaded = True
+
+        print("Importing ETFs Complete\n\n")
+
+        return (self.stock_ticker_list, self.Stocks, self.etf_ticker_list, self.ETFs)
 
 
-
-
-
-    #assetType is either ETF or Stocks
-    #label is 4 char shortcut of asset name
+    #-=-=-=- Access Data -=-=-=-=-=-
     def get(self, assetType, label):
         print("Type: " + str(assetType) + " | Label: " + str(label))
         if((str(label).lower() in self.Stocks) or (str(label).lower() in self.ETFs)):
@@ -82,23 +97,6 @@ class Database:
         else:
             return([Stock("Error", "Error", None)])
 
-    def storeLabel(self, label, type):
-        nameOfCompany = self.get_symbol(label.upper())
-
-        print("\n\n\n\t\t\t" + str(nameOfCompany) + "\n\n\n")
-
-        if type == "stock":
-            self.Stocks[label].name = nameOfCompany
-        else:
-            self.ETFs[label].name = nameOfCompany
-
-        return(nameOfCompany)
-
-
-
-    #getLabels returns the first $amount (for example 100) names, label and closing price of assetType
-    #assetType is either ETF or Stocks
-    #amount is the amount of stock labels, names and closing price we want to return
     def getLabels(self, assetType, letter):
         print("Type: " + str(assetType) + " | Letter: " + str(letter))
         temp = []
@@ -127,31 +125,73 @@ class Database:
         return(self.createDummyLabels())
 
 
+    #-=-=-=- Update/Get Data from the internet -=-=-=-=-=-
+    def storeLabel(self, label, type):
+        nameOfCompany = self.get_symbol(label.upper())
+
+        if type == "stock":
+            self.Stocks[label].name = nameOfCompany
+        else:
+            self.ETFs[label].name = nameOfCompany
+
+        return(nameOfCompany)
+
+    def get_symbol(self, symbol):
+        url = "http://d.yimg.com/autoc.finance.yahoo.com/autoc?query={}&region=1&lang=en".format(symbol)
+
+        result = requests.get(url).json()
+
+        for x in result['ResultSet']['Result']:
+            if x['symbol'] == symbol:
+                return x['name']
+
+    def updateData(self, assetType, label):
+        asset = (self.Stocks[str(label).lower()]) if("stock" in str(assetType).lower()) else (self.ETFs[str(label).lower()])
+
+        #get starting and ending date
+        startingDate = asset.data[-1]['Date']
+        endningDate = date.today()
+
+        #get data on this ticker
+        tickerData = yf.Ticker(label.upper())
+
+        #get the historical prices for this ticker
+        tickerDf = tickerData.history(period='1d', start=startingDate, end=endningDate)
+
+        print("Length of Stock data before update: " + str(len(asset.data)))
+
+        #incase it is monday and the exchange is not closed yet
+        if(str(tickerDf.iloc[-1].name).split()[0] != str(asset.data[-1]['Date'])):
+
+            for j in range(len(tickerDf)):
+                asset.data.append({'Date': str(tickerDf.iloc[j].name).split()[0],
+                                   'Open': str(round(tickerDf.iloc[j]['Open'], 2)),
+                                   'High': str(round(tickerDf.iloc[j]['High'], 2)),
+                                   'Low': str(round(tickerDf.iloc[j]['Low'], 2)),
+                                   'Close': str(round(tickerDf.iloc[j]['Close'], 2)),
+                                   'Volume': str(round(tickerDf.iloc[j]['Volume'], 2)),
+                                   'OpenInt': '0'})
+
+        print("Length of Stock data after update: " + str(len(asset.data)))
 
 
+    #-=-=-=- File I/O -=-=-=-=-=-
+    def updateCSV(self, assetType, label):
+        csv_columns = ['Date', 'Open', 'High', 'Low', 'Close', 'Volume', 'OpenInt']
+        asset = (self.Stocks[str(label).lower()]) if("stock" in str(assetType).lower()) else (self.ETFs[str(label).lower()])
+        dir = (self.stocks_directory if("stock" in str(assetType).lower()) else self.etfs_directory)
 
+        csv_file = (dir + label + ".us.txt")
 
-
-
-    def load(self):
-        self.getFilenames()
-
-        thread1 = Thread(target = self.importStocks)
-        thread2 = Thread(target = self.importETFs)
-
-        thread1.start()
-        thread2.start()
-
-        thread1.join()
-        thread2.join()
-
-        self.loaded = True
-
-        print("Importing ETFs Complete\n\n")
-
-        return (self.stock_ticker_list, self.Stocks, self.etf_ticker_list, self.ETFs)
-
-
+        print(csv_file)
+        try:
+            with open(csv_file, 'w') as csvfile:
+                writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
+                writer.writeheader()
+                for data in asset.data:
+                    writer.writerow(data)
+        except IOError:
+            print("I/O error")
 
     def getFilenames(self):
         print("Getting File Names")
@@ -209,65 +249,6 @@ class Database:
         self.loaded = True
 
         print("Importing ETFs Complete\n\n")
-
-
-    def get_symbol(self, symbol):
-        url = "http://d.yimg.com/autoc.finance.yahoo.com/autoc?query={}&region=1&lang=en".format(symbol)
-
-        result = requests.get(url).json()
-
-        for x in result['ResultSet']['Result']:
-            if x['symbol'] == symbol:
-                return x['name']
-
-    def updateData(self, assetType, label):
-        asset = (self.Stocks[str(label).lower()]) if("stock" in str(assetType).lower()) else (self.ETFs[str(label).lower()])
-
-        #get starting and ending date
-        startingDate = asset.data[-1]['Date']
-        endningDate = date.today()
-
-        #get data on this ticker
-        tickerData = yf.Ticker(label.upper())
-
-        #get the historical prices for this ticker
-        tickerDf = tickerData.history(period='1d', start=startingDate, end=endningDate)
-
-        print("Length of Stock data before update: " + str(len(asset.data)))
-
-        #incase it is monday and the exchange is not closed yet
-        if(str(tickerDf.iloc[-1].name).split()[0] != str(asset.data[-1]['Date'])):
-
-            for j in range(len(tickerDf)):
-                asset.data.append({'Date': str(tickerDf.iloc[j].name).split()[0],
-                                   'Open': str(round(tickerDf.iloc[j]['Open'], 2)),
-                                   'High': str(round(tickerDf.iloc[j]['High'], 2)),
-                                   'Low': str(round(tickerDf.iloc[j]['Low'], 2)),
-                                   'Close': str(round(tickerDf.iloc[j]['Close'], 2)),
-                                   'Volume': str(round(tickerDf.iloc[j]['Volume'], 2)),
-                                   'OpenInt': '0'})
-
-        print("Length of Stock data after update: " + str(len(asset.data)))
-
-
-    def updateCSV(self, assetType, label):
-        csv_columns = ['Date', 'Open', 'High', 'Low', 'Close', 'Volume', 'OpenInt']
-        asset = (self.Stocks[str(label).lower()]) if("stock" in str(assetType).lower()) else (self.ETFs[str(label).lower()])
-        dir = (self.stocks_directory if("stock" in str(assetType).lower()) else self.etfs_directory)
-
-        csv_file = (dir + label + ".us.txt")
-
-        print(csv_file)
-        try:
-            with open(csv_file, 'w') as csvfile:
-                writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
-                writer.writeheader()
-                for data in asset.data:
-                    writer.writerow(data)
-        except IOError:
-            print("I/O error")
-
-
 
 
     #-=-=-=- Helper Function -=-=-=-=-=-
