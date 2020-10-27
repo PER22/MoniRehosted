@@ -97,6 +97,9 @@ class Database:
         else:
             return([Stock("Error", "Error", None)])
 
+    # getLabels returns the first $amount (for example 100) names, label and closing price of assetType
+    # assetType is either ETF or Stocks
+    # amount is the amount of stock labels, names and closing price we want to return
     def getLabels(self, assetType, letter):
         print("Type: " + str(assetType) + " | Letter: " + str(letter))
         temp = []
@@ -108,22 +111,43 @@ class Database:
 
             for i in range(len(temp)):
                 stockData = self.Stocks[temp[i]].data
+                name = self.get_symbol(temp[i].upper())
+                self.Stocks[temp[i]].name = name
 
-                if(len(stockData) != 0):
-                    stockList.append(dict(name='Tesla', label=temp[i], price=stockData[-1]['Open']))
+                if (len(stockData) != 0):
+                    stockList.append(dict(name=name, label=temp[i], price=stockData[-1]['Open'], change=str(round(float(stockData[-1]['Closing'])-float(stockData[-1]['Close']),2))))
         else:
             temp = [element for element in self.etf_ticker_list if element[0].lower() == str(letter).lower()]
 
             for i in range(len(temp)):
                 etfData = self.ETFs[temp[i]].data
+                name = self.get_symbol(temp[i].upper())
+                self.ETFs[temp[i]].name = name
 
-                if(len(etfData) != 0):
-                    stockList.append(dict(name='Tesla', label=temp[i], price=etfData[-1]['Open']))
+                if (len(etfData) != 0):
+                    stockList.append(dict(name=name, label=temp[i], price=etfData[-1]['Open'], change=str(round(float(etfData[-1]['Close'])-float(etfData[-2]['Close']),2))))
 
-        # "name": "Tesla", "label": "TSLA", "price": "12"
+        refferenceVal = 120  # 3494
+        rowsLeftover = len(stockList)
+        total = len(stockList)
+        numChunks = int(math.ceil(rowsLeftover / refferenceVal))
+
+        chunkList = []
+
+        for i in range(numChunks):
+            if (refferenceVal <= rowsLeftover):
+                for x in stockList[total - rowsLeftover: refferenceVal * (i + 1)]:
+                    chunkList.append(x)
+                rowsLeftover -= refferenceVal
+            else:
+                for x in stockList[total - rowsLeftover: total - 1]:
+                    chunkList.append(x)
+
+        return chunkList
+
+        #"name": "Tesla", "label": "TSLA", "price": "12"
         #return (stockList)
-        return(self.createDummyLabels())
-
+        #return(self.createDummyLabels())
 
     #-=-=-=- Update/Get Data from the internet -=-=-=-=-=-
     def storeLabel(self, label, type):

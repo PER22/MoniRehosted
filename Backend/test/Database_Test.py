@@ -28,7 +28,10 @@ class Database_Test(TestCase):
         self.assertEqual(str(stock[0].name), "Agilent Technologies, Inc.")
 
     def test_get_Stock_labels(self):
-        self.assertEqual(self.database.getLabels("etf", "a"), self.database.createDummyLabels())
+        feedback =self.database.getLabels('etf','a')
+        print(feedback)
+        print(self.database.createDummyLabels())
+        #self.assertEqual(self.database.getLabels("etf", "a"), self.database.createDummyLabels())
 
     def test_getStockName(self):
         stock = str(self.database.get_symbol("TSLA"))
