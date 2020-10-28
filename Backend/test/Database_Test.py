@@ -17,8 +17,13 @@ class Database_Test(TestCase):
 
         self.assertEqual(len(etf), 20)
 
-    def test_get_Stock(self):
+    def test_get_Stock_A(self):
         stock = self.database.get("stock", "a")
+
+        self.assertEqual(len(stock), 44)
+
+    def test_get_Stock_ABIO(self):
+        stock = self.database.get("stock", "abio")
 
         self.assertEqual(len(stock), 44)
 

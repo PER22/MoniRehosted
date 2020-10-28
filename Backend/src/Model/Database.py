@@ -164,13 +164,14 @@ class Database:
         if(str(tickerDf.iloc[-1].name).split()[0] != str(asset.data[-1]['Date'])):
 
             for j in range(len(tickerDf)):
-                asset.data.append({'Date': str(tickerDf.iloc[j].name).split()[0],
-                                   'Open': str(round(tickerDf.iloc[j]['Open'], 2)),
-                                   'High': str(round(tickerDf.iloc[j]['High'], 2)),
-                                   'Low': str(round(tickerDf.iloc[j]['Low'], 2)),
-                                   'Close': str(round(tickerDf.iloc[j]['Close'], 2)),
-                                   'Volume': str(round(tickerDf.iloc[j]['Volume'], 2)),
-                                   'OpenInt': '0'})
+                if(str(asset.data[-1]['Date']) != str(tickerDf.iloc[j].name).split()[0]):
+                    asset.data.append({'Date': str(tickerDf.iloc[j].name).split()[0],
+                                       'Open': str(round(tickerDf.iloc[j]['Open'], 2)),
+                                       'High': str(round(tickerDf.iloc[j]['High'], 2)),
+                                       'Low': str(round(tickerDf.iloc[j]['Low'], 2)),
+                                       'Close': str(round(tickerDf.iloc[j]['Close'], 2)),
+                                       'Volume': str(round(tickerDf.iloc[j]['Volume'], 2)),
+                                       'OpenInt': '0'})
 
         print("Length of Stock data after update: " + str(len(asset.data)))
 
