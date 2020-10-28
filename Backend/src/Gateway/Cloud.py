@@ -38,6 +38,7 @@ class MySubscribeCallback(SubscribeCallback):
                     listOfLabels = database.getLabels(assetType, controlCommand["amount"])
                     for i in range(len(listOfLabels)):
                         print(str(i) + ". Chunk")
+                        print(listOfLabels[i])
                         pubnub.publish().channel('FinanceSub').message({
                             "requester": "Server",
                             "operation": "ReturnStockLabels" if (assetType == "stock") else "ReturnETFLabels",

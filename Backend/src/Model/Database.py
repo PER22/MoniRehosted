@@ -112,26 +112,33 @@ class Database:
             for i in range(len(temp)):
                 stockData = self.Stocks[temp[i]].data
                 name = self.get_symbol(temp[i].upper())
-                if name is None:
+
+                if name == None:
                     self.Stocks[temp[i]].name =temp[i].upper()
+                    name =temp[i].upper()
                 else:
                     self.Stocks[temp[i]].name =name
 
                 if (len(stockData) != 0):
-                    stockList.append(dict(name=name, label=temp[i], price=stockData[-1]['Open'], change=str(round(float(stockData[-1]['Close'])-float(stockData[-1]['Close']),2))))
+                    tempChange =str(round(float(stockData[-1]['Close']) - float(stockData[-2]['Close']),2))
+
+                    stockList.append(dict(name=name, label=temp[i], price=stockData[-1]['Open'], change=tempChange))
         else:
             temp = [element for element in self.etf_ticker_list if element[0].lower() == str(letter).lower()]
 
             for i in range(len(temp)):
                 etfData = self.ETFs[temp[i]].data
                 name = self.get_symbol(temp[i].upper())
-                if name is None:
+
+                if name == None:
                     self.ETFs[temp[i]].name = temp[i].upper()
+                    name =temp[i].upper()
                 else:
                     self.ETFs[temp[i]].name = name
 
                 if (len(etfData) != 0):
-                    stockList.append(dict(name=name, label=temp[i], price=etfData[-1]['Open'], change=str(round(float(etfData[-1]['Close'])-float(etfData[-2]['Close']),2))))
+                    tempChange =str(round(float(etfData[-1]['Close']) - float(etfData[-2]['Close']),2))
+                    stockList.append(dict(name=name, label=temp[i], price=etfData[-1]['Open'], change=tempChange))
 
         refferenceVal = 120  # 3494
         rowsLeftover = len(stockList)
