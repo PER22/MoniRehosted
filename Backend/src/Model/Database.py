@@ -1,4 +1,7 @@
-from Backend.src.Model.Stock import Stock
+import sys
+sys.path.insert(1, '../')
+
+from Model.Stock import Stock
 import yfinance as yf
 import requests
 from threading import Thread
@@ -24,7 +27,7 @@ class Database:
 
         #go to correct file location to see the different companies.
         dirname = (os.path.dirname(__file__))[:-9]
-        data_directory = os.path.join(dirname, 'data') + os.sep
+        data_directory = os.path.join(dirname, '../../data') + os.sep
 
         print(data_directory)
         #Stocks directory
