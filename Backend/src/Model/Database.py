@@ -122,7 +122,10 @@ class Database:
             for i in range(len(temp)):
                 etfData = self.ETFs[temp[i]].data
                 name = self.get_symbol(temp[i].upper())
-                self.ETFs[temp[i]].name = name
+                if name ==None:
+                    self.ETFs[temp[i]].name = temp[i].upper()
+                else:
+                    self.ETFs[temp[i]].name = name
 
                 if (len(etfData) != 0):
                     stockList.append(dict(name=name, label=temp[i], price=etfData[-1]['Open'], change=str(round(float(etfData[-1]['Close'])-float(etfData[-2]['Close']),2))))
