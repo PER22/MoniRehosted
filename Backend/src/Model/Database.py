@@ -100,6 +100,9 @@ class Database:
         else:
             return([Stock("Error", "Error", None)])
 
+    # getLabels returns the first $amount (for example 100) names, label and closing price of assetType
+    # assetType is either ETF or Stocks
+    # amount is the amount of stock labels, names and closing price we want to return
     def getLabels(self, assetType, letter):
         print("Type: " + str(assetType) + " | Letter: " + str(letter))
         temp = []
@@ -111,22 +114,54 @@ class Database:
 
             for i in range(len(temp)):
                 stockData = self.Stocks[temp[i]].data
+                name = self.get_symbol(temp[i].upper())
 
-                if(len(stockData) != 0):
-                    stockList.append(dict(name='Tesla', label=temp[i], price=stockData[-1]['Open']))
+                if name == None:
+                    self.Stocks[temp[i]].name =temp[i].upper()
+                    name =temp[i].upper()
+                else:
+                    self.Stocks[temp[i]].name =name
+
+                if (len(stockData) != 0):
+                    tempChange =str(round(float(stockData[-1]['Close']) - float(stockData[-2]['Close']),2))
+
+                    stockList.append(dict(name=name, label=temp[i], price=stockData[-1]['Open'], change=tempChange))
         else:
             temp = [element for element in self.etf_ticker_list if element[0].lower() == str(letter).lower()]
 
             for i in range(len(temp)):
                 etfData = self.ETFs[temp[i]].data
+                name = self.get_symbol(temp[i].upper())
 
-                if(len(etfData) != 0):
-                    stockList.append(dict(name='Tesla', label=temp[i], price=etfData[-1]['Open']))
+                if name == None:
+                    self.ETFs[temp[i]].name = temp[i].upper()
+                    name =temp[i].upper()
+                else:
+                    self.ETFs[temp[i]].name = name
 
-        # "name": "Tesla", "label": "TSLA", "price": "12"
+                if (len(etfData) != 0):
+                    tempChange =str(round(float(etfData[-1]['Close']) - float(etfData[-2]['Close']),2))
+                    stockList.append(dict(name=name, label=temp[i], price=etfData[-1]['Open'], change=tempChange))
+
+        refferenceVal = 120  # 3494
+        rowsLeftover = len(stockList)
+        total = len(stockList)
+        numChunks = int(math.ceil(rowsLeftover / refferenceVal))
+
+        chunkList = []
+
+        for i in range(numChunks):
+            if (refferenceVal <= rowsLeftover):
+                chunkList.append(stockList[total - rowsLeftover: refferenceVal * (i + 1)])
+                rowsLeftover -= refferenceVal
+            else:
+                chunkList.append(stockList[total - rowsLeftover: total - 1])
+
+        return chunkList
+
+        #"name": "Tesla", "label": "TSLA", "price": "12"
         #return (stockList)
-        return(self.createDummyLabels())
-
+        #return(self.createDummyLabels())
 
     #-=-=-=- Update/Get Data from the internet -=-=-=-=-=-
     def storeLabel(self, label, type):
@@ -164,16 +199,17 @@ class Database:
         print("Length of Stock data before update: " + str(len(asset.data)))
 
         #incase it is monday and the exchange is not closed yet
-        if(str(tickerDf.iloc[-1].name).split()[0] != str(asset.data[-1]['Date'])):
+        if((len(tickerDf) != 0) and str(tickerDf.iloc[-1].name).split()[0] != str(asset.data[-1]['Date'])):
 
             for j in range(len(tickerDf)):
-                asset.data.append({'Date': str(tickerDf.iloc[j].name).split()[0],
-                                   'Open': str(round(tickerDf.iloc[j]['Open'], 2)),
-                                   'High': str(round(tickerDf.iloc[j]['High'], 2)),
-                                   'Low': str(round(tickerDf.iloc[j]['Low'], 2)),
-                                   'Close': str(round(tickerDf.iloc[j]['Close'], 2)),
-                                   'Volume': str(round(tickerDf.iloc[j]['Volume'], 2)),
-                                   'OpenInt': '0'})
+                if(str(asset.data[-1]['Date']) != str(tickerDf.iloc[j].name).split()[0]):
+                    asset.data.append({'Date': str(tickerDf.iloc[j].name).split()[0],
+                                       'Open': str(round(tickerDf.iloc[j]['Open'], 2)),
+                                       'High': str(round(tickerDf.iloc[j]['High'], 2)),
+                                       'Low': str(round(tickerDf.iloc[j]['Low'], 2)),
+                                       'Close': str(round(tickerDf.iloc[j]['Close'], 2)),
+                                       'Volume': str(round(tickerDf.iloc[j]['Volume'], 2)),
+                                       'OpenInt': '0'})
 
         print("Length of Stock data after update: " + str(len(asset.data)))
 
