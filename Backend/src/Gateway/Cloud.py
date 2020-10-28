@@ -18,7 +18,7 @@ class MySubscribeCallback(SubscribeCallback):
 
     def __init__(self):
         global database
-        database = Database()
+        database = Database("ETFs1", "Stocks1")
         database.load()
 
     def presence(self, pubnub, presence):
@@ -35,12 +35,17 @@ class MySubscribeCallback(SubscribeCallback):
                 #-=-=-=-=-=-=-=- Stocks -=-=-==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
                 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
                 if("Labels" in controlCommand["operation"]):
-                    pubnub.publish().channel('FinanceSub').message({
-                        "requester": "Server",
-                        "operation": "ReturnStockLabels" if (assetType == "stock") else "ReturnETFLabels",
-                        "amount": controlCommand["amount"],
-                        "data": database.getLabels(assetType, controlCommand["amount"])
-                    }).pn_async(my_publish_callback)
+                    listOfLabels = database.getLabels(assetType, controlCommand["amount"])
+                    for i in range(len(listOfLabels)):
+                        print(str(i) + ". Chunk")
+                        pubnub.publish().channel('FinanceSub').message({
+                            "requester": "Server",
+                            "operation": "ReturnStockLabels" if (assetType == "stock") else "ReturnETFLabels",
+                            "amount": controlCommand["amount"],
+                            "part": (i + 1),
+                            "total": len(listOfLabels),
+                            "data": listOfLabels[i]
+                        }).pn_async(my_publish_callback)
 
 
                 elif("Data" in controlCommand["operation"]):
