@@ -196,7 +196,7 @@ class Database:
         print("Length of Stock data before update: " + str(len(asset.data)))
 
         #incase it is monday and the exchange is not closed yet
-        if(str(tickerDf.iloc[-1].name).split()[0] != str(asset.data[-1]['Date'])):
+        if((len(tickerDf) != 0) and str(tickerDf.iloc[-1].name).split()[0] != str(asset.data[-1]['Date'])):
 
             for j in range(len(tickerDf)):
                 asset.data.append({'Date': str(tickerDf.iloc[j].name).split()[0],
