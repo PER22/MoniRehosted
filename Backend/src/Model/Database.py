@@ -136,12 +136,10 @@ class Database:
 
         for i in range(numChunks):
             if (refferenceVal <= rowsLeftover):
-                for x in stockList[total - rowsLeftover: refferenceVal * (i + 1)]:
-                    chunkList.append(x)
+                chunkList.append(stockList[total - rowsLeftover: refferenceVal * (i + 1)])
                 rowsLeftover -= refferenceVal
             else:
-                for x in stockList[total - rowsLeftover: total - 1]:
-                    chunkList.append(x)
+                chunkList.append(stockList[total - rowsLeftover: total - 1])
 
         return chunkList
 

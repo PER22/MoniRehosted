@@ -4,7 +4,7 @@ from Backend.src.Model.Stock import Stock
 
 class Database_Test(TestCase):
     def setUp(self):
-        self.database = Database("ETFs1", "Stocks1")
+        self.database = Database("ETFs")
         self.database.load()
 
     def test_load(self):
@@ -29,6 +29,8 @@ class Database_Test(TestCase):
 
     def test_get_Stock_labels(self):
         feedback =self.database.getLabels('etf','a')
+        print(len(feedback))
+        print(len(feedback[0]))
         print(feedback)
         print(self.database.createDummyLabels())
         #self.assertEqual(self.database.getLabels("etf", "a"), self.database.createDummyLabels())
