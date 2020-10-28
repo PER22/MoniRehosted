@@ -112,7 +112,7 @@ class Database:
             for i in range(len(temp)):
                 stockData = self.Stocks[temp[i]].data
                 name = self.get_symbol(temp[i].upper())
-                if name == None:
+                if name is None:
                     self.Stocks[temp[i]].name =temp[i].upper()
                 else:
                     self.Stocks[temp[i]].name =name
@@ -125,7 +125,7 @@ class Database:
             for i in range(len(temp)):
                 etfData = self.ETFs[temp[i]].data
                 name = self.get_symbol(temp[i].upper())
-                if name ==None:
+                if name is None:
                     self.ETFs[temp[i]].name = temp[i].upper()
                 else:
                     self.ETFs[temp[i]].name = name
