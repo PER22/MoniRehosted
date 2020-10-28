@@ -141,8 +141,8 @@ function getStockDataByTicker(ticker, _callback) {
     var indx = 0;
     // Update this block with your publish/subscribe keys
     pubnub = new PubNub({
-        publishKey: "pub-c-7cd0dca0-eb36-44f8-bfef-d692af28f7d4",
-        subscribeKey: "sub-c-01442846-0b27-11eb-8b70-9ebeb8f513a7"
+      publishKey: "pub-c-9ec7d15f-4966-4f9e-9f34-b7ca51622aac",
+      subscribeKey: "sub-c-08c91d8c-196f-11eb-bc34-ce6fd967af95"
     })
 
     //Publishes data request to server
