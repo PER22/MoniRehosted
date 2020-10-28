@@ -112,7 +112,10 @@ class Database:
             for i in range(len(temp)):
                 stockData = self.Stocks[temp[i]].data
                 name = self.get_symbol(temp[i].upper())
-                self.Stocks[temp[i]].name = name
+                if name == None:
+                    self.Stocks[temp[i]].name =temp[i].upper()
+                else:
+                    self.Stocks[temp[i]].name =name
 
                 if (len(stockData) != 0):
                     stockList.append(dict(name=name, label=temp[i], price=stockData[-1]['Open'], change=str(round(float(stockData[-1]['Close'])-float(stockData[-1]['Close']),2))))
