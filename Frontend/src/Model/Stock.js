@@ -54,11 +54,13 @@ class Stock {
             else return 0;
         });
     }
+
     //Turns json element into StockData object and adds to data array.
     addStockDetailFromServer(element) {
         var stockData = new StockData(element.Date, element.Open, element.High, element.Low, element.Close, element.Volume, element.OpenInt)
         this.data.push(stockData);
     }
+
     getStockDates(startDate, endDate) {
         var stockDates = []
         for (var i = 0; i < this.data.length; i++) {
@@ -70,6 +72,7 @@ class Stock {
         }
         return stockDates;
     }
+
     getClosingPrices(startDate, endDate) {
         var closingPrices = []
         for (var i = 0; i < this.data.length; i++) {
@@ -81,6 +84,7 @@ class Stock {
         }
         return closingPrices;
     }
+
     getLowPrices(startDate, endDate) {
         var lowPrices = []
         for (var i = 0; i < this.data.length; i++) {
@@ -92,6 +96,7 @@ class Stock {
         }
         return lowPrices;
     }
+
     getHighPrices(startDate, endDate) {
         var highPrices = []
         for (var i = 0; i < this.data.length; i++) {
@@ -103,6 +108,7 @@ class Stock {
         }
         return highPrices;
     }
+
     getVolumes(startDate, endDate) {
         var volumes = []
         for (var i = 0; i < this.data.length; i++) {

@@ -1,3 +1,16 @@
+/*
+    The purpose of the displayScript.js file is to
+    house all functions that interact with the HTML
+    This includes jQuery, HTML DOM, and dynamic HTML
+*/
+
+
+//
+//Event handler functions
+// vvvvvvvvvvvvvvvvvvvvvv
+
+
+//Function used when clicking stock-list items to display graph.
 function handleChartDisplay(e) {
     if (!e)
         e = window.event;
@@ -7,6 +20,25 @@ function handleChartDisplay(e) {
     setActiveStock(ticker);
     getStockDataByTicker(ticker, displayStockChart);
 }
+
+//Function used when clicking any of the date selector buttons.
+function handleFilterDateRange(e) {
+    var sender = e.srcElement || e.target;
+    var dateRangeValue = sender.innerHTML;
+    setDatePickerBackcolor(sender);
+    setDateFilterValue(dateRangeValue);
+    displayStockChart(getActiveStockTicker());
+}
+
+//Function used when switching between Stock and ETF
+function handleSwapStockAndETF(e) {
+    var sender = e.srcElement || e.target;
+    setETFStockPickerBackColor(sender);
+    //filter by etf/stock
+}
+
+
+//Stock chart display function.
 function displayStockChart(ticker) {
     console.log("Displaying Chart");
     //Set stock title and initial date range
@@ -76,6 +108,8 @@ function displayStockChart(ticker) {
     });
     setCursor("default");
 }
+
+//Dynamic Stock list display function
 function displayStockList() {
     var stockHeader = document.getElementById('stockHeader');
     var boxContol = "";
@@ -113,20 +147,6 @@ function displayStockList() {
     getStockDataByTicker(getActiveStockTicker(), displayStockChart);
 }
 
-function handleFilterDateRange(e) {
-    var sender = e.srcElement || e.target;
-    var dateRangeValue = sender.innerHTML;
-    setDatePickerBackcolor(sender);
-    setDateFilterValue(dateRangeValue);
-    displayStockChart(getActiveStockTicker());
-}
-
-function handleSwapStockAndETF(e) {
-    var sender = e.srcElement || e.target;
-    setETFStockPickerBackColor(sender);
-    //filter by etf/stock
-}
-
 //
 // Utility functions
 //
@@ -142,6 +162,7 @@ function getSelectedRadioButtonValue() {
     return selectedRadioValue;
 }
 
+//Sets all elements on page to specified cursor.
 //https://stackoverflow.com/questions/192900/wait-cursor-over-entire-html-page
 function setCursor(cursor) {
     var x = document.querySelectorAll("*");
@@ -150,6 +171,7 @@ function setCursor(cursor) {
     }
 }
 
+//Sets the back color of the date-picker buttons to indicate which is selected
 function setDatePickerBackcolor(sender) {
     var dateButtons = document.getElementsByName('datePicker');
     for (var i = 0; i < dateButtons.length; i++) {
@@ -167,6 +189,7 @@ function setDatePickerBackcolor(sender) {
     }
 }
 
+//Sets the back color of the Stock/ETF picker buttons to indicate which is selected
 function setETFStockPickerBackColor(sender){
      console.log(myPortfolio);
     var dateButtons = document.getElementsByName('ETForStockPicker');
