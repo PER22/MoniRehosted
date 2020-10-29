@@ -109,16 +109,16 @@ function getVolumeValuesByTicker(datePickerButtonValue) {
 //Returns dataset based on selected radio button
 function getChartValuesByTicker(valueType, ticker) {
     var valuesArray = [];
-    if (valueType == "closing") {
+    if (valueType == "Closing Prices v") {
         valuesArray = getClosingValuesByTicker(ticker);
     }
-    else if (valueType == "opening") {
+    else if (valueType == "Opening Prices v") {
         valuesArray = getOpeningValuesByTicker(ticker);
     }
-    else if (valueType == "high") {
+    else if (valueType == "Highs v") {
         valuesArray = getHighValuesByTicker(ticker);
     }
-    else if (valueType == "low") {
+    else if (valueType == "Lows v") {
         valuesArray = getLowValuesByTicker(ticker);
     }
     return valuesArray;
