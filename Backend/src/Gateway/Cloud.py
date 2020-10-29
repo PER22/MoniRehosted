@@ -52,7 +52,6 @@ class MySubscribeCallback(SubscribeCallback):
 
                 elif("Data" in controlCommand["operation"]):
                     originalAsset = database.get(assetType, controlCommand[assetType])
-                    #originalAsset = testReturn()
                     for i in range(len(originalAsset)):
                         print(str(i) + ". Chunk")
                         pubnub.publish().channel('FinanceSub').message({
@@ -71,6 +70,13 @@ class MySubscribeCallback(SubscribeCallback):
                         "operation": "ReturnStockPredictions" if (assetType == "stock") else "ReturnETFPredictions",
                         "assetType": controlCommand[assetType],
                         "data": Stock("Your", "mama", {"open": "4", "cclose": "5"})
+                    }).pn_async(my_publish_callback)
+
+                elif("Delete" in controlCommand["operation"]):
+                    pubnub.publish().channel('FinanceSub').message({
+                        "requester": "Server",
+                        "operation": "DeleteStock" if (assetType == "stock") else "DeleteETF",
+                        "status": database.delete(assetType, controlCommand[assetType])
                     }).pn_async(my_publish_callback)
                 else:
                     print("OOPS something went wrong")
