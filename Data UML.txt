@@ -1,2 +1,0 @@
-ETF -> list{Stock}
-Stock -> list{Stock}
