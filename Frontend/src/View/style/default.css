@@ -111,11 +111,11 @@ button {
 }
 .stock-selection-sect {
 	padding-top: 10px;
-	height: 86%;
+	height: 90vh;
 	width: 100%;
 	float: left;
 	overflow: auto;
-	overflow-x: hidden;	
+	overflow-x: hidden;
 }
 
 .stock-selection-summary {
@@ -125,7 +125,7 @@ button {
 	border-bottom: 1px solid black;
 }
 .stock-selection-left{
-	min-width: 160px;
+	width: 100%;
 }
 .stock-selection-summary-stock-name {
 }
@@ -232,5 +232,44 @@ div:active {
 	padding-left: 20px;
 }
 .date-picker-button:focus {
+		outline: 0;
+}
+
+#etf-stock-selector-sect{
+    width: 250px;
+    vertical-align: bottom;
+    margin: 0px 0px 15px 20px;
+    border-top: 1px solid gray;
+	border-bottom: 2px solid gray;
+}
+.box {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 20px;
+	width: 55px;
+	border-radius: 5px;
+}
+
+
+  .red {
+	background-color: red;
+  }
+
+  .green {
+	background-color: green;
+  }
+
+
+.etf-stock-picker-button{
+    color: #D8D8D8;
+	font-size: 20px;
+	border-radius: 25px;
+	background: #373c42;
+	margin : 0px 10px 4px 10px;;
+
+}
+
+.etf-stock-picker-button:focus {
 		outline: 0;
 }

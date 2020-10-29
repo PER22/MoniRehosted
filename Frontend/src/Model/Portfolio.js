@@ -5,6 +5,8 @@ class Portfolio {
         this.stocks = [];
         this.startDate;
         this.endDate;
+        this.activeStockIndex = 0;
+        this.dateFilter = "1W";
     }
     setName(name) {
         this.name = name;
@@ -36,34 +38,72 @@ class Portfolio {
     getLows() {
         return this.lows;
     }
+    setDateFilter(dateFilter) {
+        this.dateFilter = dateFilter;
+    }
+    getDateFilter() {
+        return this.dateFilter;
+    }
+    setActiveStockIndexByTicker(ticker) {
+        for (var i = 0; i < this.stocks.length; i++) {
+            if (this.stocks[i].getLabel() == ticker) {
+                this.activeStockIndex = i;
+                break;
+            }
+        }
+    }
+    setActiveStockIndex(activeStockIndex) {
+        this.activeStockIndex = activeStockIndex;
+    }
+    getActiveStockIndex() {
+        return this.activeStockIndex;
+    }
+    getActiveStockTicker() {
+        return this.stocks[this.activeStockIndex].getLabel();
+    }
     //Sets startDate and endDate depending on selected datePickerButton
-    setPortfolioDateRange(datePickerButtonValue) {        
-        if (datePickerButtonValue == "1W") {            
+    setStartDateBasedOnEndDate() {
+        var newDate = "";
+        if (this.dateFilter == "1W") {
+            newDate = this.dateManipulation(this.endDate, 7, 0, 0, "-");
         }
-        else if (datePickerButtonValue == "1M") {
-
+        else if (this.dateFilter == "1M") {
+            newDate = this.dateManipulation(this.endDate, 31, 0, 0, "-");
         }
-        else if (datePickerButtonValue == "3M") {
-
+        else if (this.dateFilter == "3M") {
+            newDate = this.dateManipulation(this.endDate, 93, 0, 0, "-");
         }
-        else if (datePickerButtonValue == "6M") {
-
+        else if (this.dateFilter == "6M") {
+            newDate = this.dateManipulation(this.endDate, 183, 0, 0, "-");
         }
-        else if (datePickerButtonValue == "1Y") {
-
+        else if (this.dateFilter == "1Y") {
+            newDate = this.dateManipulation(this.endDate, 365, 0, 0, "-");
         }
-        else if (datePickerButtonValue == "2Y") {
-
+        else if (this.dateFilter == "2Y") {
+            newDate = this.dateManipulation(this.endDate, 730, 0, 0, "-");
         }
-        else if (datePickerButtonValue == "5Y") {
-
+        else if (this.dateFilter == "5Y") {
+            newDate = this.dateManipulation(this.endDate, 1825, 0, 0, "-");
         }
-        else if (datePickerButtonValue == "10Y") {
-
+        else if (this.dateFilter == "10Y") {
+            newDate = this.dateManipulation(this.endDate, 3650, 0, 0, "-");
         }
-        else if (datePickerButtonValue == "ALL") {
-
+        else if (this.dateFilter == "ALL") {
+            newDate = this.dateManipulation(this.endDate, 18250, 0, 0, "-");
         }
+        this.setStartDate(newDate);
+    }
+    //https://stackoverflow.com/questions/1296358/subtract-days-from-a-date-in-javascript
+    dateManipulation(date, days, hrs, mins, operator) {
+        date = new Date(date);
+        if (operator == "-") {
+            var durationInMs = (((24 * days) * 60) + (hrs * 60) + mins) * 60000;
+            var newDate = new Date(date.getTime() - durationInMs);
+        } else {
+            var durationInMs = (((24 * days) * 60) + (hrs * 60) + mins) * 60000;
+            var newDate = new Date(date.getTime() + durationInMs);
+        }
+        return newDate.toLocaleDateString('en-ZA').replace("/", "-").replace("/", "-");
     }
 
     /*
@@ -103,6 +143,7 @@ class Portfolio {
         }
         return stockFound;
     }
+
 
     generateStock() {
         var stocks = []

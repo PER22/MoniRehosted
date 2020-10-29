@@ -105,11 +105,16 @@ class Database:
         if((str(label).lower() in self.Stocks) or (str(label).lower() in self.ETFs)):
             if("stock" in str(assetType).lower()):
                 del self.Stocks[str(label).lower()]
+                #del self.stock_ticker_list[str(label).lower()]
             else:
                 del self.ETFs[str(label).lower()]
+                #del self.etf_ticker_list[str(label).lower()]
             return(True)
         else:
             return(False)
+
+
+
     # getLabels returns the first $amount (for example 100) names, label and closing price of assetType
     # assetType is either ETF or Stocks
     # amount is the amount of stock labels, names and closing price we want to return
