@@ -17,8 +17,9 @@ function handleChartDisplay(e) {
     var sender = e.srcElement || e.target;
     var ticker = sender.id.split("-")[1];
     setCursor("wait");
+    setStockListBackcolor(sender.parentElement.parentElement);
     setActiveStock(ticker);
-    getStockDataByTicker(ticker, false, isplayStockChart);
+    getStockDataByTicker(ticker, false, displayStockChart);
 }
 
 //Function used when clicking any of the date selector buttons.
@@ -49,7 +50,7 @@ function handleDeleteStock(e) {
 function handleReloadStock(e) {
     var sender = e.srcElement || e.target;
     var ticker = getActiveStockTicker();
-    getStockDataByTicker(ticker, false, displayStockChart);
+    getStockDataByTicker(ticker, true, displayStockChart);
 }
 
 //
@@ -148,7 +149,7 @@ function displayStockList() {
         newlist.innerHTML = '  <div class="stock-selection-sect" id="stockHeader"></div>';
         document.getElementById('listPlaceholder').parentNode.replaceChild(newlist, document.getElementById('listPlaceholder'));
     }
-    
+
     var stockHeader = document.getElementById('stockHeader');
     var boxContol = "";
     var index = 0;

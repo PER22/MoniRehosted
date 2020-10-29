@@ -243,14 +243,13 @@ div:active {
 	border-bottom: 2px solid gray;
 }
 .box {
-	/* float: middle; */
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	height: 20px;
-	width: 90px;
-	margin-bottom: 15px;
-	padding: 1.5px;
-	border-radius: 10%;
-	clear: both;
-  }
+	width: 55px;
+	border-radius: 5px;
+}
 
 
   .red {
