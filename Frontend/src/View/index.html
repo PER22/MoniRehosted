@@ -32,6 +32,18 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
   <div class="w3-row">
 
     <!-- Left Column -->
+    <div class="w3-card w3-round w3-dark">
+      <div class="w3-container w3-padding">
+        <ul uk-tab>
+          <li class="uk-active"><a href="#">Left</a></li>
+          <li><a href="#">Item</a></li>
+          <li><a href="#">Item</a></li>
+          <li class="uk-disabled"><a>Disabled</a></li>
+      </ul>
+
+      </div>
+    </div>
+    <br>
     <div class="w3-col m2 w3-margin">
 
       <div class="w3-card w3-round">
@@ -66,32 +78,32 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
             <li class="dropdown">
               <a href="javascript:void(0)" class="dropbtn" id="stockPropertyDropdownButton">Closing Prices v</a>
               <div class="dropdown-content">
-                <a id="button-1W"  onclick="updatePeriodDropDownName('Closing Prices v'); setDatePickerBackcolor(event)" name="datePicker">Closing Prices</a>
-                <a id="button-1W"  onclick="updatePeriodDropDownName('Opening Prices v'); setDatePickerBackcolor(event)" name="datePicker">Opening Prices</a>
-                <a id="button-1W"  onclick="updatePeriodDropDownName('Highs v'); setDatePickerBackcolor(event)" name="datePicker">Highs</a>
-                <a id="button-1W"  onclick="updatePeriodDropDownName('Lows v'); setDatePickerBackcolor(event)" name="datePicker">Lows</a>
+                <a id="Closing Prices v"  onclick="updatePropertyDropDownName('Closing Prices v'); setDatePickerBackcolor(event)" name="datePicker">Closing Prices</a>
+                <a id="Opening Prices v"  onclick="updatePropertyDropDownName('Opening Prices v'); setDatePickerBackcolor(event)" name="datePicker">Opening Prices</a>
+                <a id="Highs v"  onclick="updatePropertyDropDownName('Highs v'); setDatePickerBackcolor(event)" name="datePicker">Highs</a>
+                <a id="Lows v"  onclick="updatePropertyDropDownName('Lows v'); setDatePickerBackcolor(event)" name="datePicker">Lows</a>
               </div>
             </li>
             <spacer type="horizontal" width="100" height="100">  </spacer>
             <li class="dropdown">
               <a href="javascript:void(0)" class="dropbtn" id="periodDropdownButton">ALL v</a>
               <div class="dropdown-content">
-                <a id="button-1W"  onclick="updatePeriodDropDownName('W1 v'); setDatePickerBackcolor(event)" name="datePicker">1W</a>
-                <a id="button-1W"  onclick="updatePeriodDropDownName('1M v'); setDatePickerBackcolor(event)" name="datePicker">1M</a>
-                <a id="button-1W"  onclick="updatePeriodDropDownName('3M v'); setDatePickerBackcolor(event)" name="datePicker">3M</a>
-                <a id="button-1W"  onclick="updatePeriodDropDownName('6M v'); setDatePickerBackcolor(event)" name="datePicker">6M</a>
-                <a id="button-1W"  onclick="updatePeriodDropDownName('1Y v'); setDatePickerBackcolor(event)" name="datePicker">1Y</a>
-                <a id="button-1W"  onclick="updatePeriodDropDownName('2Y v'); setDatePickerBackcolor(event)" name="datePicker">2Y</a>
-                <a id="button-1W"  onclick="updatePeriodDropDownName('5Y v'); setDatePickerBackcolor(event)" name="datePicker">5Y</a>
-                <a id="button-1W"  onclick="updatePeriodDropDownName('10Y v'); setDatePickerBackcolor(event)" name="datePicker">10Y</a>
-                <a id="button-1W"  onclick="updatePeriodDropDownName('ALL v'); setDatePickerBackcolor(event)" name="datePicker">ALL</a>
+                <a id="W1 v"  onclick="updatePeriodDropDownName('W1 v'); setDatePickerBackcolor(event)" name="datePicker">1W</a>
+                <a id="1M v"  onclick="updatePeriodDropDownName('1M v'); setDatePickerBackcolor(event)" name="datePicker">1M</a>
+                <a id="3M v"  onclick="updatePeriodDropDownName('3M v'); setDatePickerBackcolor(event)" name="datePicker">3M</a>
+                <a id="6M v"  onclick="updatePeriodDropDownName('6M v'); setDatePickerBackcolor(event)" name="datePicker">6M</a>
+                <a id="1Y v"  onclick="updatePeriodDropDownName('1Y v'); setDatePickerBackcolor(event)" name="datePicker">1Y</a>
+                <a id="2Y v"  onclick="updatePeriodDropDownName('2Y v'); setDatePickerBackcolor(event)" name="datePicker">2Y</a>
+                <a id="5Y v"  onclick="updatePeriodDropDownName('5Y v'); setDatePickerBackcolor(event)" name="datePicker">5Y</a>
+                <a id="10Y v"  onclick="updatePeriodDropDownName('10Y v'); setDatePickerBackcolor(event)" name="datePicker">10Y</a>
+                <a id="ALL v"  onclick="updatePeriodDropDownName('ALL v'); setDatePickerBackcolor(event)" name="datePicker">ALL</a>
               </div>
             </li>
             <li class="dropdown">
               <a href="javascript:void(0)" class="dropbtn" id="actionDropdownButton">Actions v</a>
               <div class="dropdown-content">
-                <a id="button-1W"  onclick="" name="datePicker">Reload</a>
-                <a id="button-1W"  onclick="" name="datePicker">Delete</a>
+                <a id="Reload"  onclick="" name="datePicker">Reload</a>
+                <a id="datePicker"  onclick="" name="datePicker">Delete</a>
               </div>
             </li>
           </ul>
@@ -159,21 +171,11 @@ function updatePeriodDropDownName(name) {
   document.getElementById('periodDropdownButton').innerHTML = name;
 }
 
-/* When the user clicks on the button,
-toggle between hiding and showing the dropdown content */
-function displayPeriodDropDown() {
-  document.getElementById("actionDropDown").classList.toggle("show");
-}
-
-function updatePeriodDropDownName(name) {
-  document.getElementById('actionDropdownButton').innerHTML = name;
-}
-
-function displayPeriodDropDown() {
+function displayPropertyDropDown() {
   document.getElementById("stockPropertyDropDown").classList.toggle("show");
 }
 
-function updatePeriodDropDownName(name) {
+function updatePropertyDropDownName(name) {
   document.getElementById('stockPropertyDropdownButton').innerHTML = name;
 }
 

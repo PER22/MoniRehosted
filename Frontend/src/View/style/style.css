@@ -2048,7 +2048,7 @@ li {
   float: left;
 }
 
-li a, .dropbtn {
+li.dropbtn a.dropbtn, .dropbtn {
   display: inline-block;
   color: white;
   text-align: center;
