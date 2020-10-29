@@ -173,6 +173,7 @@ function displayStockList() {
 
 function getSelectedRadioButtonValue() {
     var selectedRadioValue = "";
+    console.log("Chart Type: " + !!document.getElementsByName('chart-type'))
     var radios = document.getElementsByName('chart-type');
     for (var i = 0; i < radios.length; i++) {
         if (radios[i].checked) {

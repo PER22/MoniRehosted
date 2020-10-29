@@ -77,26 +77,26 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
           <ul>
             <li class="dropdown">
               <a href="javascript:void(0)" class="dropbtn" id="stockPropertyDropdownButton">Closing Prices v</a>
-              <div class="dropdown-content">
-                <a id="Closing Prices v"  onclick="updatePropertyDropDownName('Closing Prices v'); setDatePickerBackcolor(event)" name="datePicker">Closing Prices</a>
-                <a id="Opening Prices v"  onclick="updatePropertyDropDownName('Opening Prices v'); setDatePickerBackcolor(event)" name="datePicker">Opening Prices</a>
-                <a id="Highs v"  onclick="updatePropertyDropDownName('Highs v'); setDatePickerBackcolor(event)" name="datePicker">Highs</a>
-                <a id="Lows v"  onclick="updatePropertyDropDownName('Lows v'); setDatePickerBackcolor(event)" name="datePicker">Lows</a>
+              <div class="dropdown-content" id="chart-type: ">
+                <a id="Closing Prices v"  onclick="updatePropertyDropDownName('Closing Prices v')">Closing Prices</a>
+                <a id="Opening Prices v"  onclick="updatePropertyDropDownName('Opening Prices v')">Opening Prices</a>
+                <a id="Highs v"  onclick="updatePropertyDropDownName('Highs v')">Highs</a>
+                <a id="Lows v"  onclick="updatePropertyDropDownName('Lows v')">Lows</a>
               </div>
             </li>
             <spacer type="horizontal" width="100" height="100">  </spacer>
             <li class="dropdown">
               <a href="javascript:void(0)" class="dropbtn" id="periodDropdownButton">ALL v</a>
               <div class="dropdown-content">
-                <a id="W1 v"  onclick="updatePeriodDropDownName('W1 v'); setDatePickerBackcolor(event)" name="datePicker">1W</a>
-                <a id="1M v"  onclick="updatePeriodDropDownName('1M v'); setDatePickerBackcolor(event)" name="datePicker">1M</a>
-                <a id="3M v"  onclick="updatePeriodDropDownName('3M v'); setDatePickerBackcolor(event)" name="datePicker">3M</a>
-                <a id="6M v"  onclick="updatePeriodDropDownName('6M v'); setDatePickerBackcolor(event)" name="datePicker">6M</a>
-                <a id="1Y v"  onclick="updatePeriodDropDownName('1Y v'); setDatePickerBackcolor(event)" name="datePicker">1Y</a>
-                <a id="2Y v"  onclick="updatePeriodDropDownName('2Y v'); setDatePickerBackcolor(event)" name="datePicker">2Y</a>
-                <a id="5Y v"  onclick="updatePeriodDropDownName('5Y v'); setDatePickerBackcolor(event)" name="datePicker">5Y</a>
-                <a id="10Y v"  onclick="updatePeriodDropDownName('10Y v'); setDatePickerBackcolor(event)" name="datePicker">10Y</a>
-                <a id="ALL v"  onclick="updatePeriodDropDownName('ALL v'); setDatePickerBackcolor(event)" name="datePicker">ALL</a>
+                <a id="W1 v"  onclick="updatePeriodDropDownName('W1 v')">1W</a>
+                <a id="1M v"  onclick="updatePeriodDropDownName('1M v')">1M</a>
+                <a id="3M v"  onclick="updatePeriodDropDownName('3M v')">3M</a>
+                <a id="6M v"  onclick="updatePeriodDropDownName('6M v')">6M</a>
+                <a id="1Y v"  onclick="updatePeriodDropDownName('1Y v')">1Y</a>
+                <a id="2Y v"  onclick="updatePeriodDropDownName('2Y v')">2Y</a>
+                <a id="5Y v"  onclick="updatePeriodDropDownName('5Y v')">5Y</a>
+                <a id="10Y v"  onclick="updatePeriodDropDownName('10Y v')">10Y</a>
+                <a id="ALL v"  onclick="updatePeriodDropDownName('ALL v')">ALL</a>
               </div>
             </li>
             <li class="dropdown">
@@ -147,36 +147,23 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
 <br>
 
 <script>
-// Accordion
-function myFunction(id) {
-  var x = document.getElementById(id);
-  if (x.className.indexOf("w3-show") == -1) {
-    x.className += " w3-show";
-    x.previousElementSibling.className += " w3-theme-d1";
-  } else {
-    x.className = x.className.replace("w3-show", "");
-    x.previousElementSibling.className =
-    x.previousElementSibling.className.replace(" w3-theme-d1", "");
-  }
-}
-
-
-/* When the user clicks on the button,
-toggle between hiding and showing the dropdown content */
-function displayPeriodDropDown() {
-  document.getElementById("periodDropDown").classList.toggle("show");
-}
 
 function updatePeriodDropDownName(name) {
   document.getElementById('periodDropdownButton').innerHTML = name;
 }
 
-function displayPropertyDropDown() {
-  document.getElementById("stockPropertyDropDown").classList.toggle("show");
-}
 
 function updatePropertyDropDownName(name) {
   document.getElementById('stockPropertyDropdownButton').innerHTML = name;
+}
+
+
+
+
+
+
+function updatePropertyID(newID) {
+  document.getElementById('stockPropertyDropdownButton').id = newID;
 }
 
 // Close the dropdown if the user clicks outside of it
