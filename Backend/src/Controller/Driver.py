@@ -2,7 +2,9 @@
 import signal
 import sys
 from time import sleep
-from Backend.src.Gateway.Cloud import Cloud
+import sys
+sys.path.insert(1, '../')
+from Gateway.Cloud import Cloud
 
 #Other Variables
 cloud = Cloud()

@@ -1,8 +1,10 @@
-from Backend.src.Model.Stock import Stock
+import sys
+sys.path.insert(1, '../')
+from Model.Stock import Stock
 from pubnub.callbacks import SubscribeCallback
 from pubnub.pnconfiguration import PNConfiguration
 from pubnub.pubnub import PubNub
-from Backend.src.Model.Database import Database
+from Model.Database import Database
 import csv
 from pubnub.exceptions import PubNubException
 
@@ -18,7 +20,7 @@ class MySubscribeCallback(SubscribeCallback):
 
     def __init__(self):
         global database
-        database = Database()
+        database = Database("ETFs1", "Stocks1")
         database.load()
 
     def presence(self, pubnub, presence):
@@ -35,17 +37,22 @@ class MySubscribeCallback(SubscribeCallback):
                 #-=-=-=-=-=-=-=- Stocks -=-=-==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
                 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
                 if("Labels" in controlCommand["operation"]):
-                    pubnub.publish().channel('FinanceSub').message({
-                        "requester": "Server",
-                        "operation": "ReturnStockLabels" if (assetType == "stock") else "ReturnETFLabels",
-                        "amount": controlCommand["amount"],
-                        "data": database.getLabels(assetType, controlCommand["amount"])
-                    }).pn_async(my_publish_callback)
+                    listOfLabels = database.getLabels(assetType, controlCommand["amount"])
+                    for i in range(len(listOfLabels)):
+                        print(str(i) + ". Chunk")
+                        print(listOfLabels[i])
+                        pubnub.publish().channel('FinanceSub').message({
+                            "requester": "Server",
+                            "operation": "ReturnStockLabels" if (assetType == "stock") else "ReturnETFLabels",
+                            "amount": controlCommand["amount"],
+                            "part": (i + 1),
+                            "total": len(listOfLabels),
+                            "data": listOfLabels[i]
+                        }).pn_async(my_publish_callback)
 
 
                 elif("Data" in controlCommand["operation"]):
                     originalAsset = database.get(assetType, controlCommand[assetType])
-                    #originalAsset = testReturn()
                     for i in range(len(originalAsset)):
                         print(str(i) + ". Chunk")
                         pubnub.publish().channel('FinanceSub').message({
@@ -65,6 +72,13 @@ class MySubscribeCallback(SubscribeCallback):
                         "assetType": controlCommand[assetType],
                         "data": Stock("Your", "mama", {"open": "4", "cclose": "5"})
                     }).pn_async(my_publish_callback)
+
+                elif("Delete" in controlCommand["operation"]):
+                    pubnub.publish().channel('FinanceSub').message({
+                        "requester": "Server",
+                        "operation": "DeleteStock" if (assetType == "stock") else "DeleteETF",
+                        "status": database.delete(assetType, controlCommand[assetType])
+                    }).pn_async(my_publish_callback)
                 else:
                     print("OOPS something went wrong")
             else:
@@ -75,8 +89,8 @@ class MySubscribeCallback(SubscribeCallback):
 class Cloud:
     def __init__(self):
         pnconfig = PNConfiguration()
-        pnconfig.publish_key = 'pub-c-7cd0dca0-eb36-44f8-bfef-d692af28f7d4'
-        pnconfig.subscribe_key = 'sub-c-01442846-0b27-11eb-8b70-9ebeb8f513a7'
+        pnconfig.publish_key = 'pub-c-9ec7d15f-4966-4f9e-9f34-b7ca51622aac'
+        pnconfig.subscribe_key = 'sub-c-08c91d8c-196f-11eb-bc34-ce6fd967af95'
         global pubnub
         pubnub = PubNub(pnconfig)
 
