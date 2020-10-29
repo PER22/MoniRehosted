@@ -43,6 +43,17 @@ function displayStockChart(ticker) {
     console.log("Displaying Chart");
     //Set stock title and initial date range
     setActiveStockDateRange();
+
+
+
+    const newlabel = document.createElement('label');
+    newlabel.innerHTML = '  <label class="header-label" id="selected-stock-name"></label>';
+    document.getElementById('labelPlaceholder').parentNode.replaceChild(newlabel, document.getElementById('labelPlaceholder'));
+
+    const newGraph = document.createElement('canvas');
+    newGraph.innerHTML = '  <canvas id="myChart"></canvas>';
+    document.getElementById('graphPlaceholder').parentNode.replaceChild(newGraph, document.getElementById('graphPlaceholder'));
+
     document.getElementById('selected-stock-name').innerHTML = getStockTitleByTicker(ticker);
     //Gather chart values
     var prevClosingValue = getStockInPortfolioByTicker(ticker).getPriceChangeFromPreviousDay();
@@ -111,6 +122,10 @@ function displayStockChart(ticker) {
 
 //Dynamic Stock list display function
 function displayStockList() {
+    const newlist = document.createElement('div');
+    newlist.innerHTML = '  <div class="stock-selection-sect" id="stockHeader"></div>';
+    document.getElementById('listPlaceholder').parentNode.replaceChild(newlist, document.getElementById('listPlaceholder'));
+
     var stockHeader = document.getElementById('stockHeader');
     var boxContol = "";
     var index = 0;

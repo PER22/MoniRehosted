@@ -111,11 +111,11 @@ button {
 }
 .stock-selection-sect {
 	padding-top: 10px;
-	height: 86%;
+	height: 90vh;
 	width: 100%;
 	float: left;
 	overflow: auto;
-	overflow-x: hidden;	
+	overflow-x: hidden;
 }
 
 .stock-selection-summary {
@@ -250,8 +250,8 @@ div:active {
 	font-size: 20px;
 	border-radius: 25px;
 	background: #373c42;
-	margin : 0px 10px 4px 10px;;    
-    
+	margin : 0px 10px 4px 10px;;
+
 }
 
 .etf-stock-picker-button:focus {

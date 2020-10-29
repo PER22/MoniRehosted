@@ -38,8 +38,10 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
         <div class="w3-container w3-padding w3-dark">
 
           <!-- Stock List Section-->
-          <div class="stock-selection-sect" id="stockHeader">
+          <div class="list-background w3-padding w3-margin graph-background" id="listPlaceholder">
+            <div class="inter-graph"></div>
           </div>
+          <!-- <div class="stock-selection-sect" id="stockHeader"></div>-->
         </div>
       </div>
       <br>
@@ -51,7 +53,10 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
 
       <div class="w3-card w3-round w3-dark">
         <div class="w3-container w3-padding">
-          <label class="header-label" id="selected-stock-name"></label>
+          <div class="linear-background" id="labelPlaceholder">
+            <div class="inter-label"></div>
+          </div>
+
         </div>
       </div>
 <br>
@@ -91,14 +96,18 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
             </li>
           </ul>
         </div>
-        <div>
-          <canvas id="myChart"></canvas>
+        <div class="linear-background w3-padding w3-margin graph-background" id="graphPlaceholder">
+          <div class="inter-graph"></div>
         </div>
       </div>
     <!-- End Middle Column -->
     </div>
 
     <!--
+
+    <div>
+      <canvas id="myChart"></canvas>
+    </div>
     Right Column
     <div class="w3-col m2 w3-margin">
       <div class="w3-card w3-round w3-white w3-center">
