@@ -52,28 +52,21 @@ function displayStockChart(ticker) {
     }
 
     if(!!document.getElementById("graphPlaceholder")){
-      const newGraph = document.createElement('canvas');
-      newGraph.innerHTML = '  <canvas id="myChart"></canvas>';
+      const newGraph = document.createElement('div');
+      newGraph.innerHTML = '  <div><canvas id="myChart"></canvas></div>';
       document.getElementById('graphPlaceholder').parentNode.replaceChild(newGraph, document.getElementById('graphPlaceholder'));
     }
 
     document.getElementById('selected-stock-name').innerHTML = getStockTitleByTicker(ticker);
     //Gather chart values
-    console.log("Here 1");
     var prevClosingValue = getStockInPortfolioByTicker(ticker).getPriceChangeFromPreviousDay();
-      console.log("Here 2");
     var selectedRadioValue = getSelectedRadioButtonValue();
-      console.log("Here 3");
     var chartValues = getChartValuesByTicker(selectedRadioValue, ticker);
-      console.log("Here 4");
     var volumes = getChartVolumeByTicker(selectedRadioValue, ticker);
-      console.log("Here 5");
     var dateValues = getClosingDatesByTicker(ticker);
-      console.log("Here 6");
 
     //Fill chart
     var ctx = document.getElementById('myChart').getContext('2d');
-    console.log("Here 7");
 
     for (var i = 0, length = volumes.length; i < length; i++) {
         volumes[i] = volumes[i] / 1000000;
@@ -179,9 +172,7 @@ function displayStockList() {
 //
 
 function getSelectedRadioButtonValue() {
-    var selectedRadioValue = "";
-    console.log("Chart Type: " + document.getElementById('stockPropertyDropdownButton').innerText)
-    return document.getElementById('stockPropertyDropdownButton');
+    return document.getElementById('stockPropertyDropdownButton').innerText;
 }
 
 //Sets all elements on page to specified cursor.
