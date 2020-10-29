@@ -82,6 +82,13 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
                 <a id="button-1W"  onclick="updatePeriodDropDownName('ALL v'); setDatePickerBackcolor(event)" name="datePicker">ALL</a>
               </div>
             </li>
+            <li class="dropdown">
+              <a href="javascript:void(0)" class="dropbtn" id="actionDropdownButton">Actions v</a>
+              <div class="dropdown-content">
+                <a id="button-1W"  onclick="" name="datePicker">Reload</a>
+                <a id="button-1W"  onclick="" name="datePicker">Delete</a>
+              </div>
+            </li>
           </ul>
         </div>
         <div class="chart-sect">
@@ -141,6 +148,16 @@ function displayPeriodDropDown() {
 
 function updatePeriodDropDownName(name) {
   document.getElementById('periodDropdownButton').innerHTML = name;
+}
+
+/* When the user clicks on the button,
+toggle between hiding and showing the dropdown content */
+function displayPeriodDropDown() {
+  document.getElementById("actionDropDown").classList.toggle("show");
+}
+
+function updatePeriodDropDownName(name) {
+  document.getElementById('actionDropdownButton').innerHTML = name;
 }
 
 function displayPeriodDropDown() {
