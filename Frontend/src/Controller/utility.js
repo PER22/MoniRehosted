@@ -183,7 +183,7 @@ function getSideBarData(_callback) {
     });
 };
 
-function getStockDataByTicker(ticker, _callback) {
+function getStockDataByTicker(ticker, reload, _callback) {
     //Return if stock data is already loaded
     if (myPortfolio.getStockByTicker(ticker).isLoaded()) {
         _callback(ticker);

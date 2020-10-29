@@ -18,7 +18,7 @@ function handleChartDisplay(e) {
     var ticker = sender.id.split("-")[1];
     setCursor("wait");
     setActiveStock(ticker);
-    getStockDataByTicker(ticker, displayStockChart);
+    getStockDataByTicker(ticker, false, isplayStockChart);
 }
 
 //Function used when clicking any of the date selector buttons.
@@ -37,6 +37,24 @@ function handleSwapStockAndETF(e) {
     //filter by etf/stock
 }
 
+//Function used to delete a stock
+function handleDeleteStock(e) {
+    var sender = e.srcElement || e.target;
+    //deleteStock(getActiveStockTicker(), null);
+    deleteStock("a", null);
+    document.getElementById("outer-" + getActiveStockTicker()).remove();
+}
+
+//Function used to delete a stock
+function handleReloadStock(e) {
+    var sender = e.srcElement || e.target;
+    var ticker = getActiveStockTicker();
+    getStockDataByTicker(ticker, false, displayStockChart);
+}
+
+//
+// Display functions
+// vvvvvvvvvvvvvvvvv
 
 //Stock chart display function.
 function displayStockChart(ticker) {
@@ -45,16 +63,16 @@ function displayStockChart(ticker) {
     setActiveStockDateRange();
 
 
-    if(!!document.getElementById("labelPlaceholder")){
-      const newlabel = document.createElement('label');
-      newlabel.innerHTML = '  <label class="header-label" id="selected-stock-name"></label>';
-      document.getElementById('labelPlaceholder').parentNode.replaceChild(newlabel, document.getElementById('labelPlaceholder'));
+    if (!!document.getElementById("labelPlaceholder")) {
+        const newlabel = document.createElement('label');
+        newlabel.innerHTML = '  <label class="header-label" id="selected-stock-name"></label>';
+        document.getElementById('labelPlaceholder').parentNode.replaceChild(newlabel, document.getElementById('labelPlaceholder'));
     }
 
-    if(!!document.getElementById("graphPlaceholder")){
-      const newGraph = document.createElement('div');
-      newGraph.innerHTML = '  <div><canvas id="myChart"></canvas></div>';
-      document.getElementById('graphPlaceholder').parentNode.replaceChild(newGraph, document.getElementById('graphPlaceholder'));
+    if (!!document.getElementById("graphPlaceholder")) {
+        const newGraph = document.createElement('div');
+        newGraph.innerHTML = '  <div><canvas id="myChart"></canvas></div>';
+        document.getElementById('graphPlaceholder').parentNode.replaceChild(newGraph, document.getElementById('graphPlaceholder'));
     }
 
     document.getElementById('selected-stock-name').innerHTML = getStockTitleByTicker(ticker);
@@ -125,10 +143,10 @@ function displayStockChart(ticker) {
 
 //Dynamic Stock list display function
 function displayStockList() {
-    if(!!document.getElementById("listPlaceholder")){
-      const newlist = document.createElement('div');
-      newlist.innerHTML = '  <div class="stock-selection-sect" id="stockHeader"></div>';
-      document.getElementById('listPlaceholder').parentNode.replaceChild(newlist, document.getElementById('listPlaceholder'));
+    if (!!document.getElementById("listPlaceholder")) {
+        const newlist = document.createElement('div');
+        newlist.innerHTML = '  <div class="stock-selection-sect" id="stockHeader"></div>';
+        document.getElementById('listPlaceholder').parentNode.replaceChild(newlist, document.getElementById('listPlaceholder'));
     }
 
     var stockHeader = document.getElementById('stockHeader');
@@ -164,7 +182,7 @@ function displayStockList() {
     stockHeader.innerHTML = boxContol;
     setDatePickerBackcolor(document.getElementById('button-1W'));
     setETFStockPickerBackColor(document.getElementById('button-stock'));
-    getStockDataByTicker(getActiveStockTicker(), displayStockChart);
+    getStockDataByTicker(getActiveStockTicker(), false, displayStockChart);
 }
 
 //
@@ -203,8 +221,8 @@ function setDatePickerBackcolor(sender) {
 }
 
 //Sets the back color of the Stock/ETF picker buttons to indicate which is selected
-function setETFStockPickerBackColor(sender){
-     console.log(myPortfolio);
+function setETFStockPickerBackColor(sender) {
+    console.log(myPortfolio);
     var dateButtons = document.getElementsByName('ETForStockPicker');
     for (var i = 0; i < dateButtons.length; i++) {
         if (dateButtons[i] == sender) {

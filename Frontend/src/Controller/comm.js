@@ -49,8 +49,8 @@ function deleteStock(ticker, _callback) {
         },
         message: function (msg) {
             if (msg.message.requester == "Server") {
-                console.log(message.data);
-                _callback();
+                console.log(message);
+                //_callback();
             }
         },
     })
@@ -115,15 +115,16 @@ function getSideBarData(_callback) {
     });
 };
 
-function getStockDataByTicker(ticker, _callback) {
+function getStockDataByTicker(ticker, reload, _callback) {
     //Return if stock data is already loaded
-    if (myPortfolio.getStockByTicker(ticker).isLoaded()) {
+    if (myPortfolio.getStockByTicker(ticker).isLoaded() && !reload) {
         _callback(ticker);
         return;
     }
     //Initialize Stock object
     var stock = new Stock();
     var indx = 0;
+    var reloaded = false;
     // Update this block with your publish/subscribe keys
     pubnub = new PubNub({
         publishKey: "pub-c-9ec7d15f-4966-4f9e-9f34-b7ca51622aac",
@@ -155,7 +156,10 @@ function getStockDataByTicker(ticker, _callback) {
         message: function (msg) {
             if (msg.message.requester == "Server") {
                 stock = myPortfolio.getStockByTicker(ticker);
-                if (stock.getData() == null) stock.setData([]);
+                if (stock.getData() == null || (reload && !reloaded)) {
+                    stock.setData([]);
+                    reloaded = true;
+                }
                 msg.message.data.data.forEach(element => { stock.addStockDetailFromServer(element) });
                 stock.sortDataByDate();
                 console.log("imported " + ticker + " data");
