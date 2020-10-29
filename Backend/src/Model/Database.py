@@ -112,6 +112,9 @@ class Database:
             return(True)
         else:
             return(False)
+
+
+
     # getLabels returns the first $amount (for example 100) names, label and closing price of assetType
     # assetType is either ETF or Stocks
     # amount is the amount of stock labels, names and closing price we want to return
