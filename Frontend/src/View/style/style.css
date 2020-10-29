@@ -2189,15 +2189,25 @@ li.dropdown {
   left: 100px;
 }
 
-html {
-scrollbar-base-color: #9999cc;
-scrollbar-arrow-color: white;
-scrollbar-track-color: #ccccff;
 
-scrollbar-shadow-color: black;
-scrollbar-lightshadow-color: black;
-scrollbar-darkshadow-color: gray;
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
 
-scrollbar-highlight-color: white;
-scrollbar-3dlight-color: black;
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 0 grey;
+  border-radius: 5px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #363C41;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #363C41;
 }
