@@ -73,6 +73,13 @@ class MySubscribeCallback(SubscribeCallback):
                         "assetType": controlCommand[assetType],
                         "data": Stock("Your", "mama", {"open": "4", "cclose": "5"})
                     }).pn_async(my_publish_callback)
+
+                elif("Delete" in controlCommand["operation"]):
+                    pubnub.publish().channel('FinanceSub').message({
+                        "requester": "Server",
+                        "operation": "DeleteStock" if (assetType == "stock") else "DeleteETF",
+                        "status": database.delete(assetType, controlCommand[assetType])
+                    }).pn_async(my_publish_callback)
                 else:
                     print("OOPS something went wrong")
             else:
