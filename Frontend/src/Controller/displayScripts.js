@@ -125,6 +125,12 @@ function displayStockChart(ticker) {
 
 //Dynamic Stock list display function
 function displayStockList() {
+    if(!!document.getElementById("listPlaceholder")){
+      const newlist = document.createElement('div');
+      newlist.innerHTML = '  <div class="stock-selection-sect" id="stockHeader"></div>';
+      document.getElementById('listPlaceholder').parentNode.replaceChild(newlist, document.getElementById('listPlaceholder'));
+    }
+    
     var stockHeader = document.getElementById('stockHeader');
     var boxContol = "";
     var index = 0;

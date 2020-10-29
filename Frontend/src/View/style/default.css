@@ -125,7 +125,7 @@ button {
 	border-bottom: 1px solid black;
 }
 .stock-selection-left{
-	min-width: 160px;
+	width: 100%;
 }
 .stock-selection-summary-stock-name {
 }
@@ -242,7 +242,24 @@ div:active {
     border-top: 1px solid gray;
 	border-bottom: 2px solid gray;
 }
+.box {
+	/* float: middle; */
+	height: 20px;
+	width: 90px;
+	margin-bottom: 15px;
+	padding: 1.5px;
+	border-radius: 10%;
+	clear: both;
+  }
 
+
+  .red {
+	background-color: red;
+  }
+
+  .green {
+	background-color: green;
+  }
 
 
 .etf-stock-picker-button{
