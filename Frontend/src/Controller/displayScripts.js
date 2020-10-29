@@ -205,6 +205,23 @@ function setDatePickerBackcolor(sender) {
     }
 }
 
+function setStockListBackcolor(sender) {
+    var StockSummarybox = document.getElementsByName('stockSummary');
+    for (var i = 0; i < StockSummarybox.length; i++) {
+        if (StockSummarybox[i] == sender) {
+            StockSummarybox[i].style.background = '#363C41';
+            StockSummarybox[i].style.fontWeight = "normal";
+            StockSummarybox[i].style.color = 'D8D8D8';
+            StockSummarybox[i].style.borderColor = 'black';
+        }
+        else {
+            StockSummarybox[i].style.background = '#2D3134';
+            StockSummarybox[i].style.fontWeight = "normal";
+            StockSummarybox[i].style.color = '#D8D8D8';
+        }
+    }
+}
+
 //Sets the back color of the Stock/ETF picker buttons to indicate which is selected
 function setETFStockPickerBackColor(sender){
      console.log(myPortfolio);
