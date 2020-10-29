@@ -148,16 +148,24 @@ function displayStockList() {
         newlist.innerHTML = '  <div class="stock-selection-sect" id="stockHeader"></div>';
         document.getElementById('listPlaceholder').parentNode.replaceChild(newlist, document.getElementById('listPlaceholder'));
     }
-
+    
     var stockHeader = document.getElementById('stockHeader');
     var boxContol = "";
     var index = 0;
     console.log("Displaying Stock List");
+
     getStocksInPortfolio().forEach(stock => {
         if (index < 20) {
+            var cssType;
+            if(stock.priceChangeFromPreviousDay < 0){
+                cssType = "\"box red detail-label-small\""
+            }
+            else if(stock.priceChangeFromPreviousDay >= 0){
+                cssType = "\"box green detail-label-small\""
+            }
             boxContol +=
-                "<div onclick=handleChartDisplay(event)>" +
-                "   <div class=\"stock-selection-summary\" id=\"outer-" + stock.label + "\">" +
+                "<div onclick = handleChartDisplay(event)>" +
+                "   <div name=\"stockSummary\" class=\"stock-selection-summary\" id=\"outer-" + stock.label + "\">" +
                 "       <div class=\"stock-selection-left\" id=\"left-" + stock.label + "\">" +
                 "           <div class=\"stock-selection-summary-stock-name\"id=\"divName-" + stock.label + "\">" +
                 "               <label class=\"detail-label\" id=\"fullName-" + stock.label + "\">" + stock.name + "</label>" +
@@ -168,14 +176,15 @@ function displayStockList() {
                 "      </div>" +
                 "      <div class=\"stock-selection-right\" id=\"right-" + stock.label + "\">" +
                 "           <div class=\"stock-selection-summary-price\" id=\"price-" + stock.label + "\">" +
-                "               <label class=\"detail-label-small\" id=\"labelPrice-" + stock.label + "\">$" + stock.price + "</label>" +
+                "               <label class=\"detail-label-price\" id=\"labelPrice-" + stock.label + "\">$" + stock.price + "</label>" +
                 "           </div>" +
                 "           <div class=\".stock-selection-change-value\" id=\"change-" + stock.label + "\">" +
-                "               <label class=\"detail-label-small\" id=\"labelChange-" + stock.label + "\">" + stock.priceChangeFromPreviousDay + "%</label>" +
+                "               <label class= " + cssType  + " id=\"labelChange-" + stock.label + "\">" + stock.priceChangeFromPreviousDay + "%</label>" +
                 "           </div>" +
                 "       </div>" +
                 "   </div>" +
                 "</div>";
+
         }
         index++;
     });
@@ -216,6 +225,23 @@ function setDatePickerBackcolor(sender) {
             dateButtons[i].style.background = '#373c42';
             dateButtons[i].style.fontWeight = "normal";
             dateButtons[i].style.color = '#D8D8D8';
+        }
+    }
+}
+
+function setStockListBackcolor(sender) {
+    var StockSummarybox = document.getElementsByName('stockSummary');
+    for (var i = 0; i < StockSummarybox.length; i++) {
+        if (StockSummarybox[i] == sender) {
+            StockSummarybox[i].style.background = '#363C41';
+            StockSummarybox[i].style.fontWeight = "normal";
+            StockSummarybox[i].style.color = 'D8D8D8';
+            StockSummarybox[i].style.borderColor = 'black';
+        }
+        else {
+            StockSummarybox[i].style.background = '#2D3134';
+            StockSummarybox[i].style.fontWeight = "normal";
+            StockSummarybox[i].style.color = '#D8D8D8';
         }
     }
 }
