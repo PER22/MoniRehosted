@@ -3,11 +3,6 @@
     Anything that interacts with the server exists here.
 */
 
-var pubnub = new PubNub({
-    publishKey: "pub-c-9ec7d15f-4966-4f9e-9f34-b7ca51622aac",
-    subscribeKey: "sub-c-08c91d8c-196f-11eb-bc34-ce6fd967af95"
-})
-
 function getSideBarData(_callback) {
 
     // Update this block with your publish/subscribe keys
@@ -69,6 +64,11 @@ function getStockDataByTicker(ticker, _callback) {
     //Initialize Stock object
     var stock = new Stock();
     var indx = 0;
+    // Update this block with your publish/subscribe keys
+    pubnub = new PubNub({
+        publishKey: "pub-c-9ec7d15f-4966-4f9e-9f34-b7ca51622aac",
+        subscribeKey: "sub-c-08c91d8c-196f-11eb-bc34-ce6fd967af95"
+    })
 
     //Publishes data request to server
     function publishSampleMessage() {
