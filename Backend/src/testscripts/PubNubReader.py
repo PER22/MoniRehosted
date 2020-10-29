@@ -5,8 +5,8 @@ from pubnub.pubnub import PubNub
 import time
 import os
 pnconfig = PNConfiguration()
-pnconfig.publish_key = 'pub-c-7cd0dca0-eb36-44f8-bfef-d692af28f7d4'
-pnconfig.subscribe_key = 'sub-c-01442846-0b27-11eb-8b70-9ebeb8f513a7'
+pnconfig.publish_key = 'pub-c-9ec7d15f-4966-4f9e-9f34-b7ca51622aac'
+pnconfig.subscribe_key = 'sub-c-08c91d8c-196f-11eb-bc34-ce6fd967af95'
 pnconfig.ssl = True
 pubnub = PubNub(pnconfig)
 def my_publish_callback(envelope, status):
