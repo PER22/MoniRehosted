@@ -1,3 +1,4 @@
 function initializePortfolio() {
+    subscribePubNub();
     loadStocksFromServer();
 }

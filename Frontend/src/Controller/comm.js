@@ -3,117 +3,116 @@
     Anything that interacts with the server exists here.
 */
 
-function requestData(dataString) {
+//Global PubNub object
+pubnub = null;
+
+function subscribePubNub() {
+    pubnub = new PubNub({
+        publishKey: "pub-c-9ec7d15f-4966-4f9e-9f34-b7ca51622aac",
+        subscribeKey: "sub-c-08c91d8c-196f-11eb-bc34-ce6fd967af95"
+    });
+    pubnub.subscribe({
+        channels: ['FinanceSub']
+    });
+    console.log("Subscribed...");
+}
+
+//Publishes request to Pubnub server.
+function publishMessage(message) {
+    var publishPayload = {
+        channel: "FinanceSub",
+        message: message
+    }
+    pubnub.publish(publishPayload, function (status, response) { })
+}
+
+
+function requestData(dataString, ticker) {
+    var message = "";
     switch (dataString) {
         case "deleteStock":
-            // code block
+            message = {
+                "requester": "Client",
+                "operation": "DeleteStock",
+                "stock": ticker
+            };
             break;
         case "deleteETF":
-            // code block
+            message = {
+                "requester": "Client",
+                "operation": "DeleteETF",
+                "stock": ticker
+            };
+            break;
+        case "getSideBar":
+            message = {
+                "requester": "Client",
+                "operation": "GetStockLabels",
+                "amount": "a"
+            };
+            break;
+        case "getStockData":
+            message = {
+                "requester": "Client",
+                "operation": "GetStockData",
+                "stock": ticker
+            }
             break;
         default:
         // code block
     }
+    return message;
 }
-
-function deleteStock(ticker, _callback) {
-
-    // Update this block with your publish/subscribe keys
-    pubnub = new PubNub({
-        publishKey: "pub-c-9ec7d15f-4966-4f9e-9f34-b7ca51622aac",
-        subscribeKey: "sub-c-08c91d8c-196f-11eb-bc34-ce6fd967af95"
-    })
-
-    function publishSampleMessage() {
-        console.log("Publish to a channel 'FinanceSub'");
-        // With the right payload, you can publish a message, add a reaction to a message,
-        // send a push notification, or send a small payload called a signal.
-        var publishPayload = {
-            channel: "FinanceSub",
-            message: {
-                "requester": "Client",
-                "operation": "DeleteStock",
-                "stock": ticker
-            }
-        }
-        pubnub.publish(publishPayload, function (status, response) {
-            //console.log(status, response);
-        })
-    }
-
-    pubnub.addListener({
-        status: function (statusEvent) {
-            if (statusEvent.category === "PNConnectedCategory") {
-                publishSampleMessage();
-            }
-        },
-        message: function (msg) {
-            if (msg.message.requester == "Server") {
-                console.log(message);
-                //_callback();
-            }
-        },
-    })
-
-    console.log("Subscribing...");
-
-    pubnub.subscribe({
-        channels: ['FinanceSub']
-    });
-};
-
-
 function getSideBarData(_callback) {
+    //Set up variables
+    var packetIndex = 0;
+    var dataRequest = requestData("getSideBar");
 
-    // Update this block with your publish/subscribe keys
-    pubnub = new PubNub({
-        publishKey: "pub-c-9ec7d15f-4966-4f9e-9f34-b7ca51622aac",
-        subscribeKey: "sub-c-08c91d8c-196f-11eb-bc34-ce6fd967af95"
-    })
-
-    function publishSampleMessage() {
-        console.log("Publish to a channel 'FinanceSub'");
-        // With the right payload, you can publish a message, add a reaction to a message,
-        // send a push notification, or send a small payload called a signal.
-        var publishPayload = {
-            channel: "FinanceSub",
-            message: {
-                "requester": "Client",
-                "operation": "GetStockLabels",
-                "amount": "a"
-            }
-        }
-        pubnub.publish(publishPayload, function (status, response) {
-            //console.log(status, response);
-        })
-    }
-
-    pubnub.addListener({
+    //Listen for response
+    var listener = {
         status: function (statusEvent) {
             if (statusEvent.category === "PNConnectedCategory") {
-                publishSampleMessage();
+                publishMessage(dataRequest);
             }
         },
         message: function (msg) {
-            //console.log(msg.message);
             if (msg.message.requester == "Server") {
                 myPortfolio.importStocks(msg.message.data);
-                console.log("imported");
-                console.log(msg.message);
-                _callback();
+                console.log("Imported SideBarData");
+                packetIndex++;
+                if (packetIndex == msg.message.total) {
+                    pubnub.removeListener(listener);
+                    _callback();
+                }
+            }
+        }
+    };
+    console.log("Requesting data...");
+    pubnub.addListener(listener);
+};
+
+function deleteStock(ticker, _callback) {
+    //Set up variables
+    var dataRequest = requestData("deleteStock");
+
+    //Listen for response
+    var listener = {
+        status: function (statusEvent) {
+            if (statusEvent.category === "PNConnectedCategory") {
+                publishMessage(dataRequest);
             }
         },
-        presence: function (presenceEvent) {
-            // This is where you handle presence. Not important for now :)
+        message: function (msg) {
+            if (msg.message.requester == "Server") {
+                pubnub.removeListener(listener);
+                console.log(message);
+            }
         }
-    })
-
-    console.log("Subscribing...");
-
-    pubnub.subscribe({
-        channels: ['FinanceSub']
-    });
+    };
+    console.log("Requesting data...");
+    pubnub.addListener(listener);
 };
+
 
 function getStockDataByTicker(ticker, reload, _callback) {
     //Return if stock data is already loaded
@@ -125,32 +124,13 @@ function getStockDataByTicker(ticker, reload, _callback) {
     var stock = new Stock();
     var indx = 0;
     var reloaded = false;
-    // Update this block with your publish/subscribe keys
-    pubnub = new PubNub({
-        publishKey: "pub-c-9ec7d15f-4966-4f9e-9f34-b7ca51622aac",
-        subscribeKey: "sub-c-08c91d8c-196f-11eb-bc34-ce6fd967af95"
-    })
-
-    //Publishes data request to server
-    function publishSampleMessage() {
-        console.log("Publish to a channel 'FinanceSub'");
-        var publishPayload = {
-            channel: "FinanceSub",
-            message: {
-                "requester": "Client",
-                "operation": "GetStockData",
-                "stock": ticker
-            }
-        }
-        pubnub.publish(publishPayload, function (status, response) {
-        });
-    }
+    var dataRequest = requestData("getStockData", ticker);
 
     //Listener to wait for response from server
-    pubnub.addListener({
+   var listener = {
         status: function (statusEvent) {
             if (statusEvent.category === "PNConnectedCategory") {
-                publishSampleMessage();
+                publishMessage(dataRequest);
             }
         },
         message: function (msg) {
@@ -166,78 +146,20 @@ function getStockDataByTicker(ticker, reload, _callback) {
                 indx++;
                 if (indx == msg.message.total) {
                     stock.setLoaded(true);
+                    pubnub.removeListener(listener);
                     _callback(ticker);
                 }
             }
-            else {
-                var test = msg.message.data;
-            }
-        },
-        presence: function (presenceEvent) {
         }
-    })
+    };
 
-    console.log("Subscribing...");
+
+    console.log("Requesting data...");
+    pubnub.addListener(listener);
 
     pubnub.subscribe({
         channels: ['FinanceSub']
     });
-
 
     console.log(myPortfolio);
 }
-
-function getData(label) {
-
-    // Update this block with your publish/subscribe keys
-    pubnub = new PubNub({
-        publishKey: "pub-c-9ec7d15f-4966-4f9e-9f34-b7ca51622aac",
-        subscribeKey: "sub-c-08c91d8c-196f-11eb-bc34-ce6fd967af95"
-    })
-    var stock = new Stock()
-    function publishSampleMessage() {
-        console.log("Publish to a channel 'FinanceSub'");
-        // With the right payload, you can publish a message, add a reaction to a message,
-        // send a push notification, or send a small payload called a signal.
-        var publishPayload = {
-            channel: "FinanceSub",
-            message: {
-                "requester": "Client",
-                "operation": "GetStockData",
-                "stock": label
-            }
-        }
-        pubnub.publish(publishPayload, function (status, response) {
-            //console.log(status, response);
-        })
-    }
-
-    pubnub.addListener({
-        status: function (statusEvent) {
-            if (statusEvent.category === "PNConnectedCategory") {
-                publishSampleMessage();
-            }
-        },
-        message: function (msg) {
-            //console.log(msg.message);
-            if (msg.message.requester == "Server") {
-                stock.label = msg.message.assetType;
-                stock.name = msg.message.data.name;
-                msg.message.data.data.forEach(element => { stock.AddStockDetailFromServer(element) });
-                console.log(msg.message);
-                console.log("imported");
-            }
-        },
-        presence: function (presenceEvent) {
-            // This is where you handle presence. Not important for now :)
-        }
-    })
-
-    console.log("Subscribing...");
-
-    pubnub.subscribe({
-        channels: ['FinanceSub']
-    });
-
-    myPortfolio.addStock(stock)
-};
