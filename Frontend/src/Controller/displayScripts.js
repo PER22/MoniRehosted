@@ -22,12 +22,20 @@ function handleChartDisplay(e) {
     getStockDataByTicker(ticker, false, displayStockChart);
 }
 
-//Function used when clicking any of the date selector buttons.
+//Function used when clicking an item in the DateRange drop down
 function handleFilterDateRange(e) {
     var sender = e.srcElement || e.target;
     var dateRangeValue = sender.innerHTML;
-    setDatePickerBackcolor(sender);
+    setPeriodDropDownName(dateRangeValue + " v");
     setDateFilterValue(dateRangeValue);
+    displayStockChart(getActiveStockTicker());
+}
+
+//Function used when clicking an item in the DisplayValue drop down
+function handlFilterDisplayValue(e) {
+    var sender = e.srcElement || e.target;
+    var displayValue = sender.innerHTML;
+    setDisplayValueDropDownName(displayValue + " v");
     displayStockChart(getActiveStockTicker());
 }
 
@@ -79,9 +87,9 @@ function displayStockChart(ticker) {
     document.getElementById('selected-stock-name').innerHTML = getStockTitleByTicker(ticker);
     //Gather chart values
     var prevClosingValue = getStockInPortfolioByTicker(ticker).getPriceChangeFromPreviousDay();
-    var selectedRadioValue = getSelectedRadioButtonValue();
-    var chartValues = getChartValuesByTicker(selectedRadioValue, ticker);
-    var volumes = getChartVolumeByTicker(selectedRadioValue, ticker);
+    var selectedDisplayValue = getSelectedDisplayValue();
+    var chartValues = getChartValuesByTicker(selectedDisplayValue, ticker);
+    var volumes = getChartVolumeByTicker(selectedDisplayValue, ticker);
     var dateValues = getClosingDatesByTicker(ticker);
 
     //Fill chart
@@ -90,7 +98,7 @@ function displayStockChart(ticker) {
     for (var i = 0, length = volumes.length; i < length; i++) {
         volumes[i] = volumes[i] / 1000000;
     }
-    var gradient = ctx.createLinearGradient(0, 0, 0, Math.max(...chartValues) * 2);
+    var gradient = ctx.createLinearGradient(0, 0, 0, 400);
     var lineColor = "#FFFFFF"
 
     if (parseFloat(prevClosingValue) < 0) {
@@ -113,7 +121,7 @@ function displayStockChart(ticker) {
                 backgroundColor: 'black',
                 order: 2
             }, {
-                label: String(selectedRadioValue) + ' Price',
+                label: String(selectedDisplayValue) + ' Price',
                 type: 'line',
                 fill: true,
                 data: chartValues,
@@ -158,10 +166,10 @@ function displayStockList() {
     getStocksInPortfolio().forEach(stock => {
         if (index < 20) {
             var cssType;
-            if(stock.priceChangeFromPreviousDay < 0){
+            if (stock.priceChangeFromPreviousDay < 0) {
                 cssType = "\"box red detail-label-small\""
             }
-            else if(stock.priceChangeFromPreviousDay >= 0){
+            else if (stock.priceChangeFromPreviousDay >= 0) {
                 cssType = "\"box green detail-label-small\""
             }
             boxContol +=
@@ -180,7 +188,7 @@ function displayStockList() {
                 "               <label class=\"detail-label-price\" id=\"labelPrice-" + stock.label + "\">$" + stock.price + "</label>" +
                 "           </div>" +
                 "           <div class=\".stock-selection-change-value\" id=\"change-" + stock.label + "\">" +
-                "               <label class= " + cssType  + " id=\"labelChange-" + stock.label + "\">" + stock.priceChangeFromPreviousDay + "%</label>" +
+                "               <label class= " + cssType + " id=\"labelChange-" + stock.label + "\">" + stock.priceChangeFromPreviousDay + "%</label>" +
                 "           </div>" +
                 "       </div>" +
                 "   </div>" +
@@ -190,8 +198,8 @@ function displayStockList() {
         index++;
     });
     stockHeader.innerHTML = boxContol;
-    setDatePickerBackcolor(document.getElementById('button-1W'));
-    setETFStockPickerBackColor(document.getElementById('button-stock'));
+    //setDatePickerBackcolor(document.getElementById('button-1W'));
+    //setETFStockPickerBackColor(document.getElementById('button-stock'));
     getStockDataByTicker(getActiveStockTicker(), false, displayStockChart);
 }
 
@@ -199,7 +207,7 @@ function displayStockList() {
 // Utility functions
 //
 
-function getSelectedRadioButtonValue() {
+function getSelectedDisplayValue() {
     return document.getElementById('stockPropertyDropdownButton').innerText;
 }
 
@@ -212,24 +220,7 @@ function setCursor(cursor) {
     }
 }
 
-//Sets the back color of the date-picker buttons to indicate which is selected
-function setDatePickerBackcolor(sender) {
-    var dateButtons = document.getElementsByName('datePicker');
-    for (var i = 0; i < dateButtons.length; i++) {
-        if (dateButtons[i] == sender) {
-            dateButtons[i].style.background = '#FFFFFF';
-            dateButtons[i].style.fontWeight = "bold";
-            dateButtons[i].style.color = 'black';
-            dateButtons[i].style.borderColor = 'black';
-        }
-        else {
-            dateButtons[i].style.background = '#373c42';
-            dateButtons[i].style.fontWeight = "normal";
-            dateButtons[i].style.color = '#D8D8D8';
-        }
-    }
-}
-
+//Sets the back color of the StockList item to indicate which is selected
 function setStockListBackcolor(sender) {
     var StockSummarybox = document.getElementsByName('stockSummary');
     for (var i = 0; i < StockSummarybox.length; i++) {
@@ -262,6 +253,30 @@ function setETFStockPickerBackColor(sender) {
             dateButtons[i].style.background = '#373c42';
             dateButtons[i].style.fontWeight = "normal";
             dateButtons[i].style.color = '#D8D8D8';
+        }
+    }
+}
+
+//Updates Period Drop Down name when list item is clicked
+function setPeriodDropDownName(name) {
+    document.getElementById('periodDropdownButton').innerHTML = name;
+}
+
+//Updates Property Drop Down name when list item is clicked
+function setDisplayValueDropDownName(name) {
+    document.getElementById('stockPropertyDropdownButton').innerHTML = name;
+}
+
+// Close the dropdown if the user clicks outside of it
+window.onclick = function (event) {
+    if (!event.target.matches('.dropbtn')) {
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        var i;
+        for (i = 0; i < dropdowns.length; i++) {
+            var openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains('show')) {
+                openDropdown.classList.remove('show');
+            }
         }
     }
 }

@@ -73,6 +73,18 @@ class Stock {
         return stockDates;
     }
 
+    getOpeningPrices(startDate, endDate) {
+        var openingPrices = []
+        for (var i = 0; i < this.data.length; i++) {
+            var stockDate = Date.parse(this.data[i].getDate());
+            var startDateVal = Date.parse(startDate);
+            var endDateVal = Date.parse(endDate);
+            if (stockDate >= startDateVal && stockDate <= endDateVal)
+                openingPrices.push(this.data[i].getOpen());
+        }
+        return openingPrices;
+    }
+
     getClosingPrices(startDate, endDate) {
         var closingPrices = []
         for (var i = 0; i < this.data.length; i++) {

@@ -59,10 +59,10 @@ function requestData(dataString, ticker) {
             }
             break;
         default:
-        // code block
     }
     return message;
 }
+
 function getSideBarData(_callback) {
     //Set up variables
     var packetIndex = 0;
