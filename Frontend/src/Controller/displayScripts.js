@@ -39,6 +39,13 @@ function handlFilterDisplayValue(e) {
     displayStockChart(getActiveStockTicker());
 }
 
+//Function used when clicking an item in the Analytics drop down
+function handleFilterAnalytics(e) {
+    var sender = e.srcElement || e.target;
+    var analytic = sender.innerHTML;
+    setAnalyticsDropDownName(analytic + " v");
+}
+
 //Function used when switching between Stock and ETF
 function handleSwapStockAndETF(e) {
     var sender = e.srcElement || e.target;
@@ -267,6 +274,11 @@ function setDisplayValueDropDownName(name) {
     document.getElementById('stockPropertyDropdownButton').innerHTML = name;
 }
 
+//Updates Property Drop Down name when list item is clicked
+function setAnalyticsDropDownName(name) {
+    document.getElementById('analyticDropdownButton').innerHTML = name;
+}
+
 // Close the dropdown if the user clicks outside of it
 window.onclick = function (event) {
     if (!event.target.matches('.dropbtn')) {
@@ -278,5 +290,11 @@ window.onclick = function (event) {
                 openDropdown.classList.remove('show');
             }
         }
+    }
+}
+
+function scrolled(e) {
+    if (myDiv.offsetHeight + myDiv.scrollTop >= myDiv.scrollHeight) {
+        scrolledToBottom(e);
     }
 }

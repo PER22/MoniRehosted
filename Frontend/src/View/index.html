@@ -35,10 +35,8 @@
 
                 <!-- Left Column -->
                 <div class="w3-col m2 w3-margin">
-
                     <div class="w3-card w3-round">
-                        <div class="w3-container w3-padding w3-dark">
-
+                        <div class="w3-container w3-padding w3-dark" >
                             <!-- Stock List Section-->
                             <div class="list-background w3-padding w3-margin graph-background" id="listPlaceholder">
                                 <div class="inter-graph"></div>
@@ -47,10 +45,8 @@
                         </div>
                     </div>
                     <br>
-                    <!-- End Left Column -->
                 </div>
-
-
+                <!-- End Left Column -->
 
                 <!-- Middle Column -->
                 <div class="w3-col m9 w3-margin">
@@ -67,8 +63,9 @@
                     <div class="w3-card w3-round w3-dark">
                         <div class="w3-container w3-padding">
                             <ul>
+                                <!-- Display Value Drop Down -->
                                 <li class="dropdown">
-                                    <a href="javascript:void(0)" class="dropbtn" id="stockPropertyDropdownButton">Closing Prices v</a>
+                                    <a class="dropbtn" id="stockPropertyDropdownButton">Closing Prices v</a>
                                     <div class="dropdown-content" id="chart-type: ">
                                         <a id="Closing Prices v" onclick="handlFilterDisplayValue(event)">Closing Prices</a>
                                         <a id="Opening Prices v" onclick="handlFilterDisplayValue(event)">Opening Prices</a>
@@ -77,8 +74,9 @@
                                     </div>
                                 </li>
                                 <spacer type="horizontal" width="100" height="100">  </spacer>
+                                <!-- Date Range Filter Drop Down -->
                                 <li class="dropdown">
-                                    <a href="javascript:void(0)" class="dropbtn" id="periodDropdownButton">ALL v</a>
+                                    <a class="dropbtn" id="periodDropdownButton">ALL v</a>
                                     <div class="dropdown-content">
                                         <a id="1W v" onclick="handleFilterDateRange(event)">1W</a>
                                         <a id="1M v" onclick="handleFilterDateRange(event)">1M</a>
@@ -91,11 +89,20 @@
                                         <a id="ALL v" onclick="handleFilterDateRange(event)">ALL</a>
                                     </div>
                                 </li>
+                                <!-- Action Drop Down -->
                                 <li class="dropdown">
-                                    <a href="javascript:void(0)" class="dropbtn" id="actionDropdownButton">Actions v</a>
+                                    <a class="dropbtn" id="actionDropdownButton">Actions v</a>
                                     <div class="dropdown-content">
-                                        <a id="Reload" onclick="handleReloadStock(event)" name="datePicker">Reload</a>
+                                        <a onclick="handleReloadStock(event)">Reload</a>
                                         <a onclick="handleDeleteStock(event)">Delete</a>
+                                    </div>
+                                </li>
+                                <!-- Analytics Drop Down -->
+                                <li class="dropdown">
+                                    <a class="dropbtn" id="analyticDropdownButton">Analytics v</a>
+                                    <div class="dropdown-content">
+                                        <a onclick="handleFilterAnalytics(event)">Plot</a>
+                                        <a onclick="handleFilterAnalytics(event)">Candle Stick</a>
                                     </div>
                                 </li>
                             </ul>
