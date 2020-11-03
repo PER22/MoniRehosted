@@ -4,7 +4,7 @@ from Backend.src.Model.Stock import Stock
 
 class Database_Test(TestCase):
     def setUp(self):
-        self.database = Database()
+        self.database = Database("ETFs1", "Stocks1")
         self.database.load()
 
     def test_load(self):
@@ -25,7 +25,7 @@ class Database_Test(TestCase):
     def test_get_Stock_ABIO(self):
         stock = self.database.get("stock", "abio")
 
-        self.assertEqual(len(stock), 44)
+        self.assertEqual(len(stock), 33)
 
     def test_get_Stock_name(self):
         stock = self.database.get("stock", "a")
@@ -40,7 +40,7 @@ class Database_Test(TestCase):
         self.assertEqual(len(self.database.getLabels("etf", "a")), 1)
 
     def test_get_Etf_labels_index_length(self):
-        self.assertEqual(len(self.database.getLabels("etf", "a")), 41)
+        self.assertEqual(len(self.database.getLabels("etf", "a")), 1)
 
     def test_getStockName(self):
         stock = str(self.database.get_symbol("TSLA"))

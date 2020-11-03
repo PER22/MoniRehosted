@@ -1,7 +1,6 @@
 import sys
-sys.path.insert(1, '../')
-
-from Model.Stock import Stock
+from Backend.src.Model.Stock import Stock
+from Backend.src.Model.FileIO import FileIO
 import yfinance as yf
 import requests
 from threading import Thread
@@ -27,7 +26,7 @@ class Database:
 
         #go to correct file location to see the different companies.
         dirname = (os.path.dirname(__file__))[:-9]
-        data_directory = os.path.join(dirname, '../../data') + os.sep
+        data_directory = os.path.join(dirname, 'data') + os.sep
 
         print(data_directory)
         #Stocks directory
@@ -113,11 +112,6 @@ class Database:
         else:
             return(False)
 
-
-
-    # getLabels returns the first $amount (for example 100) names, label and closing price of assetType
-    # assetType is either ETF or Stocks
-    # amount is the amount of stock labels, names and closing price we want to return
     def getLabels(self, assetType, letter):
         print("Type: " + str(assetType) + " | Letter: " + str(letter))
         temp = []
@@ -231,130 +225,24 @@ class Database:
 
     #-=-=-=- File I/O -=-=-=-=-=-
     def updateCSV(self, assetType, label):
-        csv_columns = ['Date', 'Open', 'High', 'Low', 'Close', 'Volume', 'OpenInt']
         asset = (self.Stocks[str(label).lower()]) if("stock" in str(assetType).lower()) else (self.ETFs[str(label).lower()])
-        dir = (self.stocks_directory if("stock" in str(assetType).lower()) else self.etfs_directory)
+        csv_file = ((self.stocks_directory if("stock" in str(assetType).lower()) else self.etfs_directory) + label + ".us.txt")
 
-        csv_file = (dir + label + ".us.txt")
-
-        print(csv_file)
-        try:
-            with open(csv_file, 'w') as csvfile:
-                writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
-                writer.writeheader()
-                for data in asset.data:
-                    writer.writerow(data)
-        except IOError:
-            print("I/O error")
+        FileIO.updateCSV(asset, csv_file)
 
     def getFilenames(self):
         print("Getting File Names")
-        #scan stocks directory,
-        #Grab all stock tickers
-        unformatted_stock_file_names = os.listdir(self.stocks_directory)
-        for each in unformatted_stock_file_names:
-            if(".DS_Store" not in each):
-                self.stock_ticker_list.append(each.replace(".us.txt", ""))
-
-        # sort etf_ticker_list
-        self.etf_ticker_list.sort()
-
-        #scan ETFs directory,
-        #Grab all ETF tickers
-        unformatted_etf_file_names = os.listdir(self.etfs_directory)
-        for each in unformatted_etf_file_names:
-            if(".DS_Store" not in each):
-                self.etf_ticker_list.append(each.replace(".us.txt", ""))
-
-        # sort stock_ticker_list
-        self.stock_ticker_list.sort()
+        self.etf_ticker_list = FileIO.getCSVNames(self.etfs_directory)
+        self.stock_ticker_list = FileIO.getCSVNames(self.stocks_directory)
 
     def importStocks(self):
         print("\t\t\t\tImporting Stocks")
-        #Use stock tickers to create an object for each ticker:
-        total = len(self.stock_ticker_list)
-        current = 1
-        for each_ticker1 in self.stock_ticker_list:
-
-            with open(self.stocks_directory + str(each_ticker1) + ".us.txt", "r") as f:
-                data1 = list(csv.DictReader(f))
-
-            self.Stocks[each_ticker1] = Stock("", each_ticker1, data1)
-            self.printCompletion(total, current, 1)
-            current += 1
-
+        self.Stocks = FileIO.loadCSV(self.stock_ticker_list, self.stocks_directory, 1)
         print("Importing Stocks Complete\n")
 
     def importETFs(self):
         print("Importing ETFs")
-
-        total = len(self.etf_ticker_list)
-        current = 1
-        #Use ETF tickers to create an object for each:
-        for each_ticker2 in self.etf_ticker_list:
-
-            with open(self.etfs_directory + str(each_ticker2) + ".us.txt", "r") as f:
-                data2 = list(csv.DictReader(f))
-
-            self.ETFs[each_ticker2] = Stock("", each_ticker2, data2)
-            self.printCompletion(total, current, 0)
-            current += 1
-
-        self.loaded = True
-
+        self.ETFs = FileIO.loadCSV(self.etf_ticker_list, self.etfs_directory, 0)
         print("Importing ETFs Complete\n\n")
 
 
-    #-=-=-=- Helper Function -=-=-=-=-=-
-    def createDummyLabels(self):
-
-        labels = [{"name": "Tesla", "label": "TSLA", "price":"12", "change": "-1.41"},
-                  {"name": "Facebook", "label": "FB", "price":"55", "change": "-0.54"},
-                  {"name": "Microsoft", "label": "MSFT", "price":"23", "change": "+2.40"},
-                  {"name": "Google", "label": "GOOG", "price":"234", "change": "-0.35"},
-                  {"name": "Intel", "label": "INTC", "price":"41", "change": "-1.91"},
-                  {"name": "TSMC", "label": "TSM", "price":"41", "change": "-0.62"},
-                  {"name": "Amazon", "label": "AMZN", "price":"234", "change": "-0.65"},
-                  {"name": "AMD", "label": "AMD", "price":"432", "change": "-0.79"},
-                  {"name": "Amgen", "label": "AMGN", "price":"56", "change": "-2.58"},
-                  {"name": "Analog Devices Inc", "label": "AMGN", "price":"234", "change": "-0.46"},
-                  {"name": "American Airlines", "label": "AAL", "price":"32", "change": "+1.34"},
-                  {"name": "Applied Materials Inc", "label": "AMAT", "price":"54", "change": "+0.07"},
-                  {"name": "Autodesk", "label": "ADSK", "price":"32", "change": "-1.97"},
-                  {"name": "Broadcom", "label": "AVGO", "price":"12", "change": "+0.07"},
-                  {"name": "Baidu", "label": "BIDU", "price":"34", "change": "-1.97"},
-                  {"name": "Cerner Group", "label": "CERN", "price":"123", "change": "-0.27"},
-                  {"name": "Comcast Corp", "label": "CMCSA", "price":"43", "change": "+0.73"},
-                  {"name": "CSX Corp", "label": "CSX", "price":"410", "change": "+0.17"},
-                  {"name": "J.B. Hunt", "label": "JBHT", "price":"465", "change": "-0.87"},
-                  {"name": "lululemon", "label": "LULU", "price":"4451", "change": "-0.57"},
-                  {"name": "Mariot International", "label": "MAR", "price":"324", "change": "-0.28"},
-                  {"name": "Netflix", "label": "NFLX", "price":"123", "change": "-0.40"},
-                  {"name": "Xillinx", "label": "XLNX", "price":"213", "change": "+1.65"},
-                  {"name": "Wynn Resorts", "label": "Wynn", "price":"342", "change": "+0.98"},
-                  {"name": "Xcel Energy", "label": "XEL", "price":"653", "change": "+3.54"}]
-
-        return(labels)
-
-    def printCompletion(self, total, current, thread = 0):
-        space = str("" if thread == 0 else "\t\t\t\t")
-        if(int(total / 10) == current):
-            print(space + "10% Complete")
-        elif(int(total / 10) * 2 == current):
-            print(space + "20% Complete")
-        elif(int(total / 10) * 3 == current):
-            print(space + "30% Complete")
-        elif(int(total / 10) * 4 == current):
-            print(space + "40% Complete")
-        elif(int(total / 2) == current):
-            print(space + "50% Complete")
-        elif(int(total / 10) * 6 == current):
-            print(space + "60% Complete")
-        elif(int(total / 10) * 7 == current):
-            print(space + "70% Complete")
-        elif(int(total / 10) * 8 == current):
-            print(space + "80% Complete")
-        elif(int(total / 10) * 9 == current):
-            print(space + "90% Complete")
-        elif(total == current):
-            print(space + "100% Complete")
