@@ -79,7 +79,6 @@ function displayStockChart(ticker) {
     //Set stock title and initial date range
     setActiveStockDateRange();
 
-
     if (!!document.getElementById("labelPlaceholder")) {
         const newlabel = document.createElement('label');
         newlabel.innerHTML = '  <label class="header-label" id="selected-stock-name"></label>';
@@ -93,6 +92,7 @@ function displayStockChart(ticker) {
     }
 
     document.getElementById('selected-stock-name').innerHTML = getStockTitleByTicker(ticker);
+
     //Gather chart values
     var prevClosingValue = getStockInPortfolioByTicker(ticker).getPriceChangeFromPreviousDay();
     var selectedDisplayValue = getSelectedDisplayValue();
@@ -100,9 +100,26 @@ function displayStockChart(ticker) {
     var volumes = getChartVolumeByTicker(selectedDisplayValue, ticker);
     var dateValues = getClosingDatesByTicker(ticker);
 
+    fillChartJS(prevClosingValue, chartValues, volumes, dateValues, selectedDisplayValue);
+
+   
+    setCursor("default");
+}
+
+function fillPlotlyChart() {
+    chartDiv = document.getElementById('chartDiv');
+
+    Plotly.newPlot(chartDiv, [{
+        x: dateValues,
+        y: chartValues,
+        type: 'scatter'
+    }]
+    );
+}
+
+function fillChartJS(prevClosingValue, chartValues, volumes, dateValues, selectedDisplayValue) {
     //Fill chart
     var ctx = document.getElementById('myChart').getContext('2d');
-
     for (var i = 0, length = volumes.length; i < length; i++) {
         volumes[i] = volumes[i] / 1000000;
     }
@@ -110,8 +127,8 @@ function displayStockChart(ticker) {
     var lineColor = "#FFFFFF"
 
     if (parseFloat(prevClosingValue) < 0) {
-        gradient.addColorStop(0, 'rgba(255,0,0,0.7)');
-        gradient.addColorStop(1, 'rgba(255,0,0,0.1)');
+        gradient.addColorStop(0, 'rgba(255,0,0,0.5)');
+        gradient.addColorStop(1, 'rgba(255,0,0,0.0)');
         lineColor = "#FF0000";
     } else {
         gradient.addColorStop(0, 'rgba(0,255,0, 0.7)');
@@ -119,38 +136,13 @@ function displayStockChart(ticker) {
         lineColor = "#00FF00";
     }
 
-    var trace1 = {
-        x: [1, 2, 3, 4],
-        y: [10, 15, 13, 17],
-        type: 'scatter'
-    };
 
-    var trace2 = {
-        x: [1, 2, 3, 4],
-        y: [16, 5, 11, 9],
-        type: 'scatter'
-    };
-
-    var data = [trace1, trace2];
-
-    chartDiv = document.getElementById('chartDiv');
-
-    Plotly.newPlot(chartDiv, [{
-        x: dateValues,
-        y: chartValues
-    }]
-    );
-
+    
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: dateValues,
             datasets: [{
-                label: 'Volume',
-                data: volumes,
-                backgroundColor: 'black',
-                order: 2
-            }, {
                 label: String(selectedDisplayValue) + ' Price',
                 type: 'line',
                 fill: true,
@@ -170,14 +162,13 @@ function displayStockChart(ticker) {
                 scales: {
                     yAxes: [{
                         ticks: {
-                            beginAtZero: true
+                            beginAtZero: false
                         }
                     }]
                 }
             }
         }
     });
-    setCursor("default");
 }
 
 //Dynamic Stock list display function

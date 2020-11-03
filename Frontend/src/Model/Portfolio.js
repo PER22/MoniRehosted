@@ -6,7 +6,7 @@ class Portfolio {
         this.startDate;
         this.endDate;
         this.activeStockIndex = 0;
-        this.dateFilter = "1W";
+        this.dateFilter = "3M";
         this.valueFilter = "Closing";
     }
     setName(name) {
@@ -68,12 +68,6 @@ class Portfolio {
     getActiveStockTicker() {
         return this.stocks[this.activeStockIndex].getLabel();
     }
-    //Sets startDate and endDate depending on selected datePickerButton
-    setStartDateBasedOnEndDate() {
-        var numericDayValue = translateDateFilterToNumericValue();
-        var newDate = this.dateManipulation(this.endDate, numericDayValue, 0, 0, "-");
-        this.setStartDate(newDate);
-    }
     //Translates dateFilter to numeric day value
     translateDateFilterToNumericValue() {
         var numericValue = 0;
@@ -87,13 +81,13 @@ class Portfolio {
             numericValue = 93;
         }
         else if (this.dateFilter == "6M") {
-             numericValue = 183;
+            numericValue = 183;
         }
         else if (this.dateFilter == "1Y") {
             numericValue = 365;
         }
         else if (this.dateFilter == "2Y") {
-             numericValue = 730;
+            numericValue = 730;
         }
         else if (this.dateFilter == "5Y") {
             numericValue = 1825;
@@ -106,6 +100,12 @@ class Portfolio {
         }
         return numericValue;
     }
+    //Sets startDate and endDate depending on selected datePickerButton
+    setStartDateBasedOnEndDate() {
+        var numericDayValue = this.translateDateFilterToNumericValue();
+        var newDate = this.dateManipulation(this.endDate, numericDayValue, 0, 0, "-");
+        this.setStartDate(newDate);
+    }  
     //https://stackoverflow.com/questions/1296358/subtract-days-from-a-date-in-javascript
     dateManipulation(date, days, hrs, mins, operator) {
         date = new Date(date);
