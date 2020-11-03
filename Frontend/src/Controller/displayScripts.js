@@ -35,6 +35,7 @@ function handleFilterDateRange(e) {
 function handlFilterDisplayValue(e) {
     var sender = e.srcElement || e.target;
     var displayValue = sender.innerHTML;
+    setDisplayFilterValue(displayValue);
     setDisplayValueDropDownName(displayValue + " v");
     displayStockChart(getActiveStockTicker());
 }
@@ -87,7 +88,7 @@ function displayStockChart(ticker) {
 
     if (!!document.getElementById("graphPlaceholder")) {
         const newGraph = document.createElement('div');
-        newGraph.innerHTML = '  <div><canvas id="myChart"></canvas></div>';
+        newGraph.innerHTML = '  <div id="chartDiv"><canvas id="myChart"></canvas></div>';
         document.getElementById('graphPlaceholder').parentNode.replaceChild(newGraph, document.getElementById('graphPlaceholder'));
     }
 
@@ -117,6 +118,28 @@ function displayStockChart(ticker) {
         gradient.addColorStop(1, 'rgba(0,255,0, 0.1)');
         lineColor = "#00FF00";
     }
+
+    var trace1 = {
+        x: [1, 2, 3, 4],
+        y: [10, 15, 13, 17],
+        type: 'scatter'
+    };
+
+    var trace2 = {
+        x: [1, 2, 3, 4],
+        y: [16, 5, 11, 9],
+        type: 'scatter'
+    };
+
+    var data = [trace1, trace2];
+
+    chartDiv = document.getElementById('chartDiv');
+
+    Plotly.newPlot(chartDiv, [{
+        x: dateValues,
+        y: chartValues
+    }]
+    );
 
     var myChart = new Chart(ctx, {
         type: 'bar',

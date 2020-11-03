@@ -26,7 +26,6 @@ function publishMessage(message) {
     pubnub.publish(publishPayload, function (status, response) { })
 }
 
-
 function requestData(dataString, ticker) {
     var message = "";
     switch (dataString) {

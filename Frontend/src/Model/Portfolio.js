@@ -7,6 +7,7 @@ class Portfolio {
         this.endDate;
         this.activeStockIndex = 0;
         this.dateFilter = "1W";
+        this.valueFilter = "Closing";
     }
     setName(name) {
         this.name = name;
@@ -43,6 +44,12 @@ class Portfolio {
     }
     getDateFilter() {
         return this.dateFilter;
+    }
+    setValueFilter(valueFilter) {
+        this.valueFilter = valueFilter;
+    }
+    getValueFilter() {
+        return this.valueFilter;
     }
     setActiveStockIndexByTicker(ticker) {
         for (var i = 0; i < this.stocks.length; i++) {
