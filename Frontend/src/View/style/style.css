@@ -2037,14 +2037,14 @@ a {
 
 
 
-ul {
+li.dropdown {
   list-style-type: none;
   margin: 5;
   padding: 0;
   overflow: hidden;
 }
 
-li {
+li.dropdown {
   float: left;
 }
 

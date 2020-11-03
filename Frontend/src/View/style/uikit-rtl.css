@@ -40,7 +40,7 @@ a:hover {
  */
 a,
 .uk-link {
-  color: #1e87f0;
+  color: #ffffff;
   text-decoration: none;
   cursor: pointer;
 }
@@ -48,7 +48,7 @@ a:hover,
 .uk-link:hover,
 .uk-link-toggle:hover .uk-link,
 .uk-link-toggle:focus .uk-link {
-  color: #0f6ecd;
+  color: #ffffff;
   text-decoration: underline;
 }
 /* Text-level semantics
@@ -502,7 +502,7 @@ a.uk-link-heading:hover,
 .uk-link-heading a:hover,
 .uk-link-toggle:hover .uk-link-heading,
 .uk-link-toggle:focus .uk-link-heading {
-  color: #1e87f0;
+  color: #ffffff;
   text-decoration: none;
 }
 /* Reset
@@ -1524,7 +1524,7 @@ button.uk-icon:not(:disabled) {
   outline: none;
   background-color: #fff;
   color: #666;
-  border-color: #1e87f0;
+  border-color: #ffffff;
 }
 /* Disabled */
 .uk-input:disabled,
@@ -1720,7 +1720,7 @@ select.uk-form-width-xsmall {
 .uk-radio:focus,
 .uk-checkbox:focus {
   outline: none;
-  border-color: #1e87f0;
+  border-color: #ffffff;
 }
 /*
  * Checked
@@ -1728,7 +1728,7 @@ select.uk-form-width-xsmall {
 .uk-radio:checked,
 .uk-checkbox:checked,
 .uk-checkbox:indeterminate {
-  background-color: #1e87f0;
+  background-color: #ffffff;
   border-color: transparent;
 }
 /* Focus */
@@ -2021,7 +2021,7 @@ select.uk-form-width-xsmall {
  * Primary
  */
 .uk-button-primary {
-  background-color: #1e87f0;
+  background-color: #ffffff;
   color: #fff;
   border: 1px solid transparent;
 }
@@ -2153,7 +2153,7 @@ select.uk-form-width-xsmall {
   line-height: 1.5;
   background: none;
   /* 2 */
-  color: #1e87f0;
+  color: #ffffff;
 }
 /* Hover + Focus */
 .uk-button-link:hover,
@@ -2261,14 +2261,14 @@ select.uk-form-width-xsmall {
  * 1. Remove right border in IE11 and Edge
  */
 .uk-progress::-webkit-progress-value {
-  background-color: #1e87f0;
+  background-color: #ffffff;
   transition: width 0.6s ease;
 }
 .uk-progress::-moz-progress-bar {
-  background-color: #1e87f0;
+  background-color: #ffffff;
 }
 .uk-progress::-ms-fill {
-  background-color: #1e87f0;
+  background-color: #ffffff;
   transition: width 0.6s ease;
   /* 1 */
   border: 0;
@@ -2737,7 +2737,7 @@ select.uk-form-width-xsmall {
   color: #fff;
 }
 .uk-card-primary.uk-card-hover:hover {
-  background-color: #1e87f0;
+  background-color: #ffffff;
   box-shadow: 0 14px 25px rgba(0, 0, 0, 0.16);
 }
 /*
@@ -3017,7 +3017,7 @@ select.uk-form-width-xsmall {
  */
 .uk-alert-primary {
   background: #d8eafc;
-  color: #1e87f0;
+  color: #ffffff;
 }
 /*
  * Success
@@ -4404,7 +4404,7 @@ select.uk-form-width-xsmall {
  * Primary
  */
 .uk-notification-message-primary {
-  color: #1e87f0;
+  color: #ffffff;
 }
 /*
  * Success
@@ -5539,7 +5539,7 @@ ul.uk-nav-sub {
 /* Divider modifier
  ========================================================================== */
 /*
- * Set gutter 
+ * Set gutter
  */
 .uk-subnav-divider {
   margin-right: -41px;
@@ -5586,7 +5586,7 @@ ul.uk-nav-sub {
 }
 /* Active */
 .uk-subnav-pill > .uk-active > a {
-  background-color: #1e87f0;
+  background-color: #ffffff;
   color: #fff;
 }
 /* Disabled
@@ -5767,7 +5767,7 @@ ul.uk-nav-sub {
 /* Active */
 .uk-tab > .uk-active > a {
   color: #333;
-  border-color: #1e87f0;
+  border-color: #ffffff;
 }
 /* Disabled */
 .uk-tab > .uk-disabled > a {
@@ -7282,7 +7282,7 @@ ul.uk-nav-sub {
 }
 @supports (-webkit-background-clip: text) {
   .uk-text-background {
-    background-color: #1e87f0;
+    background-color: #ffffff;
     color: transparent !important;
   }
 }
@@ -7582,7 +7582,7 @@ iframe.uk-cover {
   background-color: #f8f8f8;
 }
 .uk-background-primary {
-  background-color: #1e87f0;
+  background-color: #ffffff;
 }
 .uk-background-secondary {
   background-color: #222;
