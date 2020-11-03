@@ -63,35 +63,41 @@ class Portfolio {
     }
     //Sets startDate and endDate depending on selected datePickerButton
     setStartDateBasedOnEndDate() {
-        var newDate = "";
+        var numericDayValue = translateDateFilterToNumericValue();
+        var newDate = this.dateManipulation(this.endDate, numericDayValue, 0, 0, "-");
+        this.setStartDate(newDate);
+    }
+    //Translates dateFilter to numeric day value
+    translateDateFilterToNumericValue() {
+        var numericValue = 0;
         if (this.dateFilter == "1W") {
-            newDate = this.dateManipulation(this.endDate, 7, 0, 0, "-");
+            numericValue = 7;
         }
         else if (this.dateFilter == "1M") {
-            newDate = this.dateManipulation(this.endDate, 31, 0, 0, "-");
+            numericValue = 31;
         }
         else if (this.dateFilter == "3M") {
-            newDate = this.dateManipulation(this.endDate, 93, 0, 0, "-");
+            numericValue = 93;
         }
         else if (this.dateFilter == "6M") {
-            newDate = this.dateManipulation(this.endDate, 183, 0, 0, "-");
+             numericValue = 183;
         }
         else if (this.dateFilter == "1Y") {
-            newDate = this.dateManipulation(this.endDate, 365, 0, 0, "-");
+            numericValue = 365;
         }
         else if (this.dateFilter == "2Y") {
-            newDate = this.dateManipulation(this.endDate, 730, 0, 0, "-");
+             numericValue = 730;
         }
         else if (this.dateFilter == "5Y") {
-            newDate = this.dateManipulation(this.endDate, 1825, 0, 0, "-");
+            numericValue = 1825;
         }
         else if (this.dateFilter == "10Y") {
-            newDate = this.dateManipulation(this.endDate, 3650, 0, 0, "-");
+            numericValue = 3750;
         }
         else if (this.dateFilter == "ALL") {
-            newDate = this.dateManipulation(this.endDate, 18250, 0, 0, "-");
+            numericValue = 18250;
         }
-        this.setStartDate(newDate);
+        return numericValue;
     }
     //https://stackoverflow.com/questions/1296358/subtract-days-from-a-date-in-javascript
     dateManipulation(date, days, hrs, mins, operator) {
