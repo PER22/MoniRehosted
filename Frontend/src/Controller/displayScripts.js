@@ -87,7 +87,7 @@ function displayStockChart(ticker) {
 
     if (!!document.getElementById("graphPlaceholder")) {
         const newGraph = document.createElement('div');
-        newGraph.innerHTML = '  <div id="chartDiv"><canvas id="myChart"></canvas></div>';
+        newGraph.innerHTML = '  <div id="chartDiv"></div>';
         document.getElementById('graphPlaceholder').parentNode.replaceChild(newGraph, document.getElementById('graphPlaceholder'));
     }
 
@@ -100,21 +100,41 @@ function displayStockChart(ticker) {
     var volumes = getChartVolumeByTicker(selectedDisplayValue, ticker);
     var dateValues = getClosingDatesByTicker(ticker);
 
-    fillChartJS(prevClosingValue, chartValues, volumes, dateValues, selectedDisplayValue);
+    //fillChartJS(prevClosingValue, chartValues, volumes, dateValues, selectedDisplayValue);
+    fillPlotlyChart(dateValues, chartValues);
 
-   
     setCursor("default");
 }
 
-function fillPlotlyChart() {
+function fillPlotlyChart(dateValues, chartValues) {
     chartDiv = document.getElementById('chartDiv');
+    chartDiv.innerHTML = "";
 
-    Plotly.newPlot(chartDiv, [{
+
+    var trace1 = {
+        type: "scatter",
+        mode: "lines",
+        name: 'AAPL High',
         x: dateValues,
         y: chartValues,
-        type: 'scatter'
-    }]
-    );
+        line: { color: '#17BECF' }
+    }
+    var data = [trace1];
+
+    var layout = {
+        xaxis: {
+            autorange: true,
+            range: ['2020-08-01', '2020-11-01'],
+            rangeslider: { range: ['2020-08-01', '2020-11-01'] },
+            type: 'date'
+        },
+        yaxis: {
+            autorange: true,
+            range: [86.8700008333, 138.870004167],
+            type: 'linear'
+        }
+    };
+    Plotly.newPlot(chartDiv, data);
 }
 
 function fillChartJS(prevClosingValue, chartValues, volumes, dateValues, selectedDisplayValue) {
@@ -137,7 +157,7 @@ function fillChartJS(prevClosingValue, chartValues, volumes, dateValues, selecte
     }
 
 
-    
+
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
