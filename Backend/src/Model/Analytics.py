@@ -19,6 +19,28 @@ class Analytics:
         return(None)
 
     @staticmethod
+    def calculateMovingAverageChunked(stock, field, period):
+
+        data = Analytics.calculateMovingAverage(stock, field, period)
+
+        refferenceVal = 500 #3494
+        rowsLeftover = len(data)
+        total = len(data)
+        numChunks = int(math.ceil(rowsLeftover / refferenceVal))
+
+        chunkList = []
+
+        for i in range(numChunks):
+            if(refferenceVal <= rowsLeftover):
+                chunkList.append(data[total-rowsLeftover: refferenceVal * (i + 1)])
+                rowsLeftover -= refferenceVal
+            else:
+                chunkList.append(data[total-rowsLeftover: total -1])
+
+        print("Returning Data")
+        return(chunkList)
+
+    @staticmethod
     def calculateMovingAverage(stock, field, period):
 
         data = [float(i) for i in Analytics.getAllFields(stock, field)]
@@ -30,7 +52,6 @@ class Analytics:
 
         for i in range(len(data) - period):
             scores.append(mean(data[i:i+period]))
-
 
         return(scores)
 

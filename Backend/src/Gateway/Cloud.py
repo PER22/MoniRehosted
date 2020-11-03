@@ -1,11 +1,11 @@
-import sys
-sys.path.insert(1, '../')
-from Model.Stock import Stock
+from Backend.src.Model.Stock import Stock
 from pubnub.callbacks import SubscribeCallback
 from pubnub.pnconfiguration import PNConfiguration
 from pubnub.pubnub import PubNub
-from Model.Database import Database
+from Backend.src.Model.Database import Database
+from Backend.src.Model.Analytics import Analytics
 import csv
+import json
 from pubnub.exceptions import PubNubException
 
 import math
@@ -78,6 +78,29 @@ class MySubscribeCallback(SubscribeCallback):
                         "operation": "DeleteStock" if (assetType == "stock") else "DeleteETF",
                         "status": database.delete(assetType, controlCommand[assetType])
                     }).pn_async(my_publish_callback)
+
+                elif("MovingAverage" in controlCommand["operation"]):
+                    asset = database.get(assetType, controlCommand[assetType])
+                    data = Analytics.calculateMovingAverageChunked(asset, controlCommand["field"], int(controlCommand["timePeriod"]))
+
+                    for i in range(len(data)):
+                        pubnub.publish().channel('FinanceSub').message({
+                            "requester": "Server",
+                            "operation": "MovingAverage",
+                            "part": (i + 1),
+                            "total": len(data),
+                            "data": json.dumps(data[i])
+                        }).pn_async(my_publish_callback)
+
+                elif("CrossOver" in controlCommand["operation"]):
+                    asset = database.get(assetType, controlCommand[assetType])
+
+                    pubnub.publish().channel('FinanceSub').message({
+                        "requester": "Server",
+                        "operation": "CrossOver",
+                        "status": Analytics.calculateCrossOver(asset, controlCommand["field"], int(controlCommand["firstTimePeriod"]), int(controlCommand["secondTimePeriod"]))
+                    }).pn_async(my_publish_callback)
+
                 else:
                     print("OOPS something went wrong")
             else:
