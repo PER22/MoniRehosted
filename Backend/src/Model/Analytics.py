@@ -16,7 +16,38 @@ class Analytics:
     @staticmethod
     def calculateVelocity(stock, field):
 
-        return(None)
+        data = [float(i) for i in Analytics.getAllFields(stock, field)]
+
+        scores = []
+
+        scores.append(0)
+
+        for i in range(1,len(data)):
+            scores.append(((data[i] - data[i-1]) / data[i-1]) * 100)
+
+        return(scores)
+
+    @staticmethod
+    def calculateVelocityChunked(stock, field):
+
+        data = Analytics.calculateVelocity(stock, field)
+
+        refferenceVal = 500 #3494
+        rowsLeftover = len(data)
+        total = len(data)
+        numChunks = int(math.ceil(rowsLeftover / refferenceVal))
+
+        chunkList = []
+
+        for i in range(numChunks):
+            if(refferenceVal <= rowsLeftover):
+                chunkList.append(data[total-rowsLeftover: refferenceVal * (i + 1)])
+                rowsLeftover -= refferenceVal
+            else:
+                chunkList.append(data[total-rowsLeftover: total -1])
+
+        print("Returning Data")
+        return(chunkList)
 
     @staticmethod
     def calculateMovingAverageChunked(stock, field, period):

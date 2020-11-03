@@ -63,6 +63,12 @@ class MySubscribeCallback(SubscribeCallback):
                             "data": originalAsset[i].toJSON()
                         }).pn_async(my_publish_callback)
 
+                elif("Delete" in controlCommand["operation"]):
+                    pubnub.publish().channel('FinanceSub').message({
+                        "requester": "Server",
+                        "operation": "DeleteStock" if (assetType == "stock") else "DeleteETF",
+                        "status": database.delete(assetType, controlCommand[assetType])
+                    }).pn_async(my_publish_callback)
 
                 elif("Prediction" in controlCommand["operation"]):
                     pubnub.publish().channel('FinanceSub').message({
@@ -70,13 +76,6 @@ class MySubscribeCallback(SubscribeCallback):
                         "operation": "ReturnStockPredictions" if (assetType == "stock") else "ReturnETFPredictions",
                         "assetType": controlCommand[assetType],
                         "data": Stock("Your", "mama", {"open": "4", "cclose": "5"})
-                    }).pn_async(my_publish_callback)
-
-                elif("Delete" in controlCommand["operation"]):
-                    pubnub.publish().channel('FinanceSub').message({
-                        "requester": "Server",
-                        "operation": "DeleteStock" if (assetType == "stock") else "DeleteETF",
-                        "status": database.delete(assetType, controlCommand[assetType])
                     }).pn_async(my_publish_callback)
 
                 elif("MovingAverage" in controlCommand["operation"]):
@@ -87,6 +86,20 @@ class MySubscribeCallback(SubscribeCallback):
                         pubnub.publish().channel('FinanceSub').message({
                             "requester": "Server",
                             "operation": "MovingAverage",
+                            "part": (i + 1),
+                            "total": len(data),
+                            "data": json.dumps(data[i])
+                        }).pn_async(my_publish_callback)
+
+
+                elif("Velocity" in controlCommand["operation"]):
+                    asset = database.get(assetType, controlCommand[assetType])
+                    data = Analytics.calculateVelocityChunked(asset, controlCommand["field"])
+
+                    for i in range(len(data)):
+                        pubnub.publish().channel('FinanceSub').message({
+                            "requester": "Server",
+                            "operation": "Velocity",
                             "part": (i + 1),
                             "total": len(data),
                             "data": json.dumps(data[i])
