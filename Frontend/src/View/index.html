@@ -9,10 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="style/default.css">
 
-    <link rel="stylesheet" type="text/css" href="style/uikit-rtl.css">
-    <link rel="stylesheet" type="text/css" href="style/uikit-rtl.min.css">
     <link rel="stylesheet" type="text/css" href="style/uikit.css">
-    <link rel="stylesheet" type="text/css" href="style/uikit.min.css">
     <!--Script Includes-->
     <meta http-equiv="Content-Security-Policy" content="default-src * self blob: data: gap:; style-src * self 'unsafe-inline' blob: data: gap:; script-src * 'self' 'unsafe-eval' 'unsafe-inline' blob: data: gap:; object-src * 'self' blob: data: gap:; img-src * self 'unsafe-inline' blob: data: gap:; connect-src self * 'unsafe-inline' blob: data: gap:; frame-src * self blob: data: gap:;">
     <script src="../Model/Stock.js"></script>
@@ -30,38 +27,33 @@
     <script src="../View/scripts/uikit-icons.min.js"></script>
     <script src="../View/scripts/uikit.js"></script>
     <script src="../View/scripts/uikit.min.js"></script>
-    <style>
-        html, body, h1, h2, h3, h4, h5 {
-            font-family: "Open Sans", sans-serif
-        }
-    </style>
 </head>
-<body class="w3-theme-dark" onload="initializePortfolio()">
+<body class="theme-dark" onload="initializePortfolio()">
 
     <!-- Page Container -->
-    <div class="w3-container w3-content" style="max-width:100%;margin-top:20px">
+    <div class="container content" style="max-width:100%;margin-top:20px">
         <div id="portfolio">
             <!-- The Grid -->
-            <div class="w3-row">
+            <div class="row">
 
                 <!-- Left Column -->
-                <div class="w3-col m2 w3-margin">
-                  <div class="w3-card w3-round">
-                      <div class="w3-container w3-padding w3-dark" >
-
+                <div class="col m2 margin">
+                  <div class="card round">
+                      <div class="container padding dark" >
+                        <div>
                           <ul class="uk-child-width-expand" uk-tab>
-                              <li class="uk-active"><a href="#">Stocks</a></li>
-                              <li><a href="#">ETFs</a></li>
+                              <li class="uk-active .tab-color"><a href="#">Stocks</a></li>
+                              <li class=".tab-color"><a href="#">ETFs</a></li>
                           </ul>
-
+                        </div>
                           <!-- <div class="stock-selection-sect" id="stockHeader"></div>-->
                       </div>
                   </div>
                   <br>
-                  <div class="w3-card w3-round">
-                      <div class="w3-container w3-padding w3-dark" >
+                  <div class="card round">
+                      <div class="container padding dark" >
                           <!-- Stock List Section-->
-                          <div class="list-background w3-padding w3-margin graph-background" id="listPlaceholder">
+                          <div class="list-background padding margin graph-background" id="listPlaceholder">
                               <div class="inter-graph"></div>
                           </div>
                           <!-- <div class="stock-selection-sect" id="stockHeader"></div>-->
@@ -71,10 +63,10 @@
                 <!-- End Left Column -->
 
                 <!-- Middle Column -->
-                <div class="w3-col m9 w3-margin">
+                <div class="col m9 margin">
 
-                    <div class="w3-card w3-round w3-dark">
-                        <div class="w3-container w3-padding">
+                    <div class="card round dark">
+                        <div class="container padding">
                             <div class="linear-background" id="labelPlaceholder">
                                 <div class="inter-label"></div>
                             </div>
@@ -82,8 +74,8 @@
                         </div>
                     </div>
                     <br>
-                    <div class="w3-card w3-round w3-dark">
-                        <div class="w3-container w3-padding">
+                    <div class="card round dark">
+                        <div class="container padding">
                             <ul>
                                 <!-- Display Value Drop Down -->
                                 <li class="dropdown">
@@ -130,7 +122,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="linear-background w3-padding w3-margin graph-background" id="graphPlaceholder">
+                        <div class="linear-background padding margin graph-background" id="graphPlaceholder">
                             <div class="inter-graph"></div>
                         </div>
                     </div>

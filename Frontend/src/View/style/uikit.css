@@ -132,7 +132,7 @@ sup {
   vertical-align: baseline;
 }
 sup {
-  top: -0.5em;
+  top: -1em;
 }
 sub {
   bottom: -0.25em;
@@ -615,7 +615,7 @@ a.uk-link-reset,
   top: calc(-0.1 * 1em);
   vertical-align: middle;
   /* 3 */
-  height: calc(4px + 0.7em);
+  height: calc(4px + 1em);
   margin-right: calc(5px + 0.2em);
   border-left: calc(5px + 0.1em) solid #e5e5e5;
 }
@@ -5539,7 +5539,7 @@ ul.uk-nav-sub {
 /* Divider modifier
  ========================================================================== */
 /*
- * Set gutter 
+ * Set gutter
  */
 .uk-subnav-divider {
   margin-left: -41px;
@@ -5838,7 +5838,7 @@ ul.uk-nav-sub {
  */
 .uk-slidenav {
   padding: 5px 10px;
-  color: rgba(102, 102, 102, 0.5);
+  color: rgba(102, 102, 102, 1);
   transition: color 0.1s ease-in-out;
 }
 /* Hover + Focus */
@@ -5849,7 +5849,7 @@ ul.uk-nav-sub {
 }
 /* OnClick */
 .uk-slidenav:active {
-  color: rgba(102, 102, 102, 0.5);
+  color: rgba(102, 102, 102, 1);
 }
 /* Icon modifier
  ========================================================================== */
@@ -6171,7 +6171,7 @@ ul.uk-nav-sub {
   justify-content: center;
   align-items: center;
   /* 3 */
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
   /* 4 */
   will-change: transform, opacity;
 }
@@ -6196,16 +6196,16 @@ ul.uk-nav-sub {
 .uk-lightbox-toolbar {
   padding: 10px 10px;
   background: rgba(0, 0, 0, 0.3);
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-lightbox-toolbar > * {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 /* Toolbar Icon (Close)
  ========================================================================== */
 .uk-lightbox-toolbar-icon {
   padding: 5px;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 /*
  * Hover
@@ -6223,7 +6223,7 @@ ul.uk-nav-sub {
   width: 50px;
   height: 50px;
   background: rgba(0, 0, 0, 0.3);
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
   /* 1 */
   display: inline-flex;
   justify-content: center;
@@ -6250,7 +6250,7 @@ ul.uk-nav-sub {
    Component: Animation
  ========================================================================== */
 [class*='uk-animation-'] {
-  animation-duration: 0.5s;
+  animation-duration: 1s;
   animation-timing-function: ease-out;
   animation-fill-mode: both;
 }
@@ -9158,7 +9158,7 @@ iframe.uk-cover {
 /* Duration modifiers
  ========================================================================== */
 .uk-transition-slow {
-  transition-duration: 0.7s;
+  transition-duration: 1s;
 }
 /* ========================================================================
    Component: Visibility
@@ -9312,7 +9312,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']),
 .uk-overlay-primary,
 .uk-offcanvas-bar {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light a,
 .uk-light .uk-link,
@@ -9395,7 +9395,7 @@ iframe.uk-cover {
 .uk-offcanvas-bar :not(pre) > code,
 .uk-offcanvas-bar :not(pre) > kbd,
 .uk-offcanvas-bar :not(pre) > samp {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
   background: rgba(255, 255, 255, 0.1);
 }
 .uk-light em,
@@ -9624,7 +9624,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) blockquote footer,
 .uk-overlay-primary blockquote footer,
 .uk-offcanvas-bar blockquote footer {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light hr,
 .uk-light .uk-hr,
@@ -9672,7 +9672,7 @@ iframe.uk-cover {
 .uk-overlay-primary .uk-link-muted a,
 .uk-offcanvas-bar a.uk-link-muted,
 .uk-offcanvas-bar .uk-link-muted a {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light a.uk-link-muted:hover,
 .uk-light .uk-link-muted a:hover,
@@ -9718,7 +9718,7 @@ iframe.uk-cover {
 .uk-offcanvas-bar .uk-link-muted a:hover,
 .uk-offcanvas-bar .uk-link-toggle:hover .uk-link-muted,
 .uk-offcanvas-bar .uk-link-toggle:focus .uk-link-muted {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light a.uk-link-text:hover,
 .uk-light .uk-link-text a:hover,
@@ -9764,7 +9764,7 @@ iframe.uk-cover {
 .uk-offcanvas-bar .uk-link-text a:hover,
 .uk-offcanvas-bar .uk-link-toggle:hover .uk-link-text,
 .uk-offcanvas-bar .uk-link-toggle:focus .uk-link-text {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light a.uk-link-heading:hover,
 .uk-light .uk-link-heading a:hover,
@@ -9936,7 +9936,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-list-muted > ::before,
 .uk-overlay-primary .uk-list-muted > ::before,
 .uk-offcanvas-bar .uk-list-muted > ::before {
-  color: rgba(255, 255, 255, 0.5) !important;
+  color: rgba(255, 255, 255, 1) !important;
 }
 .uk-light .uk-list-emphasis > ::before,
 .uk-section-primary:not(.uk-preserve-color) .uk-list-emphasis > ::before,
@@ -9988,7 +9988,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-list-bullet > ::before,
 .uk-overlay-primary .uk-list-bullet > ::before,
 .uk-offcanvas-bar .uk-list-bullet > ::before {
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%226%22%20height%3D%226%22%20viewBox%3D%220%200%206%206%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%20%20%20%20%3Ccircle%20fill%3D%22rgba%28255,%20255,%20255,%200.7%29%22%20cx%3D%223%22%20cy%3D%223%22%20r%3D%223%22%20%2F%3E%0A%3C%2Fsvg%3E");
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%226%22%20height%3D%226%22%20viewBox%3D%220%200%206%206%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%20%20%20%20%3Ccircle%20fill%3D%22rgba%28255,%20255,%20255,%201%29%22%20cx%3D%223%22%20cy%3D%223%22%20r%3D%223%22%20%2F%3E%0A%3C%2Fsvg%3E");
 }
 .uk-light .uk-list-divider > :nth-child(n+2),
 .uk-section-primary:not(.uk-preserve-color) .uk-list-divider > :nth-child(n+2),
@@ -10041,7 +10041,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-table th,
 .uk-overlay-primary .uk-table th,
 .uk-offcanvas-bar .uk-table th {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-table caption,
 .uk-section-primary:not(.uk-preserve-color) .uk-table caption,
@@ -10054,7 +10054,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-table caption,
 .uk-overlay-primary .uk-table caption,
 .uk-offcanvas-bar .uk-table caption {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-table > tr.uk-active,
 .uk-light .uk-table tbody tr.uk-active,
@@ -10176,7 +10176,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-icon-link,
 .uk-overlay-primary .uk-icon-link,
 .uk-offcanvas-bar .uk-icon-link {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-icon-link:hover,
 .uk-light .uk-icon-link:focus,
@@ -10200,7 +10200,7 @@ iframe.uk-cover {
 .uk-overlay-primary .uk-icon-link:focus,
 .uk-offcanvas-bar .uk-icon-link:hover,
 .uk-offcanvas-bar .uk-icon-link:focus {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-icon-link:active,
 .uk-light .uk-active > .uk-icon-link,
@@ -10224,7 +10224,7 @@ iframe.uk-cover {
 .uk-overlay-primary .uk-active > .uk-icon-link,
 .uk-offcanvas-bar .uk-icon-link:active,
 .uk-offcanvas-bar .uk-active > .uk-icon-link {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-icon-button,
 .uk-section-primary:not(.uk-preserve-color) .uk-icon-button,
@@ -10238,7 +10238,7 @@ iframe.uk-cover {
 .uk-overlay-primary .uk-icon-button,
 .uk-offcanvas-bar .uk-icon-button {
   background-color: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-icon-button:hover,
 .uk-light .uk-icon-button:focus,
@@ -10263,7 +10263,7 @@ iframe.uk-cover {
 .uk-offcanvas-bar .uk-icon-button:hover,
 .uk-offcanvas-bar .uk-icon-button:focus {
   background-color: rgba(242, 242, 242, 0.1);
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-icon-button:active,
 .uk-section-primary:not(.uk-preserve-color) .uk-icon-button:active,
@@ -10277,7 +10277,7 @@ iframe.uk-cover {
 .uk-overlay-primary .uk-icon-button:active,
 .uk-offcanvas-bar .uk-icon-button:active {
   background-color: rgba(230, 230, 230, 0.1);
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-input,
 .uk-light .uk-select,
@@ -10313,7 +10313,7 @@ iframe.uk-cover {
 .uk-offcanvas-bar .uk-select,
 .uk-offcanvas-bar .uk-textarea {
   background-color: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
   background-clip: padding-box;
   border-color: rgba(255, 255, 255, 0.2);
 }
@@ -10351,8 +10351,8 @@ iframe.uk-cover {
 .uk-offcanvas-bar .uk-select:focus,
 .uk-offcanvas-bar .uk-textarea:focus {
   background-color: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.7);
-  border-color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
+  border-color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-input::-ms-input-placeholder,
 .uk-section-primary:not(.uk-preserve-color) .uk-input::-ms-input-placeholder,
@@ -10365,7 +10365,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-input::-ms-input-placeholder,
 .uk-overlay-primary .uk-input::-ms-input-placeholder,
 .uk-offcanvas-bar .uk-input::-ms-input-placeholder {
-  color: rgba(255, 255, 255, 0.5) !important;
+  color: rgba(255, 255, 255, 1) !important;
 }
 .uk-light .uk-input::placeholder,
 .uk-section-primary:not(.uk-preserve-color) .uk-input::placeholder,
@@ -10378,7 +10378,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-input::placeholder,
 .uk-overlay-primary .uk-input::placeholder,
 .uk-offcanvas-bar .uk-input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-textarea::-ms-input-placeholder,
 .uk-section-primary:not(.uk-preserve-color) .uk-textarea::-ms-input-placeholder,
@@ -10391,7 +10391,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-textarea::-ms-input-placeholder,
 .uk-overlay-primary .uk-textarea::-ms-input-placeholder,
 .uk-offcanvas-bar .uk-textarea::-ms-input-placeholder {
-  color: rgba(255, 255, 255, 0.5) !important;
+  color: rgba(255, 255, 255, 1) !important;
 }
 .uk-light .uk-textarea::placeholder,
 .uk-section-primary:not(.uk-preserve-color) .uk-textarea::placeholder,
@@ -10404,7 +10404,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-textarea::placeholder,
 .uk-overlay-primary .uk-textarea::placeholder,
 .uk-offcanvas-bar .uk-textarea::placeholder {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-select:not([multiple]):not([size]),
 .uk-section-primary:not(.uk-preserve-color) .uk-select:not([multiple]):not([size]),
@@ -10417,7 +10417,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-select:not([multiple]):not([size]),
 .uk-overlay-primary .uk-select:not([multiple]):not([size]),
 .uk-offcanvas-bar .uk-select:not([multiple]):not([size]) {
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2224%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2016%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%20%20%20%20%3Cpolygon%20fill%3D%22rgba%28255,%20255,%20255,%200.7%29%22%20points%3D%2212%201%209%206%2015%206%22%20%2F%3E%0A%20%20%20%20%3Cpolygon%20fill%3D%22rgba%28255,%20255,%20255,%200.7%29%22%20points%3D%2212%2013%209%208%2015%208%22%20%2F%3E%0A%3C%2Fsvg%3E%0A");
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2224%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2016%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%20%20%20%20%3Cpolygon%20fill%3D%22rgba%28255,%20255,%20255,%201%29%22%20points%3D%2212%201%209%206%2015%206%22%20%2F%3E%0A%20%20%20%20%3Cpolygon%20fill%3D%22rgba%28255,%20255,%20255,%201%29%22%20points%3D%2212%2013%209%208%2015%208%22%20%2F%3E%0A%3C%2Fsvg%3E%0A");
 }
 .uk-light .uk-input[list]:hover,
 .uk-light .uk-input[list]:focus,
@@ -10441,7 +10441,7 @@ iframe.uk-cover {
 .uk-overlay-primary .uk-input[list]:focus,
 .uk-offcanvas-bar .uk-input[list]:hover,
 .uk-offcanvas-bar .uk-input[list]:focus {
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2224%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2016%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%20%20%20%20%3Cpolygon%20fill%3D%22rgba%28255,%20255,%20255,%200.7%29%22%20points%3D%2212%2012%208%206%2016%206%22%20%2F%3E%0A%3C%2Fsvg%3E%0A");
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2224%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2016%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%20%20%20%20%3Cpolygon%20fill%3D%22rgba%28255,%20255,%20255,%201%29%22%20points%3D%2212%2012%208%206%2016%206%22%20%2F%3E%0A%3C%2Fsvg%3E%0A");
 }
 .uk-light .uk-radio,
 .uk-light .uk-checkbox,
@@ -10490,7 +10490,7 @@ iframe.uk-cover {
 .uk-overlay-primary .uk-checkbox:focus,
 .uk-offcanvas-bar .uk-radio:focus,
 .uk-offcanvas-bar .uk-checkbox:focus {
-  border-color: rgba(255, 255, 255, 0.7);
+  border-color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-radio:checked,
 .uk-light .uk-checkbox:checked,
@@ -10526,7 +10526,7 @@ iframe.uk-cover {
 .uk-offcanvas-bar .uk-checkbox:checked,
 .uk-offcanvas-bar .uk-checkbox:indeterminate {
   background-color: #fff;
-  border-color: rgba(255, 255, 255, 0.7);
+  border-color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-radio:checked:focus,
 .uk-light .uk-checkbox:checked:focus,
@@ -10626,7 +10626,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-form-icon,
 .uk-overlay-primary .uk-form-icon,
 .uk-offcanvas-bar .uk-form-icon {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-form-icon:hover,
 .uk-section-primary:not(.uk-preserve-color) .uk-form-icon:hover,
@@ -10639,7 +10639,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-form-icon:hover,
 .uk-overlay-primary .uk-form-icon:hover,
 .uk-offcanvas-bar .uk-form-icon:hover {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-button-default,
 .uk-section-primary:not(.uk-preserve-color) .uk-button-default,
@@ -10654,7 +10654,7 @@ iframe.uk-cover {
 .uk-offcanvas-bar .uk-button-default {
   background-color: transparent;
   color: #fff;
-  border-color: rgba(255, 255, 255, 0.7);
+  border-color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-button-default:hover,
 .uk-light .uk-button-default:focus,
@@ -10897,7 +10897,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-button-text:disabled,
 .uk-overlay-primary .uk-button-text:disabled,
 .uk-offcanvas-bar .uk-button-text:disabled {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-button-link,
 .uk-section-primary:not(.uk-preserve-color) .uk-button-link,
@@ -10910,7 +10910,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-button-link,
 .uk-overlay-primary .uk-button-link,
 .uk-offcanvas-bar .uk-button-link {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-button-link:hover,
 .uk-light .uk-button-link:focus,
@@ -10934,7 +10934,7 @@ iframe.uk-cover {
 .uk-overlay-primary .uk-button-link:focus,
 .uk-offcanvas-bar .uk-button-link:hover,
 .uk-offcanvas-bar .uk-button-link:focus {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-close,
 .uk-section-primary:not(.uk-preserve-color) .uk-close,
@@ -10947,7 +10947,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-close,
 .uk-overlay-primary .uk-close,
 .uk-offcanvas-bar .uk-close {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-close:hover,
 .uk-light .uk-close:focus,
@@ -10971,7 +10971,7 @@ iframe.uk-cover {
 .uk-overlay-primary .uk-close:focus,
 .uk-offcanvas-bar .uk-close:hover,
 .uk-offcanvas-bar .uk-close:focus {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-totop,
 .uk-section-primary:not(.uk-preserve-color) .uk-totop,
@@ -10984,7 +10984,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-totop,
 .uk-overlay-primary .uk-totop,
 .uk-offcanvas-bar .uk-totop {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-totop:hover,
 .uk-light .uk-totop:focus,
@@ -11008,7 +11008,7 @@ iframe.uk-cover {
 .uk-overlay-primary .uk-totop:focus,
 .uk-offcanvas-bar .uk-totop:hover,
 .uk-offcanvas-bar .uk-totop:focus {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-totop:active,
 .uk-section-primary:not(.uk-preserve-color) .uk-totop:active,
@@ -11124,7 +11124,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-article-meta,
 .uk-overlay-primary .uk-article-meta,
 .uk-offcanvas-bar .uk-article-meta {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-search-input,
 .uk-section-primary:not(.uk-preserve-color) .uk-search-input,
@@ -11137,7 +11137,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-search-input,
 .uk-overlay-primary .uk-search-input,
 .uk-offcanvas-bar .uk-search-input {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-search-input:-ms-input-placeholder,
 .uk-section-primary:not(.uk-preserve-color) .uk-search-input:-ms-input-placeholder,
@@ -11150,7 +11150,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-search-input:-ms-input-placeholder,
 .uk-overlay-primary .uk-search-input:-ms-input-placeholder,
 .uk-offcanvas-bar .uk-search-input:-ms-input-placeholder {
-  color: rgba(255, 255, 255, 0.5) !important;
+  color: rgba(255, 255, 255, 1) !important;
 }
 .uk-light .uk-search-input::placeholder,
 .uk-section-primary:not(.uk-preserve-color) .uk-search-input::placeholder,
@@ -11163,7 +11163,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-search-input::placeholder,
 .uk-overlay-primary .uk-search-input::placeholder,
 .uk-offcanvas-bar .uk-search-input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-search .uk-search-icon,
 .uk-section-primary:not(.uk-preserve-color) .uk-search .uk-search-icon,
@@ -11176,7 +11176,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-search .uk-search-icon,
 .uk-overlay-primary .uk-search .uk-search-icon,
 .uk-offcanvas-bar .uk-search .uk-search-icon {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-search .uk-search-icon:hover,
 .uk-section-primary:not(.uk-preserve-color) .uk-search .uk-search-icon:hover,
@@ -11189,7 +11189,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-search .uk-search-icon:hover,
 .uk-overlay-primary .uk-search .uk-search-icon:hover,
 .uk-offcanvas-bar .uk-search .uk-search-icon:hover {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-search-default .uk-search-input,
 .uk-section-primary:not(.uk-preserve-color) .uk-search-default .uk-search-input,
@@ -11255,7 +11255,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-search-toggle,
 .uk-overlay-primary .uk-search-toggle,
 .uk-offcanvas-bar .uk-search-toggle {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-search-toggle:hover,
 .uk-light .uk-search-toggle:focus,
@@ -11279,7 +11279,7 @@ iframe.uk-cover {
 .uk-overlay-primary .uk-search-toggle:focus,
 .uk-offcanvas-bar .uk-search-toggle:hover,
 .uk-offcanvas-bar .uk-search-toggle:focus {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-accordion-title,
 .uk-section-primary:not(.uk-preserve-color) .uk-accordion-title,
@@ -11316,7 +11316,7 @@ iframe.uk-cover {
 .uk-overlay-primary .uk-accordion-title:focus,
 .uk-offcanvas-bar .uk-accordion-title:hover,
 .uk-offcanvas-bar .uk-accordion-title:focus {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-grid-divider > :not(.uk-first-column)::before,
 .uk-section-primary:not(.uk-preserve-color) .uk-grid-divider > :not(.uk-first-column)::before,
@@ -11355,7 +11355,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-nav-parent-icon > .uk-parent > a::after,
 .uk-overlay-primary .uk-nav-parent-icon > .uk-parent > a::after,
 .uk-offcanvas-bar .uk-nav-parent-icon > .uk-parent > a::after {
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2214%22%20height%3D%2214%22%20viewBox%3D%220%200%2014%2014%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%20%20%20%20%3Cpolyline%20fill%3D%22none%22%20stroke%3D%22rgba%28255,%20255,%20255,%200.7%29%22%20stroke-width%3D%221.1%22%20points%3D%2210%201%204%207%2010%2013%22%20%2F%3E%0A%3C%2Fsvg%3E");
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2214%22%20height%3D%2214%22%20viewBox%3D%220%200%2014%2014%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%20%20%20%20%3Cpolyline%20fill%3D%22none%22%20stroke%3D%22rgba%28255,%20255,%20255,%201%29%22%20stroke-width%3D%221.1%22%20points%3D%2210%201%204%207%2010%2013%22%20%2F%3E%0A%3C%2Fsvg%3E");
 }
 .uk-light .uk-nav-parent-icon > .uk-parent.uk-open > a::after,
 .uk-section-primary:not(.uk-preserve-color) .uk-nav-parent-icon > .uk-parent.uk-open > a::after,
@@ -11368,7 +11368,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-nav-parent-icon > .uk-parent.uk-open > a::after,
 .uk-overlay-primary .uk-nav-parent-icon > .uk-parent.uk-open > a::after,
 .uk-offcanvas-bar .uk-nav-parent-icon > .uk-parent.uk-open > a::after {
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2214%22%20height%3D%2214%22%20viewBox%3D%220%200%2014%2014%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%20%20%20%20%3Cpolyline%20fill%3D%22none%22%20stroke%3D%22rgba%28255,%20255,%20255,%200.7%29%22%20stroke-width%3D%221.1%22%20points%3D%221%204%207%2010%2013%204%22%20%2F%3E%0A%3C%2Fsvg%3E");
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2214%22%20height%3D%2214%22%20viewBox%3D%220%200%2014%2014%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%20%20%20%20%3Cpolyline%20fill%3D%22none%22%20stroke%3D%22rgba%28255,%20255,%20255,%201%29%22%20stroke-width%3D%221.1%22%20points%3D%221%204%207%2010%2013%204%22%20%2F%3E%0A%3C%2Fsvg%3E");
 }
 .uk-light .uk-nav-default > li > a,
 .uk-section-primary:not(.uk-preserve-color) .uk-nav-default > li > a,
@@ -11381,7 +11381,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-nav-default > li > a,
 .uk-overlay-primary .uk-nav-default > li > a,
 .uk-offcanvas-bar .uk-nav-default > li > a {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-nav-default > li > a:hover,
 .uk-light .uk-nav-default > li > a:focus,
@@ -11405,7 +11405,7 @@ iframe.uk-cover {
 .uk-overlay-primary .uk-nav-default > li > a:focus,
 .uk-offcanvas-bar .uk-nav-default > li > a:hover,
 .uk-offcanvas-bar .uk-nav-default > li > a:focus {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-nav-default > li.uk-active > a,
 .uk-section-primary:not(.uk-preserve-color) .uk-nav-default > li.uk-active > a,
@@ -11457,7 +11457,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-nav-default .uk-nav-sub a,
 .uk-overlay-primary .uk-nav-default .uk-nav-sub a,
 .uk-offcanvas-bar .uk-nav-default .uk-nav-sub a {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-nav-default .uk-nav-sub a:hover,
 .uk-light .uk-nav-default .uk-nav-sub a:focus,
@@ -11481,7 +11481,7 @@ iframe.uk-cover {
 .uk-overlay-primary .uk-nav-default .uk-nav-sub a:focus,
 .uk-offcanvas-bar .uk-nav-default .uk-nav-sub a:hover,
 .uk-offcanvas-bar .uk-nav-default .uk-nav-sub a:focus {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-nav-default .uk-nav-sub li.uk-active > a,
 .uk-section-primary:not(.uk-preserve-color) .uk-nav-default .uk-nav-sub li.uk-active > a,
@@ -11507,7 +11507,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-nav-primary > li > a,
 .uk-overlay-primary .uk-nav-primary > li > a,
 .uk-offcanvas-bar .uk-nav-primary > li > a {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-nav-primary > li > a:hover,
 .uk-light .uk-nav-primary > li > a:focus,
@@ -11531,7 +11531,7 @@ iframe.uk-cover {
 .uk-overlay-primary .uk-nav-primary > li > a:focus,
 .uk-offcanvas-bar .uk-nav-primary > li > a:hover,
 .uk-offcanvas-bar .uk-nav-primary > li > a:focus {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-nav-primary > li.uk-active > a,
 .uk-section-primary:not(.uk-preserve-color) .uk-nav-primary > li.uk-active > a,
@@ -11583,7 +11583,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-nav-primary .uk-nav-sub a,
 .uk-overlay-primary .uk-nav-primary .uk-nav-sub a,
 .uk-offcanvas-bar .uk-nav-primary .uk-nav-sub a {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-nav-primary .uk-nav-sub a:hover,
 .uk-light .uk-nav-primary .uk-nav-sub a:focus,
@@ -11607,7 +11607,7 @@ iframe.uk-cover {
 .uk-overlay-primary .uk-nav-primary .uk-nav-sub a:focus,
 .uk-offcanvas-bar .uk-nav-primary .uk-nav-sub a:hover,
 .uk-offcanvas-bar .uk-nav-primary .uk-nav-sub a:focus {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-nav-primary .uk-nav-sub li.uk-active > a,
 .uk-section-primary:not(.uk-preserve-color) .uk-nav-primary .uk-nav-sub li.uk-active > a,
@@ -11633,7 +11633,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-navbar-nav > li > a,
 .uk-overlay-primary .uk-navbar-nav > li > a,
 .uk-offcanvas-bar .uk-navbar-nav > li > a {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-navbar-nav > li:hover > a,
 .uk-light .uk-navbar-nav > li > a:focus,
@@ -11668,7 +11668,7 @@ iframe.uk-cover {
 .uk-offcanvas-bar .uk-navbar-nav > li:hover > a,
 .uk-offcanvas-bar .uk-navbar-nav > li > a:focus,
 .uk-offcanvas-bar .uk-navbar-nav > li > a.uk-open {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-navbar-nav > li > a:active,
 .uk-section-primary:not(.uk-preserve-color) .uk-navbar-nav > li > a:active,
@@ -11707,7 +11707,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-navbar-item,
 .uk-overlay-primary .uk-navbar-item,
 .uk-offcanvas-bar .uk-navbar-item {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-navbar-toggle,
 .uk-section-primary:not(.uk-preserve-color) .uk-navbar-toggle,
@@ -11720,7 +11720,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-navbar-toggle,
 .uk-overlay-primary .uk-navbar-toggle,
 .uk-offcanvas-bar .uk-navbar-toggle {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-navbar-toggle:hover,
 .uk-light .uk-navbar-toggle:focus,
@@ -11755,7 +11755,7 @@ iframe.uk-cover {
 .uk-offcanvas-bar .uk-navbar-toggle:hover,
 .uk-offcanvas-bar .uk-navbar-toggle:focus,
 .uk-offcanvas-bar .uk-navbar-toggle.uk-open {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-subnav > * > :first-child,
 .uk-section-primary:not(.uk-preserve-color) .uk-subnav > * > :first-child,
@@ -11768,7 +11768,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-subnav > * > :first-child,
 .uk-overlay-primary .uk-subnav > * > :first-child,
 .uk-offcanvas-bar .uk-subnav > * > :first-child {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-subnav > * > a:hover,
 .uk-light .uk-subnav > * > a:focus,
@@ -11792,7 +11792,7 @@ iframe.uk-cover {
 .uk-overlay-primary .uk-subnav > * > a:focus,
 .uk-offcanvas-bar .uk-subnav > * > a:hover,
 .uk-offcanvas-bar .uk-subnav > * > a:focus {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-subnav > .uk-active > a,
 .uk-section-primary:not(.uk-preserve-color) .uk-subnav > .uk-active > a,
@@ -11832,7 +11832,7 @@ iframe.uk-cover {
 .uk-overlay-primary .uk-subnav-pill > * > :first-child,
 .uk-offcanvas-bar .uk-subnav-pill > * > :first-child {
   background-color: transparent;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-subnav-pill > * > a:hover,
 .uk-light .uk-subnav-pill > * > a:focus,
@@ -11857,7 +11857,7 @@ iframe.uk-cover {
 .uk-offcanvas-bar .uk-subnav-pill > * > a:hover,
 .uk-offcanvas-bar .uk-subnav-pill > * > a:focus {
   background-color: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-subnav-pill > * > a:active,
 .uk-section-primary:not(.uk-preserve-color) .uk-subnav-pill > * > a:active,
@@ -11871,7 +11871,7 @@ iframe.uk-cover {
 .uk-overlay-primary .uk-subnav-pill > * > a:active,
 .uk-offcanvas-bar .uk-subnav-pill > * > a:active {
   background-color: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-subnav-pill > .uk-active > a,
 .uk-section-primary:not(.uk-preserve-color) .uk-subnav-pill > .uk-active > a,
@@ -11898,7 +11898,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-subnav > .uk-disabled > a,
 .uk-overlay-primary .uk-subnav > .uk-disabled > a,
 .uk-offcanvas-bar .uk-subnav > .uk-disabled > a {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-breadcrumb > * > *,
 .uk-section-primary:not(.uk-preserve-color) .uk-breadcrumb > * > *,
@@ -11911,7 +11911,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-breadcrumb > * > *,
 .uk-overlay-primary .uk-breadcrumb > * > *,
 .uk-offcanvas-bar .uk-breadcrumb > * > * {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-breadcrumb > * > :hover,
 .uk-light .uk-breadcrumb > * > :focus,
@@ -11935,7 +11935,7 @@ iframe.uk-cover {
 .uk-overlay-primary .uk-breadcrumb > * > :focus,
 .uk-offcanvas-bar .uk-breadcrumb > * > :hover,
 .uk-offcanvas-bar .uk-breadcrumb > * > :focus {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-breadcrumb > :last-child > *,
 .uk-section-primary:not(.uk-preserve-color) .uk-breadcrumb > :last-child > *,
@@ -11948,7 +11948,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-breadcrumb > :last-child > *,
 .uk-overlay-primary .uk-breadcrumb > :last-child > *,
 .uk-offcanvas-bar .uk-breadcrumb > :last-child > * {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-breadcrumb > :nth-child(n+2):not(.uk-first-column)::before,
 .uk-section-primary:not(.uk-preserve-color) .uk-breadcrumb > :nth-child(n+2):not(.uk-first-column)::before,
@@ -11961,7 +11961,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-breadcrumb > :nth-child(n+2):not(.uk-first-column)::before,
 .uk-overlay-primary .uk-breadcrumb > :nth-child(n+2):not(.uk-first-column)::before,
 .uk-offcanvas-bar .uk-breadcrumb > :nth-child(n+2):not(.uk-first-column)::before {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-pagination > * > *,
 .uk-section-primary:not(.uk-preserve-color) .uk-pagination > * > *,
@@ -11974,7 +11974,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-pagination > * > *,
 .uk-overlay-primary .uk-pagination > * > *,
 .uk-offcanvas-bar .uk-pagination > * > * {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-pagination > * > :hover,
 .uk-light .uk-pagination > * > :focus,
@@ -11998,7 +11998,7 @@ iframe.uk-cover {
 .uk-overlay-primary .uk-pagination > * > :focus,
 .uk-offcanvas-bar .uk-pagination > * > :hover,
 .uk-offcanvas-bar .uk-pagination > * > :focus {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-pagination > .uk-active > *,
 .uk-section-primary:not(.uk-preserve-color) .uk-pagination > .uk-active > *,
@@ -12011,7 +12011,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-pagination > .uk-active > *,
 .uk-overlay-primary .uk-pagination > .uk-active > *,
 .uk-offcanvas-bar .uk-pagination > .uk-active > * {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-pagination > .uk-disabled > *,
 .uk-section-primary:not(.uk-preserve-color) .uk-pagination > .uk-disabled > *,
@@ -12024,7 +12024,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-pagination > .uk-disabled > *,
 .uk-overlay-primary .uk-pagination > .uk-disabled > *,
 .uk-offcanvas-bar .uk-pagination > .uk-disabled > * {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-tab::before,
 .uk-section-primary:not(.uk-preserve-color) .uk-tab::before,
@@ -12050,7 +12050,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-tab > * > a,
 .uk-overlay-primary .uk-tab > * > a,
 .uk-offcanvas-bar .uk-tab > * > a {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-tab > * > a:hover,
 .uk-light .uk-tab > * > a:focus,
@@ -12074,7 +12074,7 @@ iframe.uk-cover {
 .uk-overlay-primary .uk-tab > * > a:focus,
 .uk-offcanvas-bar .uk-tab > * > a:hover,
 .uk-offcanvas-bar .uk-tab > * > a:focus {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-tab > .uk-active > a,
 .uk-section-primary:not(.uk-preserve-color) .uk-tab > .uk-active > a,
@@ -12101,7 +12101,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-tab > .uk-disabled > a,
 .uk-overlay-primary .uk-tab > .uk-disabled > a,
 .uk-offcanvas-bar .uk-tab > .uk-disabled > a {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-slidenav,
 .uk-section-primary:not(.uk-preserve-color) .uk-slidenav,
@@ -12114,7 +12114,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-slidenav,
 .uk-overlay-primary .uk-slidenav,
 .uk-offcanvas-bar .uk-slidenav {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-slidenav:hover,
 .uk-light .uk-slidenav:focus,
@@ -12151,7 +12151,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-slidenav:active,
 .uk-overlay-primary .uk-slidenav:active,
 .uk-offcanvas-bar .uk-slidenav:active {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-dotnav > * > *,
 .uk-section-primary:not(.uk-preserve-color) .uk-dotnav > * > *,
@@ -12203,7 +12203,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-dotnav > * > :active,
 .uk-overlay-primary .uk-dotnav > * > :active,
 .uk-offcanvas-bar .uk-dotnav > * > :active {
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 1);
   border-color: transparent;
 }
 .uk-light .uk-dotnav > .uk-active > *,
@@ -12231,7 +12231,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-iconnav > * > a,
 .uk-overlay-primary .uk-iconnav > * > a,
 .uk-offcanvas-bar .uk-iconnav > * > a {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-iconnav > * > a:hover,
 .uk-light .uk-iconnav > * > a:focus,
@@ -12255,7 +12255,7 @@ iframe.uk-cover {
 .uk-overlay-primary .uk-iconnav > * > a:focus,
 .uk-offcanvas-bar .uk-iconnav > * > a:hover,
 .uk-offcanvas-bar .uk-iconnav > * > a:focus {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-iconnav > .uk-active > a,
 .uk-section-primary:not(.uk-preserve-color) .uk-iconnav > .uk-active > a,
@@ -12268,7 +12268,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-iconnav > .uk-active > a,
 .uk-overlay-primary .uk-iconnav > .uk-active > a,
 .uk-offcanvas-bar .uk-iconnav > .uk-active > a {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-text-lead,
 .uk-section-primary:not(.uk-preserve-color) .uk-text-lead,
@@ -12281,7 +12281,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-text-lead,
 .uk-overlay-primary .uk-text-lead,
 .uk-offcanvas-bar .uk-text-lead {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-text-meta,
 .uk-section-primary:not(.uk-preserve-color) .uk-text-meta,
@@ -12294,7 +12294,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-text-meta,
 .uk-overlay-primary .uk-text-meta,
 .uk-offcanvas-bar .uk-text-meta {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-text-muted,
 .uk-section-primary:not(.uk-preserve-color) .uk-text-muted,
@@ -12307,7 +12307,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-text-muted,
 .uk-overlay-primary .uk-text-muted,
 .uk-offcanvas-bar .uk-text-muted {
-  color: rgba(255, 255, 255, 0.5) !important;
+  color: rgba(255, 255, 255, 1) !important;
 }
 .uk-light .uk-text-emphasis,
 .uk-section-primary:not(.uk-preserve-color) .uk-text-emphasis,
@@ -12372,7 +12372,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-logo,
 .uk-overlay-primary .uk-logo,
 .uk-offcanvas-bar .uk-logo {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-logo:hover,
 .uk-light .uk-logo:focus,
@@ -12396,7 +12396,7 @@ iframe.uk-cover {
 .uk-overlay-primary .uk-logo:focus,
 .uk-offcanvas-bar .uk-logo:hover,
 .uk-offcanvas-bar .uk-logo:focus {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 1);
 }
 .uk-light .uk-logo > :not(.uk-logo-inverse):not(:only-of-type),
 .uk-section-primary:not(.uk-preserve-color) .uk-logo > :not(.uk-logo-inverse):not(:only-of-type),
@@ -12435,7 +12435,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-accordion-title::before,
 .uk-overlay-primary .uk-accordion-title::before,
 .uk-offcanvas-bar .uk-accordion-title::before {
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2213%22%20height%3D%2213%22%20viewBox%3D%220%200%2013%2013%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%20%20%20%20%3Crect%20fill%3D%22rgba%28255,%20255,%20255,%200.7%29%22%20width%3D%2213%22%20height%3D%221%22%20x%3D%220%22%20y%3D%226%22%20%2F%3E%0A%20%20%20%20%3Crect%20fill%3D%22rgba%28255,%20255,%20255,%200.7%29%22%20width%3D%221%22%20height%3D%2213%22%20x%3D%226%22%20y%3D%220%22%20%2F%3E%0A%3C%2Fsvg%3E");
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2213%22%20height%3D%2213%22%20viewBox%3D%220%200%2013%2013%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%20%20%20%20%3Crect%20fill%3D%22rgba%28255,%20255,%20255,%201%29%22%20width%3D%2213%22%20height%3D%221%22%20x%3D%220%22%20y%3D%226%22%20%2F%3E%0A%20%20%20%20%3Crect%20fill%3D%22rgba%28255,%20255,%20255,%201%29%22%20width%3D%221%22%20height%3D%2213%22%20x%3D%226%22%20y%3D%220%22%20%2F%3E%0A%3C%2Fsvg%3E");
 }
 .uk-light .uk-open > .uk-accordion-title::before,
 .uk-section-primary:not(.uk-preserve-color) .uk-open > .uk-accordion-title::before,
@@ -12448,7 +12448,7 @@ iframe.uk-cover {
 .uk-card-secondary > :not([class*='uk-card-media']) .uk-open > .uk-accordion-title::before,
 .uk-overlay-primary .uk-open > .uk-accordion-title::before,
 .uk-offcanvas-bar .uk-open > .uk-accordion-title::before {
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2213%22%20height%3D%2213%22%20viewBox%3D%220%200%2013%2013%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%20%20%20%20%3Crect%20fill%3D%22rgba%28255,%20255,%20255,%200.7%29%22%20width%3D%2213%22%20height%3D%221%22%20x%3D%220%22%20y%3D%226%22%20%2F%3E%0A%3C%2Fsvg%3E");
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2213%22%20height%3D%2213%22%20viewBox%3D%220%200%2013%2013%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%20%20%20%20%3Crect%20fill%3D%22rgba%28255,%20255,%20255,%201%29%22%20width%3D%2213%22%20height%3D%221%22%20x%3D%220%22%20y%3D%226%22%20%2F%3E%0A%3C%2Fsvg%3E");
 }
 /* ========================================================================
    Component: Print
@@ -12482,7 +12482,7 @@ iframe.uk-cover {
     max-width: 100% !important;
   }
   @page {
-    margin: 0.5cm;
+    margin: 1cm;
   }
   p,
   h2,
