@@ -51,7 +51,7 @@ class MySubscribeCallback(SubscribeCallback):
 
 
                 elif("Data" in controlCommand["operation"]):
-                    originalAsset = database.get(assetType, controlCommand[assetType])
+                    originalAsset = database.getChunked(assetType, controlCommand[assetType])
                     for i in range(len(originalAsset)):
                         print(str(i) + ". Chunk")
                         pubnub.publish().channel('FinanceSub').message({
