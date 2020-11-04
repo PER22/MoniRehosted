@@ -132,6 +132,9 @@ class Stock {
         }
         return volumes;
     }
+    getLastData(){
+      return this.data[this.data.length - 1];
+    }
 }
 
 class StockData {
