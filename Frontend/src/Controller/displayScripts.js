@@ -92,21 +92,46 @@ function displayStockChart(ticker) {
 
     updateHeader(stockTitle, prevClosingValue, lastDay.getOpen(), lastDay.getLow(), lastDay.getHigh(), lastDay.getVolume(), ticker, prevClosingValue)
 
-    fillChartJS(prevClosingValue, chartValues, volumes, dateValues, selectedDisplayValue);
+    //fillChartJS(prevClosingValue, chartValues, volumes, dateValues, selectedDisplayValue);
 
-
+    //fillChartJS(prevClosingValue, chartValues, volumes, dateValues, selectedDisplayValue);
+    fillPlotlyChart(dateValues, chartValues);
     setCursor("default");
 }
 
-function fillPlotlyChart() {
+function fillPlotlyChart(dateValues, chartValues) {
+    chartDiv.innerHTML = "";
     chartDiv = document.getElementById('chartDiv');
+    var min = Math.min(...chartValues) - 2;
+    var max = Math.max(...chartValues) + 2;
 
-    Plotly.newPlot(chartDiv, [{
+    var trace1 = {
+        type: "scatter",
+        mode: "lines",
         x: dateValues,
         y: chartValues,
-        type: 'scatter'
-    }]
-    );
+        fill: 'tonexty',
+        line: { color: '#17BECF' }
+    }
+    var data = [trace1];
+
+    var layout = {
+        plot_bgcolor: "rgba(0,0,0,0)",
+        paper_bgcolor: "rgba(0,0,0,0)",
+        height: 735,
+        xaxis: {
+            gridcolor: '#373c42',
+            gridwidth: 1,
+            linecolor: '#636363',
+        },
+        yaxis: {
+            gridcolor: '#373c42',
+            gridwidth: 1,
+            linecolor: '#636363',
+            range: [min,max]
+        }
+    }
+    Plotly.newPlot(chartDiv, data, layout=layout);
 }
 
 function fillChartJS(prevClosingValue, chartValues, volumes, dateValues, selectedDisplayValue) {
