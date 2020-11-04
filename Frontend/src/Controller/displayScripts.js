@@ -79,30 +79,22 @@ function displayStockChart(ticker) {
     //Set stock title and initial date range
     setActiveStockDateRange();
 
-    if (!!document.getElementById("labelPlaceholder")) {
-        const newlabel = document.createElement('label');
-        newlabel.innerHTML = '  <label class="header-label" id="selected-stock-name"></label>';
-        document.getElementById('labelPlaceholder').parentNode.replaceChild(newlabel, document.getElementById('labelPlaceholder'));
-    }
-
-    if (!!document.getElementById("graphPlaceholder")) {
-        const newGraph = document.createElement('div');
-        newGraph.innerHTML = '  <div id="chartDiv"><canvas id="myChart"></canvas></div>';
-        document.getElementById('graphPlaceholder').parentNode.replaceChild(newGraph, document.getElementById('graphPlaceholder'));
-    }
-
-    document.getElementById('selected-stock-name').innerHTML = getStockTitleByTicker(ticker);
+    replaceAnimationAfterLoad();
 
     //Gather chart values
+    var stockTitle = getStockTitleByTicker(ticker);
     var prevClosingValue = getStockInPortfolioByTicker(ticker).getPriceChangeFromPreviousDay();
+    var lastDay = getStockInPortfolioByTicker(ticker).getLastData();
     var selectedDisplayValue = getSelectedDisplayValue();
     var chartValues = getChartValuesByTicker(selectedDisplayValue, ticker);
     var volumes = getChartVolumeByTicker(selectedDisplayValue, ticker);
     var dateValues = getClosingDatesByTicker(ticker);
 
+    updateHeader(stockTitle, prevClosingValue, lastDay.getOpen(), lastDay.getLow(), lastDay.getHigh(), lastDay.getVolume(), ticker, prevClosingValue)
+
     fillChartJS(prevClosingValue, chartValues, volumes, dateValues, selectedDisplayValue);
 
-   
+
     setCursor("default");
 }
 
@@ -137,7 +129,7 @@ function fillChartJS(prevClosingValue, chartValues, volumes, dateValues, selecte
     }
 
 
-    
+
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
@@ -311,4 +303,81 @@ function scrolled(e) {
     if (myDiv.offsetHeight + myDiv.scrollTop >= myDiv.scrollHeight) {
         scrolledToBottom(e);
     }
+}
+
+function replaceAnimationAfterLoad(stock){
+  //Name of Company
+  if (!!document.getElementById("labelPlaceholder")) {
+      const newlabel = document.createElement('label');
+      newlabel.innerHTML = '  <label class="header-label" id="selected-stock-name"></label>';
+      document.getElementById('labelPlaceholder').parentNode.replaceChild(newlabel, document.getElementById('labelPlaceholder'));
+  }
+
+  //Price Of Company
+  if (!!document.getElementById("pricePlaceholder")) {
+      const newlabel = document.createElement('h1');
+      newlabel.innerHTML = '  <h1 class="header-label" id="selected-stock-price">340</h1>';
+      document.getElementById('pricePlaceholder').parentNode.replaceChild(newlabel, document.getElementById('pricePlaceholder'));
+  }
+
+  //Currency and Trend of Company Asset
+  if (!!document.getElementById("currencyPlaceholder")) {
+      const newlabel = document.createElement('label');
+      newlabel.innerHTML = '<div id="selected-stock-trend"></div>' +
+                           '<br>' +
+                           '<label class="" id="selected-stock-currency">USD</label>';
+      document.getElementById('currencyPlaceholder').parentNode.replaceChild(newlabel, document.getElementById('currencyPlaceholder'));
+  }
+
+  //Open / Close Price of Asset
+  if (!!document.getElementById("openClosePlaceholder")) {
+      const newlabel = document.createElement('label');
+      newlabel.innerHTML = '<label class="" id="selected-stock-PreviousClose">Previous Close: </label> ' +
+                           '<label class="" id=""></label>' +
+                           '<br>' +
+                           '<label class="" id="selected-stock-Open">Open: </label>';
+      document.getElementById('openClosePlaceholder').parentNode.replaceChild(newlabel, document.getElementById('openClosePlaceholder'));
+  }
+
+  //Range / Colume of Asset
+  if (!!document.getElementById("rangeVolumePlaceholder")) {
+      const newlabel = document.createElement('label');
+      newlabel.innerHTML = '<label class="" id="selected-stock-range">Day\'s Range: </label> ' +
+                           '<br>' +
+                           '<label class="" id="selected-stock-volume">Volume: </label>';
+      document.getElementById('rangeVolumePlaceholder').parentNode.replaceChild(newlabel, document.getElementById('rangeVolumePlaceholder'));
+  }
+
+  //Graph of Asset
+  if (!!document.getElementById("graphPlaceholder")) {
+      const newGraph = document.createElement('div');
+      newGraph.innerHTML = '  <div id="chartDiv"><canvas id="myChart"></canvas></div>';
+      document.getElementById('graphPlaceholder').parentNode.replaceChild(newGraph, document.getElementById('graphPlaceholder'));
+  }
+}
+
+function updateHeader(header, prevClosingValue, open, low, high, volume, label, priceChangeFromPreviousDay) {
+  console.log(header);
+  console.log(prevClosingValue);
+  console.log(open);
+  console.log(low);
+  console.log(high);
+  console.log(volume);
+
+  var cssType;
+  if (priceChangeFromPreviousDay < 0) {
+      cssType = "\"box red detail-label-small\""
+  }
+  else{
+      cssType = "\"box green detail-label-small\""
+  }
+
+  document.getElementById('selected-stock-name').innerHTML =  header;
+  document.getElementById('selected-stock-trend').innerHTML = "<div class=\".stock-selection-change-value\" id=\"change-" + label + "\">" +
+                                                              "<label class= " + cssType + " id=\"labelChange-" + label + "\">" + priceChangeFromPreviousDay + "%</label>" +
+                                                              "</div>";
+  document.getElementById('selected-stock-PreviousClose').innerHTML = 'Previous Close: $' + prevClosingValue;
+  document.getElementById('selected-stock-Open').innerHTML = 'Open: $' + open;
+  document.getElementById('selected-stock-range').innerHTML = 'Day\'s Range: $' + low + ' - $' + high;
+  document.getElementById('selected-stock-volume').innerHTML = 'Volume: ' + volume;
 }

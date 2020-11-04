@@ -66,10 +66,29 @@
                     <!-- Asset Stats -->
                     <div class="card round dark">
                         <div class="container padding">
-                            <div class="linear-background" id="labelPlaceholder">
+                          <!-- Price -->
+                          <div class="col m1 margin">
+                            <div class="linear-background" id="pricePlaceholder">
                                 <div class="inter-label"></div>
                             </div>
-
+                          </div>
+                          <div class="col m1 margin">
+                            <div class="linear-background" id="currencyPlaceholder">
+                                <div class="inter-label"></div>
+                            </div>
+                          </div>
+                          <!-- Open / Close -->
+                          <div class="col m2 margin">
+                            <div class="linear-background" id="openClosePlaceholder">
+                                <div class="inter-label"></div>
+                            </div>
+                          </div>
+                          <!-- Range / Volume -->
+                          <div class="col m3 margin">
+                            <div class="linear-background" id="rangeVolumePlaceholder">
+                                <div class="inter-label"></div>
+                            </div>
+                          </div>
                         </div>
                     </div>
                     <!-- End Asset Stats -->
@@ -77,10 +96,11 @@
                     <!-- Graph/Analytics -->
                     <div class="card round dark">
                       <div class="container padding">
+                        <!--
                         <ul uk-tab>
                             <li class="uk-active .tab-color"><a href="#">Stocks</a></li>
                             <li class=".tab-color"><a href="#">ETFs</a></li>
-                        </ul>
+                        </ul> -->
                         <ul>
                           <!-- Display Value Drop Down -->
                           <li class="dropdown">
