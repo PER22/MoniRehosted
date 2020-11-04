@@ -1096,10 +1096,10 @@ a {
 }
 
 .spin {
-	animation: w3-spin 2s infinite linear
+	animation: spin 2s infinite linear
 }
 
-@keyframes w3-spin {
+@keyframes spin {
 	0% {
 		transform: rotate(0deg)
 	}
@@ -2037,14 +2037,14 @@ a {
 
 
 
-li.dropdown {
+ul {
   list-style-type: none;
   margin: 5;
   padding: 0;
   overflow: hidden;
 }
 
-li.dropdown {
+li {
   float: left;
 }
 
@@ -2210,9 +2210,4 @@ li.dropdown {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #363C41;
-}
-
-
-.tab-color{
-	color: #ffffff !important
 }

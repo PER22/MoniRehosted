@@ -48,7 +48,6 @@ a:hover,
 .uk-link:hover,
 .uk-link-toggle:hover .uk-link,
 .uk-link-toggle:focus .uk-link {
-  color: #0f6ecd;
   text-decoration: underline;
 }
 /* Text-level semantics
@@ -222,7 +221,7 @@ figure {
 * + address,
 * + fieldset,
 * + figure {
-  margin-top: 20px;
+  margin-top: 0px;
 }
 /* Headings
  ========================================================================== */
@@ -315,10 +314,7 @@ h6,
 }
 /* Lists
  ========================================================================== */
-ul,
-ol {
-  padding-left: 30px;
-}
+
 /*
  * Reset margin for nested lists
  */
