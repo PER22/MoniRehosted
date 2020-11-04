@@ -193,7 +193,7 @@ button {
 	justify-content: space-between;
 }
 
-.chart-sect {
+.chartDiv {
 	border-top: 1px solid gray;
 	padding: 10px;
 	height: 80%;

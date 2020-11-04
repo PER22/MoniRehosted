@@ -107,34 +107,38 @@ function displayStockChart(ticker) {
 }
 
 function fillPlotlyChart(dateValues, chartValues) {
-    chartDiv = document.getElementById('chartDiv');
     chartDiv.innerHTML = "";
-
+    chartDiv = document.getElementById('chartDiv');
+    var min = Math.min(...chartValues) - 2;
+    var max = Math.max(...chartValues) + 2;
 
     var trace1 = {
         type: "scatter",
         mode: "lines",
-        name: 'AAPL High',
         x: dateValues,
         y: chartValues,
+        fill: 'tonexty',
         line: { color: '#17BECF' }
     }
     var data = [trace1];
 
     var layout = {
+        plot_bgcolor: "rgba(0,0,0,0)",
+        paper_bgcolor: "rgba(0,0,0,0)",
+        height: 735,
         xaxis: {
-            autorange: true,
-            range: ['2020-08-01', '2020-11-01'],
-            rangeslider: { range: ['2020-08-01', '2020-11-01'] },
-            type: 'date'
+            gridcolor: '#373c42',
+            gridwidth: 1,
+            linecolor: '#636363',
         },
         yaxis: {
-            autorange: true,
-            range: [86.8700008333, 138.870004167],
-            type: 'linear'
+            gridcolor: '#373c42',
+            gridwidth: 1,
+            linecolor: '#636363',
+            range: [min,max]
         }
-    };
-    Plotly.newPlot(chartDiv, data);
+    }
+    Plotly.newPlot(chartDiv, data, layout=layout);
 }
 
 function fillChartJS(prevClosingValue, chartValues, volumes, dateValues, selectedDisplayValue) {
