@@ -382,12 +382,6 @@ function replaceAnimationAfterLoad(stock){
 }
 
 function updateHeader(header, prevClosingValue, open, close, low, high, volume, label, priceChangeFromPreviousDay) {
-  console.log(header);
-  console.log(prevClosingValue);
-  console.log(open);
-  console.log(low);
-  console.log(high);
-  console.log(volume);
 
   var cssType;
   if (priceChangeFromPreviousDay < 0) {
