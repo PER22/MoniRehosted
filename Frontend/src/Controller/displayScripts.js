@@ -90,7 +90,7 @@ function displayStockChart(ticker) {
     var volumes = getChartVolumeByTicker(selectedDisplayValue, ticker);
     var dateValues = getClosingDatesByTicker(ticker);
 
-    updateHeader(stockTitle, prevClosingValue, lastDay.getOpen(), lastDay.getLow(), lastDay.getHigh(), lastDay.getVolume(), ticker, prevClosingValue)
+    updateHeader(stockTitle, prevClosingValue, lastDay.getOpen(), lastDay.getClose(),lastDay.getLow(), lastDay.getHigh(), lastDay.getVolume(), ticker, prevClosingValue)
 
     //fillChartJS(prevClosingValue, chartValues, volumes, dateValues, selectedDisplayValue);
 
@@ -381,7 +381,7 @@ function replaceAnimationAfterLoad(stock){
   }
 }
 
-function updateHeader(header, prevClosingValue, open, low, high, volume, label, priceChangeFromPreviousDay) {
+function updateHeader(header, prevClosingValue, open, close, low, high, volume, label, priceChangeFromPreviousDay) {
   console.log(header);
   console.log(prevClosingValue);
   console.log(open);
@@ -398,6 +398,7 @@ function updateHeader(header, prevClosingValue, open, low, high, volume, label, 
   }
 
   document.getElementById('selected-stock-name').innerHTML =  header;
+  document.getElementById('selected-stock-price').innerHTML =  close;
   document.getElementById('selected-stock-trend').innerHTML = "<div class=\".stock-selection-change-value\" id=\"change-" + label + "\">" +
                                                               "<label class= " + cssType + " id=\"labelChange-" + label + "\">" + priceChangeFromPreviousDay + "%</label>" +
                                                               "</div>";
