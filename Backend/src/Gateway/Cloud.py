@@ -80,7 +80,7 @@ class MySubscribeCallback(SubscribeCallback):
 
                 elif("MovingAverage" in controlCommand["operation"]):
                     asset = database.get(assetType, controlCommand[assetType])
-                    data = Analytics.calculateMovingAverageChunked(asset, controlCommand["field"], int(controlCommand["timePeriod"]))
+                    data = Analytics.calculateMovingAverageChunked(asset, Analytics.fieldFilter(controlCommand["displayValue"]), int(controlCommand["numberOfDays"]))
 
                     for i in range(len(data)):
                         pubnub.publish().channel('FinanceSub').message({
@@ -94,7 +94,7 @@ class MySubscribeCallback(SubscribeCallback):
 
                 elif("Velocity" in controlCommand["operation"]):
                     asset = database.get(assetType, controlCommand[assetType])
-                    data = Analytics.calculateVelocityChunked(asset, controlCommand["field"])
+                    data = Analytics.calculateVelocityChunked(asset, Analytics.fieldFilter(controlCommand["displayValue"]))
 
                     for i in range(len(data)):
                         pubnub.publish().channel('FinanceSub').message({
@@ -111,7 +111,7 @@ class MySubscribeCallback(SubscribeCallback):
                     pubnub.publish().channel('FinanceSub').message({
                         "requester": "Server",
                         "operation": "CrossOver",
-                        "status": Analytics.calculateCrossOver(asset, controlCommand["field"], int(controlCommand["firstTimePeriod"]), int(controlCommand["secondTimePeriod"]))
+                        "status": Analytics.calculateCrossOver(asset, Analytics.fieldFilter(controlCommand["displayValue"]), int(controlCommand["firstTimePeriod"]), int(controlCommand["secondTimePeriod"]))
                     }).pn_async(my_publish_callback)
 
                 else:

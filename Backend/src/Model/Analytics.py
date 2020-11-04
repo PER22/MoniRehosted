@@ -108,3 +108,11 @@ class Analytics:
             tempList.append(item[field])
 
         return(tempList)
+
+
+    @staticmethod
+    def fieldFilter(field):
+        if("clos" in str(field).lower()):
+            return "Close"
+        else:
+            return "Open"
