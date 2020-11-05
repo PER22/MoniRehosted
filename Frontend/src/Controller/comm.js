@@ -26,7 +26,7 @@ function publishMessage(message) {
     pubnub.publish(publishPayload, function (status, response) { })
 }
 
-function requestData(dataString, ticker) {
+function requestData(dataString, ticker, operation, field, timePeriod) {
     var message = "";
     switch (dataString) {
         case "deleteStock":
@@ -57,9 +57,61 @@ function requestData(dataString, ticker) {
                 "stock": ticker
             }
             break;
+        case "getAnalytics":
+            message = {
+                "requester": "Client",
+                "operation": operation, //"StockMovingAverage",
+                "stock": ticker,
+                "displayValue": field, //"Open"/"Close"/"High"/"Low"
+                "numberOfDays": timePeriod //"100"
+            }
+            break;
         default:
     }
     return message;
+}
+
+function getAnalytics(operation, ticker, displayValue, numberOfDays, date) {
+    var packetIndex = 0;
+    var dataRequest =requestData('getAnalytics', ticker, operation, displayValue, numberOfDays.toString());
+    response =[];
+
+    console.log(dataRequest)
+    var listener = {
+        status: function (statusEvent) {
+            if (statusEvent.category === "PNConnectedCategory") {
+                publishMessage(dataRequest);
+            }
+        },
+        message: function (msg) {
+            if (msg.message.requester == "Server") {
+                response.push(msg.message);
+                packetIndex++;
+                if (packetIndex == msg.message.total) {
+                    type =(operation =="StockMovingAverage"? 'stock': 'etf');
+                    res =[];
+                    response.sort((a,b) => {
+                        if(a.part >b.part) return 1;
+                        else if (a.part < b.part) return -1;
+                        else return 0;
+                    });
+                    for(var i =0; i <response.length; i++) {
+                        response[i].data.split(",").forEach(a =>{
+                            res.push(parseFloat(a.replace(/[^\d.-]/g, '')));
+                        })
+                    }
+                    console.log(res)
+                    myPortfolio.importMovingAverage(type, ticker,date+'-'+field, res);
+                    pubnub.removeListener(listener);
+                }
+            }
+        }
+    };
+    pubnub.addListener(listener);
+
+    pubnub.subscribe({
+        channels: ['FinanceSub']
+    });
 }
 
 function getSideBarData(_callback) {
@@ -89,6 +141,8 @@ function getSideBarData(_callback) {
     console.log("Requesting data...");
     pubnub.addListener(listener);
 };
+
+
 
 function deleteStock(ticker, _callback) {
     //Set up variables

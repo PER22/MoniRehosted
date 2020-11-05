@@ -44,7 +44,10 @@ function handlFilterDisplayValue(e) {
 function handleFilterAnalytics(e) {
     var sender = e.srcElement || e.target;
     var analytic = sender.innerHTML;
+    setAnalyticFilterValue(analytic);
     setAnalyticsDropDownName(analytic + " v");
+    displayStockChart(getActiveStockTicker());
+    getAnalytics('StockMovingAverage', getActiveStockTicker(), myPortfolio.getValueFilter(), myPortfolio.translateDateFilterToNumericValue(), myPortfolio.getDateFilter());
 }
 
 //Function used when switching between Stock and ETF
@@ -78,7 +81,6 @@ function displayStockChart(ticker) {
     console.log("Displaying Chart");
     //Set stock title and initial date range
     setActiveStockDateRange();
-
     replaceAnimationAfterLoad();
 
     //Gather chart values

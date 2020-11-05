@@ -8,6 +8,7 @@ class Portfolio {
         this.activeStockIndex = 0;
         this.dateFilter = "3M";
         this.valueFilter = "Closing";
+        this.analyticFilter = "Plot";
     }
     setName(name) {
         this.name = name;
@@ -50,6 +51,12 @@ class Portfolio {
     }
     getValueFilter() {
         return this.valueFilter;
+    }
+    setAnalyticFilter(analyticFilter) {
+        this.analyticFilter = analyticFilter;
+    }
+    getAnalyticFilter() {
+        return this.analyticFilter;
     }
     setActiveStockIndexByTicker(ticker) {
         for (var i = 0; i < this.stocks.length; i++) {
@@ -135,6 +142,23 @@ class Portfolio {
     }
     async populateStocksFromServer() {
         this.stocks = generateStock();
+    }
+    importMovingAverage(type, ticker, key, response) {
+        if(type =='stock') {
+            for (var i =0; i <this.stocks.length; i++) {
+                if(this.stocks[i].getLabel ==ticker) {
+                    this.stocks[i].movingAverage[key] =response;
+                }
+            }
+        }
+        else {
+            //for etf
+            for (var i =0; i <this.stocks.length; i++) {
+                if(this.stocks[i].getLabel ==ticker) {
+                    this.stocks[i].movingAverage[key] =response;
+                }
+            }
+        }
     }
     importStocks(portfolio) {
         portfolio.forEach(stock => {
