@@ -143,6 +143,23 @@ class Portfolio {
     async populateStocksFromServer() {
         this.stocks = generateStock();
     }
+    importMovingAverage(type, ticker, key, response) {
+        if(type =='stock') {
+            for (var i =0; i <this.stocks.length; i++) {
+                if(this.stocks[i].getLabel ==ticker) {
+                    this.stocks[i].movingAverage[key] =response;
+                }
+            }
+        }
+        else {
+            //for etf
+            for (var i =0; i <this.stocks.length; i++) {
+                if(this.stocks[i].getLabel ==ticker) {
+                    this.stocks[i].movingAverage[key] =response;
+                }
+            }
+        }
+    }
     importStocks(portfolio) {
         portfolio.forEach(stock => {
             let add = new Stock();

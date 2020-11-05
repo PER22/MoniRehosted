@@ -8,6 +8,7 @@ class Stock {
         this.label = "";
         this.price = 0;
         this.data = [];
+        this.movingAverage ={};
         this.priceChangeFromPreviousDay = 0;
         this.loaded = false;
     }

@@ -47,6 +47,7 @@ function handleFilterAnalytics(e) {
     setAnalyticFilterValue(analytic);
     setAnalyticsDropDownName(analytic + " v");
     displayStockChart(getActiveStockTicker());
+    getAnalytics('StockMovingAverage', getActiveStockTicker(), myPortfolio.getValueFilter(), myPortfolio.translateDateFilterToNumericValue(), myPortfolio.getDateFilter());
 }
 
 //Function used when switching between Stock and ETF
