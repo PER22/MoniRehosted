@@ -193,7 +193,7 @@ button {
 	justify-content: space-between;
 }
 
-.chart-sect {
+.chartDiv {
 	border-top: 1px solid gray;
 	padding: 10px;
 	height: 80%;
@@ -253,11 +253,11 @@ div:active {
 
 
   .red {
-	background-color: red;
+	background-color: #c2331f;
   }
 
   .green {
-	background-color: green;
+	background-color: #209e54;
   }
 
 

@@ -9,6 +9,7 @@
   "author": "FTAH",
   "license": "MIT",
   "dependencies": {
+    "plotly": "^1.0.6",
     "pubnub": "^4.29.9"
   }
 }

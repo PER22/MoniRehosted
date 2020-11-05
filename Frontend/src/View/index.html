@@ -1,151 +1,179 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<title>Moni Trader</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" type="text/css" href="style/style.css">
-<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" type="text/css" href="style/default.css">
-<!--Script Includes-->
-<meta http-equiv="Content-Security-Policy" content="default-src * self blob: data: gap:; style-src * self 'unsafe-inline' blob: data: gap:; script-src * 'self' 'unsafe-eval' 'unsafe-inline' blob: data: gap:; object-src * 'self' blob: data: gap:; img-src * self 'unsafe-inline' blob: data: gap:; connect-src self * 'unsafe-inline' blob: data: gap:; frame-src * self blob: data: gap:;">
-<script src="../Model/Stock.js"></script>
-<script src="../Model/Portfolio.js"></script>
-<script src="../Controller/displayScripts.js"></script>
-<script src="../Controller/utility.js"></script>
-<script src="../Controller/inits.js"></script>
-<script src="../Controller/comm.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
-<script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.29.9.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-<style>
-html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
-</style>
+    <title>Moni Trader</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="style/style.css">
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="style/default.css">
+    <link rel="stylesheet" type="text/css" href="style/uikit.css">
+    <!--Script Includes-->
+    <meta http-equiv="Content-Security-Policy" content="default-src * self blob: data: gap:; style-src * self 'unsafe-inline' blob: data: gap:; script-src * 'self' 'unsafe-eval' 'unsafe-inline' blob: data: gap:; object-src * 'self' blob: data: gap:; img-src * self 'unsafe-inline' blob: data: gap:; connect-src self * 'unsafe-inline' blob: data: gap:; frame-src * self blob: data: gap:;">
+    <script src="../Model/Stock.js"></script>
+    <script src="../Model/Portfolio.js"></script>
+    <script src="../Controller/displayScripts.js"></script>
+    <script src="../Controller/utility.js"></script>
+    <script src="../Controller/inits.js"></script>
+    <script src="../Controller/comm.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.29.9.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="../View/scripts/plotly.js"></script>
+
+    <script src="../View/scripts/uikit.js"></script>
 </head>
-<body class="w3-theme-dark" onload="initializePortfolio()">
+<body class="theme-dark" onload="initializePortfolio()">
 
-<!-- Page Container -->
-<div class="w3-container w3-content" style="max-width:100%;margin-top:20px">
-  <div id="portfolio">
-  <!-- The Grid -->
-  <div class="w3-row">
+    <!-- Page Container -->
+    <div class="container content" style="max-width:100%;margin-top:20px">
+        <div id="portfolio">
+            <!-- The Grid -->
+            <div class="row">
 
-    <!-- Left Column -->
-    <div class="w3-col m2 w3-margin">
+                <!-- Company Names/Labels -->
+                <div class="col m2 margin">
+                    <div class="card round">
+                        <div class="container padding dark">
+                            <!-- Stock List Section-->
+                            <ul class="uk-child-width-expand" uk-tab>
+                                <li class="uk-active .tab-color"><a href="#">Stocks</a></li>
+                                <li class=".tab-color"><a href="#">ETFs</a></li>
+                            </ul>
+                            <div class="list-background padding margin graph-background" id="listPlaceholder">
+                                <div class="inter-graph"></div>
+                            </div>
+                            <!-- <div class="stock-selection-sect" id="stockHeader"></div>-->
+                        </div>
+                    </div>
+                </div>
+                <!-- End Company Names/Labels -->
+                <!-- Middle Column -->
+                <div class="col m9 margin">
+                    <!-- Name of Company -->
+                    <div class="card round dark">
+                        <div class="container padding">
+                            <div class="linear-background" id="labelPlaceholder">
+                                <div class="inter-label"></div>
+                            </div>
 
-      <div class="w3-card w3-round">
-        <div class="w3-container w3-padding w3-dark">
+                        </div>
+                    </div>
+                    <!-- End Name of Company -->
+                    <br>
+                    <!-- Asset Stats -->
+                    <div class="card round dark">
+                        <div class="container">
+                            <!-- Price -->
+                            <div class="col m1 margin">
+                                <div class="linear-background padding" id="pricePlaceholder">
+                                    <div class="inter-label"></div>
+                                </div>
+                            </div>
+                            <div class="col m1 margin padding">
+                                <div class="linear-background" id="currencyPlaceholder">
+                                    <div class="inter-label"></div>
+                                </div>
+                            </div>
+                            <!-- Open / Close -->
+                            <div class="col m2 margin">
+                                <div class="linear-background" id="openClosePlaceholder">
+                                    <div class="inter-label"></div>
+                                </div>
+                            </div>
+                            <!-- Range / Volume -->
+                            <div class="col m3 margin">
+                                <div class="linear-background" id="rangeVolumePlaceholder">
+                                    <div class="inter-label"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Asset Stats -->
+                    <br>
+                    <!-- Graph/Analytics -->
+                    <div class="card round dark">
+                        <div class="container padding">
+                            <!--
+                            <ul uk-tab>
+                                <li class="uk-active .tab-color"><a href="#">Stocks</a></li>
+                                <li class=".tab-color"><a href="#">ETFs</a></li>
+                            </ul> -->
+                            <ul>
+                                <!-- Display Value Drop Down -->
+                                <li class="dropdown">
+                                    <a class="dropbtn" id="stockPropertyDropdownButton">Closing Prices v</a>
+                                    <div class="dropdown-content" id="chart-type: ">
+                                        <a id="Closing Prices v" onclick="handlFilterDisplayValue(event)">Closing Prices</a>
+                                        <a id="Opening Prices v" onclick="handlFilterDisplayValue(event)">Opening Prices</a>
+                                        <a id="Highs v" onclick="handlFilterDisplayValue(event)">Highs</a>
+                                        <a id="Lows v" onclick="handlFilterDisplayValue(event)">Lows</a>
+                                    </div>
+                                </li>
+                                <spacer type="horizontal" width="100" height="100">  </spacer>
+                                <!-- Date Range Filter Drop Down -->
+                                <li class="dropdown">
+                                    <a class="dropbtn" id="periodDropdownButton">3M v</a>
+                                    <div class="dropdown-content">
+                                        <a id="1W v" onclick="handleFilterDateRange(event)">1W</a>
+                                        <a id="1M v" onclick="handleFilterDateRange(event)">1M</a>
+                                        <a id="3M v" onclick="handleFilterDateRange(event)">3M</a>
+                                        <a id="6M v" onclick="handleFilterDateRange(event)">6M</a>
+                                        <a id="1Y v" onclick="handleFilterDateRange(event)">1Y</a>
+                                        <a id="2Y v" onclick="handleFilterDateRange(event)">2Y</a>
+                                        <a id="5Y v" onclick="handleFilterDateRange(event)">5Y</a>
+                                        <a id="10Y v" onclick="handleFilterDateRange(event)">10Y</a>
+                                        <a id="ALL v" onclick="handleFilterDateRange(event)">ALL</a>
+                                    </div>
+                                </li>
+                                <!-- Action Drop Down -->
+                                <li class="dropdown">
+                                    <a class="dropbtn" id="actionDropdownButton">Actions v</a>
+                                    <div class="dropdown-content">
+                                        <a onclick="handleReloadStock(event)">Reload</a>
+                                        <a onclick="handleDeleteStock(event)">Delete</a>
+                                    </div>
+                                </li>
+                                <!-- Analytics Drop Down -->
+                                <li class="dropdown">
+                                    <a class="dropbtn" id="analyticDropdownButton">Plot v</a>
+                                    <div class="dropdown-content">
+                                        <a onclick="handleFilterAnalytics(event)">Plot</a>
+                                        <a onclick="handleFilterAnalytics(event)">Candle Stick</a>
+                                        <a onclick="handleFilterAnalytics(event)">Moving Average</a>
+                                    </div>
+                                </li>
+                                <!-- Filter Moving Average Drop Down -->
+                                <li class="dropdown">
+                                    <a class="dropbtn" id="movingAverageDropdownButton" style="display:none">3M v</a>
+                                    <div class="dropdown-content">
+                                        <a id="1W v" onclick="handleDisplayMovingAverage(event)">1W</a>
+                                        <a id="1M v" onclick="handleDisplayMovingAverage(event)">1M</a>
+                                        <a id="3M v" onclick="handleDisplayMovingAverage(event)">3M</a>
+                                        <a id="6M v" onclick="handleDisplayMovingAverage(event)">6M</a>
+                                        <a id="1Y v" onclick="handleDisplayMovingAverage(event)">1Y</a>
+                                        <a id="2Y v" onclick="handleDisplayMovingAverage(event)">2Y</a>
+                                        <a id="5Y v" onclick="handleDisplayMovingAverage(event)">5Y</a>
+                                        <a id="10Y v" onclick="handleDisplayMovingAverage(event)">10Y</a>
+                                        <a id="ALL v" onclick="handleDisplayMovingAverage(event)">ALL</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="linear-background padding margin graph-background" id="graphPlaceholder">
+                            <div class="inter-graph"></div>
+                        </div>
+                    </div>
+                    <!-- EndGraph/Analytics -->
+                    <!-- End Middle Column -->
+                </div>
 
-          <!-- Stock List Section-->
-          <div class="list-background w3-padding w3-margin graph-background" id="listPlaceholder">
-            <div class="inter-graph"></div>
-          </div>
-          <!-- <div class="stock-selection-sect" id="stockHeader"></div>-->
+                <!-- End Grid -->
+            </div>
         </div>
-      </div>
-      <br>
-    <!-- End Left Column -->
+        <!-- End Page Container -->
     </div>
-
-
-
-    <!-- Middle Column -->
-    <div class="w3-col m9 w3-margin">
-
-      <div class="w3-card w3-round w3-dark">
-        <div class="w3-container w3-padding">
-          <div class="linear-background" id="labelPlaceholder">
-            <div class="inter-label"></div>
-          </div>
-
-        </div>
-      </div>
-      <br>
-    <div class="w3-card w3-round w3-dark">
-        <div class="w3-container w3-padding">
-          <ul>
-            <li class="dropdown">
-              <a href="javascript:void(0)" class="dropbtn" id="stockPropertyDropdownButton">Closing Prices v</a>
-              <div class="dropdown-content" id="chart-type: ">
-                <a id="Closing Prices v"  onclick="updatePropertyDropDownName('Closing Prices v')">Closing Prices</a>
-                <a id="Opening Prices v"  onclick="updatePropertyDropDownName('Opening Prices v')">Opening Prices</a>
-                <a id="Highs v"  onclick="updatePropertyDropDownName('Highs v')">Highs</a>
-                <a id="Lows v"  onclick="updatePropertyDropDownName('Lows v')">Lows</a>
-              </div>
-            </li>
-            <spacer type="horizontal" width="100" height="100">  </spacer>
-            <li class="dropdown">
-              <a href="javascript:void(0)" class="dropbtn" id="periodDropdownButton">ALL v</a>
-              <div class="dropdown-content">
-                <a id="W1 v"  onclick="updatePeriodDropDownName('W1 v')">1W</a>
-                <a id="1M v"  onclick="updatePeriodDropDownName('1M v')">1M</a>
-                <a id="3M v"  onclick="updatePeriodDropDownName('3M v')">3M</a>
-                <a id="6M v"  onclick="updatePeriodDropDownName('6M v')">6M</a>
-                <a id="1Y v"  onclick="updatePeriodDropDownName('1Y v')">1Y</a>
-                <a id="2Y v"  onclick="updatePeriodDropDownName('2Y v')">2Y</a>
-                <a id="5Y v"  onclick="updatePeriodDropDownName('5Y v')">5Y</a>
-                <a id="10Y v"  onclick="updatePeriodDropDownName('10Y v')">10Y</a>
-                <a id="ALL v"  onclick="updatePeriodDropDownName('ALL v')">ALL</a>
-              </div>
-            </li>
-            <li class="dropdown">
-              <a href="javascript:void(0)" class="dropbtn" id="actionDropdownButton">Actions v</a>
-              <div class="dropdown-content">
-                <a id="Reload"  onclick="handleReloadStock(event)" name="datePicker">Reload</a>
-                <a onclick="handleDeleteStock(event)">Delete</a>
-              </div>
-            </li>
-          </ul>
-        </div>
-        <div class="linear-background w3-padding w3-margin graph-background" id="graphPlaceholder">
-          <div class="inter-graph"></div>
-        </div>
-      </div>
-    <!-- End Middle Column -->
-    </div>
-
-  <!-- End Grid -->
-  </div>
-</div>
-<!-- End Page Container -->
-</div>
-<br>
-
-<script>
-
-function updatePeriodDropDownName(name) {
-  document.getElementById('periodDropdownButton').innerHTML = name;
-}
-
-
-function updatePropertyDropDownName(name) {
-  document.getElementById('stockPropertyDropdownButton').innerHTML = name;
-}
-
-
-
-
-
-
-function updatePropertyID(newID) {
-  document.getElementById('stockPropertyDropdownButton').id = newID;
-}
-
-// Close the dropdown if the user clicks outside of it
-window.onclick = function(event) {
-  if (!event.target.matches('.dropbtn')) {
-    var dropdowns = document.getElementsByClassName("dropdown-content");
-    var i;
-    for (i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains('show')) {
-        openDropdown.classList.remove('show');
-      }
-    }
-  }
-}
-</script>
-
+    <br>
 </body>
 </html>
