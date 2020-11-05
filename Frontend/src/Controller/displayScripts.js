@@ -79,63 +79,61 @@ function displayStockChart(ticker) {
     //Set stock title and initial date range
     setActiveStockDateRange();
 
-    if (!!document.getElementById("labelPlaceholder")) {
-        const newlabel = document.createElement('label');
-        newlabel.innerHTML = '  <label class="header-label" id="selected-stock-name"></label>';
-        document.getElementById('labelPlaceholder').parentNode.replaceChild(newlabel, document.getElementById('labelPlaceholder'));
-    }
-
-    if (!!document.getElementById("graphPlaceholder")) {
-        const newGraph = document.createElement('div');
-        newGraph.innerHTML = '  <div id="chartDiv"></div>';
-        document.getElementById('graphPlaceholder').parentNode.replaceChild(newGraph, document.getElementById('graphPlaceholder'));
-    }
-
-    document.getElementById('selected-stock-name').innerHTML = getStockTitleByTicker(ticker);
+    replaceAnimationAfterLoad();
 
     //Gather chart values
+    var stockTitle = getStockTitleByTicker(ticker);
     var prevClosingValue = getStockInPortfolioByTicker(ticker).getPriceChangeFromPreviousDay();
+    var lastDay = getStockInPortfolioByTicker(ticker).getLastData();
     var selectedDisplayValue = getSelectedDisplayValue();
     var chartValues = getChartValuesByTicker(selectedDisplayValue, ticker);
     var volumes = getChartVolumeByTicker(selectedDisplayValue, ticker);
     var dateValues = getClosingDatesByTicker(ticker);
 
+    updateHeader(stockTitle, prevClosingValue, lastDay.getOpen(), lastDay.getClose(),lastDay.getLow(), lastDay.getHigh(), lastDay.getVolume(), ticker, prevClosingValue)
+
     //fillChartJS(prevClosingValue, chartValues, volumes, dateValues, selectedDisplayValue);
     //fillPlotlyChart(dateValues, chartValues);
-    fillCandleChart(dateValues, ticker);
+    //fillCandleChart(dateValues, ticker);
+
+    //fillChartJS(prevClosingValue, chartValues, volumes, dateValues, selectedDisplayValue);
+    fillPlotlyChart(dateValues, chartValues);
     setCursor("default");
 }
 
 function fillPlotlyChart(dateValues, chartValues) {
-    chartDiv = document.getElementById('chartDiv');
     chartDiv.innerHTML = "";
-
+    chartDiv = document.getElementById('chartDiv');
+    var min = Math.min(...chartValues) - 2;
+    var max = Math.max(...chartValues) + 2;
 
     var trace1 = {
         type: "scatter",
         mode: "lines",
-        name: 'AAPL High',
         x: dateValues,
         y: chartValues,
+        fill: 'tonexty',
         line: { color: '#17BECF' }
     }
     var data = [trace1];
 
     var layout = {
-        showlegend: false,
+        plot_bgcolor: "rgba(0,0,0,0)",
+        paper_bgcolor: "rgba(0,0,0,0)",
+        height: 735,
         xaxis: {
-            autorange: true,
-            range: ['2020-08-01', '2020-11-01'],
-            rangeslider: {visible: false},
-            type: 'date'
+            gridcolor: '#373c42',
+            gridwidth: 1,
+            linecolor: '#636363',
         },
         yaxis: {
-            autorange: true,
-            range: [86.8700008333, 138.870004167],
-            type: 'linear'
+            gridcolor: '#373c42',
+            gridwidth: 1,
+            linecolor: '#636363',
+            range: [min,max]
         }
-    };
-    Plotly.newPlot(chartDiv, data);
+    }
+    Plotly.newPlot(chartDiv, data, layout=layout);
 }
 
 function fillCandleChart(dateValues, ticker) {
@@ -388,4 +386,76 @@ function scrolled(e) {
     if (myDiv.offsetHeight + myDiv.scrollTop >= myDiv.scrollHeight) {
         scrolledToBottom(e);
     }
+}
+
+function replaceAnimationAfterLoad(stock){
+  //Name of Company
+  if (!!document.getElementById("labelPlaceholder")) {
+      const newlabel = document.createElement('label');
+      newlabel.innerHTML = '  <label class="header-label" id="selected-stock-name"></label>';
+      document.getElementById('labelPlaceholder').parentNode.replaceChild(newlabel, document.getElementById('labelPlaceholder'));
+  }
+
+  //Price Of Company
+  if (!!document.getElementById("pricePlaceholder")) {
+      const newlabel = document.createElement('h1');
+      newlabel.innerHTML = '  <h1 class="header-label" id="selected-stock-price">340</h1>';
+      document.getElementById('pricePlaceholder').parentNode.replaceChild(newlabel, document.getElementById('pricePlaceholder'));
+  }
+
+  //Currency and Trend of Company Asset
+  if (!!document.getElementById("currencyPlaceholder")) {
+      const newlabel = document.createElement('label');
+      newlabel.innerHTML = '<div id="selected-stock-trend"></div>' +
+                           '<br>' +
+                           '<label class="" id="selected-stock-currency">USD</label>';
+      document.getElementById('currencyPlaceholder').parentNode.replaceChild(newlabel, document.getElementById('currencyPlaceholder'));
+  }
+
+  //Open / Close Price of Asset
+  if (!!document.getElementById("openClosePlaceholder")) {
+      const newlabel = document.createElement('label');
+      newlabel.innerHTML = '<label class="" id="selected-stock-PreviousClose">Previous Close: </label> ' +
+                           '<label class="" id=""></label>' +
+                           '<br>' +
+                           '<label class="" id="selected-stock-Open">Open: </label>';
+      document.getElementById('openClosePlaceholder').parentNode.replaceChild(newlabel, document.getElementById('openClosePlaceholder'));
+  }
+
+  //Range / Colume of Asset
+  if (!!document.getElementById("rangeVolumePlaceholder")) {
+      const newlabel = document.createElement('label');
+      newlabel.innerHTML = '<label class="" id="selected-stock-range">Day\'s Range: </label> ' +
+                           '<br>' +
+                           '<label class="" id="selected-stock-volume">Volume: </label>';
+      document.getElementById('rangeVolumePlaceholder').parentNode.replaceChild(newlabel, document.getElementById('rangeVolumePlaceholder'));
+  }
+
+  //Graph of Asset
+  if (!!document.getElementById("graphPlaceholder")) {
+      const newGraph = document.createElement('div');
+      newGraph.innerHTML = '  <div id="chartDiv"><canvas id="myChart"></canvas></div>';
+      document.getElementById('graphPlaceholder').parentNode.replaceChild(newGraph, document.getElementById('graphPlaceholder'));
+  }
+}
+
+function updateHeader(header, prevClosingValue, open, close, low, high, volume, label, priceChangeFromPreviousDay) {
+
+  var cssType;
+  if (priceChangeFromPreviousDay < 0) {
+      cssType = "\"box red detail-label-small\""
+  }
+  else{
+      cssType = "\"box green detail-label-small\""
+  }
+
+  document.getElementById('selected-stock-name').innerHTML =  header;
+  document.getElementById('selected-stock-price').innerHTML =  close;
+  document.getElementById('selected-stock-trend').innerHTML = "<div class=\".stock-selection-change-value\" id=\"change-" + label + "\">" +
+                                                              "<label class= " + cssType + " id=\"labelChange-" + label + "\">" + priceChangeFromPreviousDay + "%</label>" +
+                                                              "</div>";
+  document.getElementById('selected-stock-PreviousClose').innerHTML = 'Previous Close: $' + prevClosingValue;
+  document.getElementById('selected-stock-Open').innerHTML = 'Open: $' + open;
+  document.getElementById('selected-stock-range').innerHTML = 'Day\'s Range: $' + low + ' - $' + high;
+  document.getElementById('selected-stock-volume').innerHTML = 'Volume: ' + volume;
 }
