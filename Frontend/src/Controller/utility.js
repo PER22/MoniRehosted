@@ -80,6 +80,10 @@ function setDateFilterValue(datePickerButtonValue) {
 function setDisplayFilterValue(displayPickerButtonValue) {
     myPortfolio.setValueFilter(displayPickerButtonValue);
 }
+//Sets analytic filter for pulling data to display on chart
+function setAnalyticFilterValue(analyticPickerButtonValue) {
+    myPortfolio.setAnalyticFilter(analyticPickerButtonValue);
+}
 //Sets date range for current active stock
 function setActiveStockDateRange() {
     myPortfolio.setEndDate(myPortfolio.stocks[myPortfolio.getActiveStockIndex()].data[myPortfolio.stocks[myPortfolio.getActiveStockIndex()].data.length - 1].getDate());
