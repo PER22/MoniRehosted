@@ -97,7 +97,7 @@ function getAnalytics(operation, ticker, displayValue, numberOfDays, date) {
                     });
                     for(var i =0; i <response.length; i++) {
                         response[i].data.split(",").forEach(a =>{
-                            res.push(a.replace(/[^\d.-]/g, ''));
+                            res.push(parseFloat(a.replace(/[^\d.-]/g, '')));
                         })
                     }
                     console.log(res)
