@@ -45,6 +45,7 @@ function handleFilterAnalytics(e) {
     var sender = e.srcElement || e.target;
     var analytic = sender.innerHTML;
     setAnalyticsDropDownName(analytic + " v");
+    getAnalytics('StockMovingAverage', getActiveStockTicker(), myPortfolio.getValueFilter(), myPortfolio.translateDateFilterToNumericValue(), myPortfolio.getDateFilter());
 }
 
 //Function used when switching between Stock and ETF
