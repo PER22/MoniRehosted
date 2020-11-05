@@ -76,13 +76,34 @@ function setDateRangeByDatePickerButton(datePickerButtonValue) {
 function setDateFilterValue(datePickerButtonValue) {
     myPortfolio.setDateFilter(datePickerButtonValue);
 }
+//Gets date filter for pulling data to display on chart
+function getDateFilterValue() {
+    return myPortfolio.getDateFilter();
+}
 //Sets date filter for pulling data to display on chart
 function setDisplayFilterValue(displayPickerButtonValue) {
     myPortfolio.setValueFilter(displayPickerButtonValue);
 }
+//Gets date filter for pulling data to display on chart
+function getDisplayValueFilter() {
+    return myPortfolio.getValueFilter();
+}
 //Sets analytic filter for pulling data to display on chart
 function setAnalyticFilterValue(analyticPickerButtonValue) {
     myPortfolio.setAnalyticFilter(analyticPickerButtonValue);
+}
+//Sets analytic filter for pulling data to display on chart
+function setMovingAverageFilterValue(movingAveragePickerButtonValue) {
+    var activeStock = myPortfolio.getActiveStock();
+    activeStock.setMovingAverageFilter(movingAveragePickerButtonValue);
+}
+function getMovingAverageDateFilterNumOfDays() {
+    var activeStock = myPortfolio.getActiveStock();
+    return myPortfolio.translateDateFilterToNumericValue(activeStock.getMovingAverageFilter());
+}
+function getMovingAverageDateFilter() {
+    var activeStock = myPortfolio.getActiveStock();
+    return activeStock.getMovingAverageFilter();
 }
 //Sets date range for current active stock
 function setActiveStockDateRange() {
@@ -114,10 +135,20 @@ function getVolumeValuesByTicker(datePickerButtonValue) {
     return stock.getVolumes();
 }
 
+function getActiveStockMovingAverage(key) {
+    var activeStock = myPortfolio.getActiveStock();   
+    var numberOfDays = myPortfolio.getNumberOfStockDetailsInRange();
+    return activeStock.getMovingAverage(key, numberOfDays);
+}
+
 //Returns dataset based on selected radio button
 function getChartValuesByTicker(valueType, ticker) {
+    var analyticFilter = myPortfolio.getAnalyticFilter();
     var valuesArray = [];
-    if (valueType == "Closing Prices v") {
+    if (analyticFilter == "Moving Average") {
+        valuesArray = getActiveStockMovingAverage(getMovingAverageDateFilter() + "-" + myPortfolio.getValueFilter());
+    }
+    else if (valueType == "Closing Prices v") {
         valuesArray = getClosingValuesByTicker(ticker);
     }
     else if (valueType == "Opening Prices v") {

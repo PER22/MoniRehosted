@@ -28,26 +28,43 @@ function handleFilterDateRange(e) {
     var dateRangeValue = sender.innerHTML;
     setPeriodDropDownName(dateRangeValue + " v");
     setDateFilterValue(dateRangeValue);
-    displayStockChart(getActiveStockTicker());
+    displayStockChart(getActiveStockTicker(), (document.getElementById("analyticDropdownButton").innerHTML.replace(' v', '') == "Candle Stick"));
 }
 
 //Function used when clicking an item in the DisplayValue drop down
 function handlFilterDisplayValue(e) {
     var sender = e.srcElement || e.target;
     var displayValue = sender.innerHTML;
-    setDisplayFilterValue(displayValue);
+    setDisplayFilterValue(displayValue.split(' ')[0]);
     setDisplayValueDropDownName(displayValue + " v");
-    displayStockChart(getActiveStockTicker());
+    var val = document.getElementById("analyticDropdownButton").innerHTML.replace(' v', '');
+    if (val == "Moving Average")
+        loadMovingAverage();
+    else
+        displayStockChart(getActiveStockTicker());
 }
 
 //Function used when clicking an item in the Analytics drop down
 function handleFilterAnalytics(e) {
     var sender = e.srcElement || e.target;
     var analytic = sender.innerHTML;
+    setCursor("wait");
     setAnalyticFilterValue(analytic);
     setAnalyticsDropDownName(analytic + " v");
-    displayStockChart(getActiveStockTicker());
-    getAnalytics('StockMovingAverage', getActiveStockTicker(), myPortfolio.getValueFilter(), myPortfolio.translateDateFilterToNumericValue(), myPortfolio.getDateFilter());
+    if (analytic == "Moving Average")
+        loadMovingAverage();
+    else
+        displayStockChart(getActiveStockTicker(), (analytic == "Candle Stick"));
+    toggleMovingAverageDateFilterDropDownVisibility((analytic == "Moving Average"));
+}
+
+function handleDisplayMovingAverage(e) {
+    var sender = e.srcElement || e.target;
+    var dateRangeValue = sender.innerHTML;
+    setCursor("wait");
+    setMovingAverageFilterValue(dateRangeValue);
+    setMovingAverageDripDownName(dateRangeValue + " v");
+    getAnalytics('StockMovingAverage', getActiveStockTicker(), getDisplayValueFilter(), getMovingAverageDateFilterNumOfDays(), getMovingAverageDateFilter(), displayStockChart);
 }
 
 //Function used when switching between Stock and ETF
@@ -60,8 +77,7 @@ function handleSwapStockAndETF(e) {
 //Function used to delete a stock
 function handleDeleteStock(e) {
     var sender = e.srcElement || e.target;
-    //deleteStock(getActiveStockTicker(), null);
-    deleteStock("a", null);
+    deleteStock(getActiveStockTicker(), null);
     document.getElementById("outer-" + getActiveStockTicker()).remove();
 }
 
@@ -72,12 +88,20 @@ function handleReloadStock(e) {
     getStockDataByTicker(ticker, true, displayStockChart);
 }
 
+function loadMovingAverage() {
+    var ticker = getActiveStockTicker();
+    var displayValue = getDisplayValueFilter();
+    var movingAverageDateFilter = getMovingAverageDateFilterNumOfDays();
+    var chartDateFilter = getMovingAverageDateFilter();
+    getAnalytics('StockMovingAverage', ticker, displayValue, movingAverageDateFilter, chartDateFilter, displayStockChart);
+}
+
 //
 // Display functions
 // vvvvvvvvvvvvvvvvv
 
 //Stock chart display function.
-function displayStockChart(ticker) {
+function displayStockChart(ticker, candleChart) {
     console.log("Displaying Chart");
     //Set stock title and initial date range
     setActiveStockDateRange();
@@ -92,14 +116,17 @@ function displayStockChart(ticker) {
     var volumes = getChartVolumeByTicker(selectedDisplayValue, ticker);
     var dateValues = getClosingDatesByTicker(ticker);
 
-    updateHeader(stockTitle, prevClosingValue, lastDay.getOpen(), lastDay.getClose(),lastDay.getLow(), lastDay.getHigh(), lastDay.getVolume(), ticker, prevClosingValue)
+    updateHeader(stockTitle, prevClosingValue, lastDay.getOpen(), lastDay.getClose(), lastDay.getLow(), lastDay.getHigh(), lastDay.getVolume(), ticker, prevClosingValue)
 
     //fillChartJS(prevClosingValue, chartValues, volumes, dateValues, selectedDisplayValue);
     //fillPlotlyChart(dateValues, chartValues);
     //fillCandleChart(dateValues, ticker);
 
     //fillChartJS(prevClosingValue, chartValues, volumes, dateValues, selectedDisplayValue);
-    fillPlotlyChart(dateValues, chartValues);
+    if (candleChart)
+        fillCandleChart(dateValues, ticker);
+    else
+        fillPlotlyChart(dateValues, chartValues);
     setCursor("default");
 }
 
@@ -132,10 +159,10 @@ function fillPlotlyChart(dateValues, chartValues) {
             gridcolor: '#373c42',
             gridwidth: 1,
             linecolor: '#636363',
-            range: [min,max]
+            range: [min, max]
         }
     }
-    Plotly.newPlot(chartDiv, data, layout=layout);
+    Plotly.newPlot(chartDiv, data, layout = layout);
 }
 
 function fillCandleChart(dateValues, ticker) {
@@ -146,30 +173,30 @@ function fillCandleChart(dateValues, ticker) {
         type: "candlestick",
         //mode: "lines",
         x: dateValues,
-        xaxis : 'x',
+        xaxis: 'x',
         yaxis: 'y',
         close: getClosingValuesByTicker(ticker),
         high: getHighValuesByTicker(ticker),
         low: getLowValuesByTicker(ticker),
         open: getOpeningValuesByTicker(ticker),
 
-       decreasing: {
-           line: {color: '#c2331f'},
-           fillcolor: '#c2331f'
+        decreasing: {
+            line: { color: '#c2331f' },
+            fillcolor: '#c2331f'
         },
-       increasing: {
-           line: {color: '#209e54'},
-           fillcolor : '#209e54'   
+        increasing: {
+            line: { color: '#209e54' },
+            fillcolor: '#209e54'
         },
-       
+
     };
     var data = [trace1];
 
     var layout = {
-        showlegend: false, 
+        showlegend: false,
         xaxis: {
-            autorange: true, 
-            rangeslider: {visible: false}, 
+            autorange: true,
+            rangeslider: { visible: false },
             gridcolor: '#373c42',
             gridwidth: 1,
             linecolor: '#636363',
@@ -179,18 +206,18 @@ function fillCandleChart(dateValues, ticker) {
             gridcolor: '#373c42',
             gridwidth: 1,
             linecolor: '#636363',
-            
-          },
+
+        },
         plot_bgcolor: "rgba(0,0,0,0)",
         paper_bgcolor: "rgba(0,0,0,0)",
         font: {
             //family: 'Courier New, monospace',
             size: 14,
             color: '#FFFFFF'
-          }
-        
-      };
-      Plotly.newPlot(chartDiv, data, layout);
+        }
+
+    };
+    Plotly.newPlot(chartDiv, data, layout);
 }
 
 
@@ -305,6 +332,11 @@ function displayStockList() {
 // Utility functions
 //
 
+function toggleMovingAverageDateFilterDropDownVisibility(on) {
+
+    document.getElementById("movingAverageDropdownButton").style.display = (on) ? "block" : "none";
+}
+
 function getSelectedDisplayValue() {
     return document.getElementById('stockPropertyDropdownButton').innerText;
 }
@@ -360,14 +392,19 @@ function setPeriodDropDownName(name) {
     document.getElementById('periodDropdownButton').innerHTML = name;
 }
 
-//Updates Property Drop Down name when list item is clicked
+//Updates Display Value Drop Down name when list item is clicked
 function setDisplayValueDropDownName(name) {
     document.getElementById('stockPropertyDropdownButton').innerHTML = name;
 }
 
-//Updates Property Drop Down name when list item is clicked
+//Updates Analytics Drop Down name when list item is clicked
 function setAnalyticsDropDownName(name) {
     document.getElementById('analyticDropdownButton').innerHTML = name;
+}
+
+//Updates Property Drop Down name when list item is clicked
+function setMovingAverageDripDownName(name) {
+    document.getElementById('movingAverageDropdownButton').innerHTML = name;
 }
 
 // Close the dropdown if the user clicks outside of it
@@ -390,74 +427,74 @@ function scrolled(e) {
     }
 }
 
-function replaceAnimationAfterLoad(stock){
-  //Name of Company
-  if (!!document.getElementById("labelPlaceholder")) {
-      const newlabel = document.createElement('label');
-      newlabel.innerHTML = '  <label class="header-label" id="selected-stock-name"></label>';
-      document.getElementById('labelPlaceholder').parentNode.replaceChild(newlabel, document.getElementById('labelPlaceholder'));
-  }
+function replaceAnimationAfterLoad(stock) {
+    //Name of Company
+    if (!!document.getElementById("labelPlaceholder")) {
+        const newlabel = document.createElement('label');
+        newlabel.innerHTML = '  <label class="header-label" id="selected-stock-name"></label>';
+        document.getElementById('labelPlaceholder').parentNode.replaceChild(newlabel, document.getElementById('labelPlaceholder'));
+    }
 
-  //Price Of Company
-  if (!!document.getElementById("pricePlaceholder")) {
-      const newlabel = document.createElement('h1');
-      newlabel.innerHTML = '  <h1 class="header-label" id="selected-stock-price">340</h1>';
-      document.getElementById('pricePlaceholder').parentNode.replaceChild(newlabel, document.getElementById('pricePlaceholder'));
-  }
+    //Price Of Company
+    if (!!document.getElementById("pricePlaceholder")) {
+        const newlabel = document.createElement('h1');
+        newlabel.innerHTML = '  <h1 class="header-label" id="selected-stock-price">340</h1>';
+        document.getElementById('pricePlaceholder').parentNode.replaceChild(newlabel, document.getElementById('pricePlaceholder'));
+    }
 
-  //Currency and Trend of Company Asset
-  if (!!document.getElementById("currencyPlaceholder")) {
-      const newlabel = document.createElement('label');
-      newlabel.innerHTML = '<div id="selected-stock-trend"></div>' +
-                           '<br>' +
-                           '<label class="" id="selected-stock-currency">USD</label>';
-      document.getElementById('currencyPlaceholder').parentNode.replaceChild(newlabel, document.getElementById('currencyPlaceholder'));
-  }
+    //Currency and Trend of Company Asset
+    if (!!document.getElementById("currencyPlaceholder")) {
+        const newlabel = document.createElement('label');
+        newlabel.innerHTML = '<div id="selected-stock-trend"></div>' +
+            '<br>' +
+            '<label class="" id="selected-stock-currency">USD</label>';
+        document.getElementById('currencyPlaceholder').parentNode.replaceChild(newlabel, document.getElementById('currencyPlaceholder'));
+    }
 
-  //Open / Close Price of Asset
-  if (!!document.getElementById("openClosePlaceholder")) {
-      const newlabel = document.createElement('label');
-      newlabel.innerHTML = '<label class="" id="selected-stock-PreviousClose">Previous Close: </label> ' +
-                           '<label class="" id=""></label>' +
-                           '<br>' +
-                           '<label class="" id="selected-stock-Open">Open: </label>';
-      document.getElementById('openClosePlaceholder').parentNode.replaceChild(newlabel, document.getElementById('openClosePlaceholder'));
-  }
+    //Open / Close Price of Asset
+    if (!!document.getElementById("openClosePlaceholder")) {
+        const newlabel = document.createElement('label');
+        newlabel.innerHTML = '<label class="" id="selected-stock-PreviousClose">Previous Close: </label> ' +
+            '<label class="" id=""></label>' +
+            '<br>' +
+            '<label class="" id="selected-stock-Open">Open: </label>';
+        document.getElementById('openClosePlaceholder').parentNode.replaceChild(newlabel, document.getElementById('openClosePlaceholder'));
+    }
 
-  //Range / Colume of Asset
-  if (!!document.getElementById("rangeVolumePlaceholder")) {
-      const newlabel = document.createElement('label');
-      newlabel.innerHTML = '<label class="" id="selected-stock-range">Day\'s Range: </label> ' +
-                           '<br>' +
-                           '<label class="" id="selected-stock-volume">Volume: </label>';
-      document.getElementById('rangeVolumePlaceholder').parentNode.replaceChild(newlabel, document.getElementById('rangeVolumePlaceholder'));
-  }
+    //Range / Colume of Asset
+    if (!!document.getElementById("rangeVolumePlaceholder")) {
+        const newlabel = document.createElement('label');
+        newlabel.innerHTML = '<label class="" id="selected-stock-range">Day\'s Range: </label> ' +
+            '<br>' +
+            '<label class="" id="selected-stock-volume">Volume: </label>';
+        document.getElementById('rangeVolumePlaceholder').parentNode.replaceChild(newlabel, document.getElementById('rangeVolumePlaceholder'));
+    }
 
-  //Graph of Asset
-  if (!!document.getElementById("graphPlaceholder")) {
-      const newGraph = document.createElement('div');
-      newGraph.innerHTML = '  <div id="chartDiv"><canvas id="myChart"></canvas></div>';
-      document.getElementById('graphPlaceholder').parentNode.replaceChild(newGraph, document.getElementById('graphPlaceholder'));
-  }
+    //Graph of Asset
+    if (!!document.getElementById("graphPlaceholder")) {
+        const newGraph = document.createElement('div');
+        newGraph.innerHTML = '  <div id="chartDiv"><canvas id="myChart"></canvas></div>';
+        document.getElementById('graphPlaceholder').parentNode.replaceChild(newGraph, document.getElementById('graphPlaceholder'));
+    }
 }
 
 function updateHeader(header, prevClosingValue, open, close, low, high, volume, label, priceChangeFromPreviousDay) {
 
-  var cssType;
-  if (priceChangeFromPreviousDay < 0) {
-      cssType = "\"box red detail-label-small\""
-  }
-  else{
-      cssType = "\"box green detail-label-small\""
-  }
+    var cssType;
+    if (priceChangeFromPreviousDay < 0) {
+        cssType = "\"box red detail-label-small\""
+    }
+    else {
+        cssType = "\"box green detail-label-small\""
+    }
 
-  document.getElementById('selected-stock-name').innerHTML =  header;
-  document.getElementById('selected-stock-price').innerHTML =  close;
-  document.getElementById('selected-stock-trend').innerHTML = "<div class=\".stock-selection-change-value\" id=\"change-" + label + "\">" +
-                                                              "<label class= " + cssType + " id=\"labelChange-" + label + "\">" + priceChangeFromPreviousDay + "%</label>" +
-                                                              "</div>";
-  document.getElementById('selected-stock-PreviousClose').innerHTML = 'Previous Close: $' + prevClosingValue;
-  document.getElementById('selected-stock-Open').innerHTML = 'Open: $' + open;
-  document.getElementById('selected-stock-range').innerHTML = 'Day\'s Range: $' + low + ' - $' + high;
-  document.getElementById('selected-stock-volume').innerHTML = 'Volume: ' + volume;
+    document.getElementById('selected-stock-name').innerHTML = header;
+    document.getElementById('selected-stock-price').innerHTML = close;
+    document.getElementById('selected-stock-trend').innerHTML = "<div class=\".stock-selection-change-value\" id=\"change-" + label + "\">" +
+        "<label class= " + cssType + " id=\"labelChange-" + label + "\">" + priceChangeFromPreviousDay + "%</label>" +
+        "</div>";
+    document.getElementById('selected-stock-PreviousClose').innerHTML = 'Previous Close: $' + prevClosingValue;
+    document.getElementById('selected-stock-Open').innerHTML = 'Open: $' + open;
+    document.getElementById('selected-stock-range').innerHTML = 'Day\'s Range: $' + low + ' - $' + high;
+    document.getElementById('selected-stock-volume').innerHTML = 'Volume: ' + volume;
 }

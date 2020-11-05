@@ -58,6 +58,12 @@ class Portfolio {
     getAnalyticFilter() {
         return this.analyticFilter;
     }
+    setMovingAverageFilter(analyticFilter) {
+        this.analyticFilter = analyticFilter;
+    }
+    getMovingAverageFilter() {
+        return this.analyticFilter;
+    }
     setActiveStockIndexByTicker(ticker) {
         for (var i = 0; i < this.stocks.length; i++) {
             if (this.stocks[i].getLabel() == ticker) {
@@ -75,44 +81,47 @@ class Portfolio {
     getActiveStockTicker() {
         return this.stocks[this.activeStockIndex].getLabel();
     }
+    getActiveStock() {
+        return this.stocks[this.activeStockIndex];
+    }
     //Translates dateFilter to numeric day value
-    translateDateFilterToNumericValue() {
+    translateDateFilterToNumericValue(dateFilter) {
         var numericValue = 0;
-        if (this.dateFilter == "1W") {
+        if (dateFilter == "1W") {
             numericValue = 7;
         }
-        else if (this.dateFilter == "1M") {
+        else if (dateFilter == "1M") {
             numericValue = 31;
         }
-        else if (this.dateFilter == "3M") {
+        else if (dateFilter == "3M") {
             numericValue = 93;
         }
-        else if (this.dateFilter == "6M") {
+        else if (dateFilter == "6M") {
             numericValue = 183;
         }
-        else if (this.dateFilter == "1Y") {
+        else if (dateFilter == "1Y") {
             numericValue = 365;
         }
-        else if (this.dateFilter == "2Y") {
+        else if (dateFilter == "2Y") {
             numericValue = 730;
         }
-        else if (this.dateFilter == "5Y") {
+        else if (dateFilter == "5Y") {
             numericValue = 1825;
         }
-        else if (this.dateFilter == "10Y") {
+        else if (dateFilter == "10Y") {
             numericValue = 3750;
         }
-        else if (this.dateFilter == "ALL") {
+        else if (dateFilter == "ALL") {
             numericValue = 18250;
         }
         return numericValue;
     }
     //Sets startDate and endDate depending on selected datePickerButton
     setStartDateBasedOnEndDate() {
-        var numericDayValue = this.translateDateFilterToNumericValue();
+        var numericDayValue = this.translateDateFilterToNumericValue(this.dateFilter);
         var newDate = this.dateManipulation(this.endDate, numericDayValue, 0, 0, "-");
         this.setStartDate(newDate);
-    }  
+    }
     //https://stackoverflow.com/questions/1296358/subtract-days-from-a-date-in-javascript
     dateManipulation(date, days, hrs, mins, operator) {
         date = new Date(date);
@@ -144,21 +153,8 @@ class Portfolio {
         this.stocks = generateStock();
     }
     importMovingAverage(type, ticker, key, response) {
-        if(type =='stock') {
-            for (var i =0; i <this.stocks.length; i++) {
-                if(this.stocks[i].getLabel ==ticker) {
-                    this.stocks[i].movingAverage[key] =response;
-                }
-            }
-        }
-        else {
-            //for etf
-            for (var i =0; i <this.stocks.length; i++) {
-                if(this.stocks[i].getLabel ==ticker) {
-                    this.stocks[i].movingAverage[key] =response;
-                }
-            }
-        }
+        var activeStock = this.getActiveStock();
+        activeStock.addMovingAverageRecord(key, response);
     }
     importStocks(portfolio) {
         portfolio.forEach(stock => {
@@ -179,6 +175,10 @@ class Portfolio {
             }
         }
         return stockFound;
+    }
+    getNumberOfStockDetailsInRange() {
+        var activeStock = this.getActiveStock();
+        return activeStock.getStockDetailCount(this.startDate, this.endDate)
     }
 
 

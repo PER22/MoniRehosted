@@ -8,7 +8,8 @@ class Stock {
         this.label = "";
         this.price = 0;
         this.data = [];
-        this.movingAverage ={};
+        this.movingAverage = {};
+        this.movingAverageFilter = "3M";
         this.priceChangeFromPreviousDay = 0;
         this.loaded = false;
     }
@@ -133,8 +134,32 @@ class Stock {
         }
         return volumes;
     }
-    getLastData(){
-      return this.data[this.data.length - 1];
+    getStockDetailCount(startDate, endDate) {
+        var count = 1;
+        for (var i = 0; i < this.data.length; i++) {
+            var stockDate = Date.parse(this.data[i].getDate());
+            var startDateVal = Date.parse(startDate);
+            var endDateVal = Date.parse(endDate);
+            if (stockDate >= startDateVal && stockDate <= endDateVal)
+                count++;
+        }
+        return count;
+    }
+    getLastData() {
+        return this.data[this.data.length - 1];
+    }
+    getMovingAverage(key, numberOfDays) {
+        var dataSet = this.movingAverage[key];
+        return dataSet.slice(dataSet.length - numberOfDays, dataSet.length - 1);
+    }
+    addMovingAverageRecord(key, data) {
+        this.movingAverage[key] = data;
+    }
+    setMovingAverageFilter(movingAverageFilter) {
+        this.movingAverageFilter = movingAverageFilter;
+    }
+    getMovingAverageFilter() {
+        return this.movingAverageFilter;
     }
 }
 

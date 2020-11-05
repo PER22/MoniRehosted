@@ -71,12 +71,10 @@ function requestData(dataString, ticker, operation, field, timePeriod) {
     return message;
 }
 
-function getAnalytics(operation, ticker, displayValue, numberOfDays, date) {
+function getAnalytics(operation, ticker, displayValue, numberOfDays, date, _callback) {
     var packetIndex = 0;
-    var dataRequest =requestData('getAnalytics', ticker, operation, displayValue, numberOfDays.toString());
-    response =[];
-
-    console.log(dataRequest)
+    var dataRequest = requestData('getAnalytics', ticker, operation, displayValue, numberOfDays.toString());
+    response = [];
     var listener = {
         status: function (statusEvent) {
             if (statusEvent.category === "PNConnectedCategory") {
@@ -87,26 +85,31 @@ function getAnalytics(operation, ticker, displayValue, numberOfDays, date) {
             if (msg.message.requester == "Server") {
                 response.push(msg.message);
                 packetIndex++;
+                console.log("Imported " + ticker + ": " + operation);
                 if (packetIndex == msg.message.total) {
-                    type =(operation =="StockMovingAverage"? 'stock': 'etf');
-                    res =[];
-                    response.sort((a,b) => {
-                        if(a.part >b.part) return 1;
+                    type = (operation == "StockMovingAverage" ? 'stock' : 'etf');
+                    res = [];
+                    //Sort response by
+                    response.sort((a, b) => {
+                        if (a.part > b.part) return 1;
                         else if (a.part < b.part) return -1;
                         else return 0;
                     });
-                    for(var i =0; i <response.length; i++) {
-                        response[i].data.split(",").forEach(a =>{
+                    //??
+                    for (var i = 0; i < response.length; i++) {
+                        response[i].data.split(",").forEach(a => {
                             res.push(parseFloat(a.replace(/[^\d.-]/g, '')));
                         })
                     }
                     console.log(res)
-                    myPortfolio.importMovingAverage(type, ticker,date+'-'+field, res);
+                    myPortfolio.importMovingAverage(type, ticker, date + '-' + displayValue, res);
                     pubnub.removeListener(listener);
+                    _callback(ticker);
                 }
             }
         }
     };
+    console.log("Requesting data...");
     pubnub.addListener(listener);
 
     pubnub.subscribe({
@@ -146,7 +149,7 @@ function getSideBarData(_callback) {
 
 function deleteStock(ticker, _callback) {
     //Set up variables
-    var dataRequest = requestData("deleteStock");
+    var dataRequest = requestData("deleteStock", ticker);
 
     //Listen for response
     var listener = {
@@ -164,6 +167,9 @@ function deleteStock(ticker, _callback) {
     };
     console.log("Requesting data...");
     pubnub.addListener(listener);
+    pubnub.subscribe({
+        channels: ['FinanceSub']
+    });
 };
 
 
@@ -180,7 +186,7 @@ function getStockDataByTicker(ticker, reload, _callback) {
     var dataRequest = requestData("getStockData", ticker);
 
     //Listener to wait for response from server
-   var listener = {
+    var listener = {
         status: function (statusEvent) {
             if (statusEvent.category === "PNConnectedCategory") {
                 publishMessage(dataRequest);

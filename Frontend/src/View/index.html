@@ -34,22 +34,21 @@
 
                 <!-- Company Names/Labels -->
                 <div class="col m2 margin">
-                  <div class="card round">
-                      <div class="container padding dark" >
-                          <!-- Stock List Section-->
-                          <ul class="uk-child-width-expand" uk-tab>
-                              <li class="uk-active .tab-color"><a href="#">Stocks</a></li>
-                              <li class=".tab-color"><a href="#">ETFs</a></li>
-                          </ul>
-                          <div class="list-background padding margin graph-background" id="listPlaceholder">
-                              <div class="inter-graph"></div>
-                          </div>
-                          <!-- <div class="stock-selection-sect" id="stockHeader"></div>-->
-                      </div>
-                  </div>
+                    <div class="card round">
+                        <div class="container padding dark">
+                            <!-- Stock List Section-->
+                            <ul class="uk-child-width-expand" uk-tab>
+                                <li class="uk-active .tab-color"><a href="#">Stocks</a></li>
+                                <li class=".tab-color"><a href="#">ETFs</a></li>
+                            </ul>
+                            <div class="list-background padding margin graph-background" id="listPlaceholder">
+                                <div class="inter-graph"></div>
+                            </div>
+                            <!-- <div class="stock-selection-sect" id="stockHeader"></div>-->
+                        </div>
+                    </div>
                 </div>
                 <!-- End Company Names/Labels -->
-
                 <!-- Middle Column -->
                 <div class="col m9 margin">
                     <!-- Name of Company -->
@@ -66,93 +65,108 @@
                     <!-- Asset Stats -->
                     <div class="card round dark">
                         <div class="container">
-                          <!-- Price -->
-                          <div class="col m1 margin">
-                            <div class="linear-background padding" id="pricePlaceholder">
-                                <div class="inter-label"></div>
+                            <!-- Price -->
+                            <div class="col m1 margin">
+                                <div class="linear-background padding" id="pricePlaceholder">
+                                    <div class="inter-label"></div>
+                                </div>
                             </div>
-                          </div>
-                          <div class="col m1 margin padding">
-                            <div class="linear-background" id="currencyPlaceholder">
-                                <div class="inter-label"></div>
+                            <div class="col m1 margin padding">
+                                <div class="linear-background" id="currencyPlaceholder">
+                                    <div class="inter-label"></div>
+                                </div>
                             </div>
-                          </div>
-                          <!-- Open / Close -->
-                          <div class="col m2 margin">
-                            <div class="linear-background" id="openClosePlaceholder">
-                                <div class="inter-label"></div>
+                            <!-- Open / Close -->
+                            <div class="col m2 margin">
+                                <div class="linear-background" id="openClosePlaceholder">
+                                    <div class="inter-label"></div>
+                                </div>
                             </div>
-                          </div>
-                          <!-- Range / Volume -->
-                          <div class="col m3 margin">
-                            <div class="linear-background" id="rangeVolumePlaceholder">
-                                <div class="inter-label"></div>
+                            <!-- Range / Volume -->
+                            <div class="col m3 margin">
+                                <div class="linear-background" id="rangeVolumePlaceholder">
+                                    <div class="inter-label"></div>
+                                </div>
                             </div>
-                          </div>
                         </div>
                     </div>
                     <!-- End Asset Stats -->
                     <br>
                     <!-- Graph/Analytics -->
                     <div class="card round dark">
-                      <div class="container padding">
-                        <!--
-                        <ul uk-tab>
-                            <li class="uk-active .tab-color"><a href="#">Stocks</a></li>
-                            <li class=".tab-color"><a href="#">ETFs</a></li>
-                        </ul> -->
-                        <ul>
-                          <!-- Display Value Drop Down -->
-                          <li class="dropdown">
-                              <a class="dropbtn" id="stockPropertyDropdownButton">Closing Prices v</a>
-                              <div class="dropdown-content" id="chart-type: ">
-                                  <a id="Closing Prices v" onclick="handlFilterDisplayValue(event)">Closing Prices</a>
-                                  <a id="Opening Prices v" onclick="handlFilterDisplayValue(event)">Opening Prices</a>
-                                  <a id="Highs v" onclick="handlFilterDisplayValue(event)">Highs</a>
-                                  <a id="Lows v" onclick="handlFilterDisplayValue(event)">Lows</a>
-                              </div>
-                          </li>
-                          <spacer type="horizontal" width="100" height="100">  </spacer>
-                          <!-- Date Range Filter Drop Down -->
-                          <li class="dropdown">
-                              <a class="dropbtn" id="periodDropdownButton">3M v</a>
-                              <div class="dropdown-content">
-                                  <a id="1W v" onclick="handleFilterDateRange(event)">1W</a>
-                                  <a id="1M v" onclick="handleFilterDateRange(event)">1M</a>
-                                  <a id="3M v" onclick="handleFilterDateRange(event)">3M</a>
-                                  <a id="6M v" onclick="handleFilterDateRange(event)">6M</a>
-                                  <a id="1Y v" onclick="handleFilterDateRange(event)">1Y</a>
-                                  <a id="2Y v" onclick="handleFilterDateRange(event)">2Y</a>
-                                  <a id="5Y v" onclick="handleFilterDateRange(event)">5Y</a>
-                                  <a id="10Y v" onclick="handleFilterDateRange(event)">10Y</a>
-                                  <a id="ALL v" onclick="handleFilterDateRange(event)">ALL</a>
-                              </div>
-                          </li>
-                          <!-- Action Drop Down -->
-                          <li class="dropdown">
-                              <a class="dropbtn" id="actionDropdownButton">Actions v</a>
-                              <div class="dropdown-content">
-                                  <a onclick="handleReloadStock(event)">Reload</a>
-                                  <a onclick="handleDeleteStock(event)">Delete</a>
-                              </div>
-                          </li>
-                          <!-- Analytics Drop Down -->
-                          <li class="dropdown">
-                            <a class="dropbtn" id="analyticDropdownButton">Analytics v</a>
-                            <div class="dropdown-content">
-                                <a onclick="handleFilterAnalytics(event)">Plot</a>
-                                <a onclick="handleFilterAnalytics(event)">Candle Stick</a>
-                                <a onclick="handleFilterAnalytics(event)">Moving Average</a>
-                            </div>
-                          </li>
-                        </ul>
-                      </div>
-                      <div class="linear-background padding margin graph-background" id="graphPlaceholder">
-                          <div class="inter-graph"></div>
-                      </div>
+                        <div class="container padding">
+                            <!--
+                            <ul uk-tab>
+                                <li class="uk-active .tab-color"><a href="#">Stocks</a></li>
+                                <li class=".tab-color"><a href="#">ETFs</a></li>
+                            </ul> -->
+                            <ul>
+                                <!-- Display Value Drop Down -->
+                                <li class="dropdown">
+                                    <a class="dropbtn" id="stockPropertyDropdownButton">Closing Prices v</a>
+                                    <div class="dropdown-content" id="chart-type: ">
+                                        <a id="Closing Prices v" onclick="handlFilterDisplayValue(event)">Closing Prices</a>
+                                        <a id="Opening Prices v" onclick="handlFilterDisplayValue(event)">Opening Prices</a>
+                                        <a id="Highs v" onclick="handlFilterDisplayValue(event)">Highs</a>
+                                        <a id="Lows v" onclick="handlFilterDisplayValue(event)">Lows</a>
+                                    </div>
+                                </li>
+                                <spacer type="horizontal" width="100" height="100">  </spacer>
+                                <!-- Date Range Filter Drop Down -->
+                                <li class="dropdown">
+                                    <a class="dropbtn" id="periodDropdownButton">3M v</a>
+                                    <div class="dropdown-content">
+                                        <a id="1W v" onclick="handleFilterDateRange(event)">1W</a>
+                                        <a id="1M v" onclick="handleFilterDateRange(event)">1M</a>
+                                        <a id="3M v" onclick="handleFilterDateRange(event)">3M</a>
+                                        <a id="6M v" onclick="handleFilterDateRange(event)">6M</a>
+                                        <a id="1Y v" onclick="handleFilterDateRange(event)">1Y</a>
+                                        <a id="2Y v" onclick="handleFilterDateRange(event)">2Y</a>
+                                        <a id="5Y v" onclick="handleFilterDateRange(event)">5Y</a>
+                                        <a id="10Y v" onclick="handleFilterDateRange(event)">10Y</a>
+                                        <a id="ALL v" onclick="handleFilterDateRange(event)">ALL</a>
+                                    </div>
+                                </li>
+                                <!-- Action Drop Down -->
+                                <li class="dropdown">
+                                    <a class="dropbtn" id="actionDropdownButton">Actions v</a>
+                                    <div class="dropdown-content">
+                                        <a onclick="handleReloadStock(event)">Reload</a>
+                                        <a onclick="handleDeleteStock(event)">Delete</a>
+                                    </div>
+                                </li>
+                                <!-- Analytics Drop Down -->
+                                <li class="dropdown">
+                                    <a class="dropbtn" id="analyticDropdownButton">Plot v</a>
+                                    <div class="dropdown-content">
+                                        <a onclick="handleFilterAnalytics(event)">Plot</a>
+                                        <a onclick="handleFilterAnalytics(event)">Candle Stick</a>
+                                        <a onclick="handleFilterAnalytics(event)">Moving Average</a>
+                                    </div>
+                                </li>
+                                <!-- Filter Moving Average Drop Down -->
+                                <li class="dropdown">
+                                    <a class="dropbtn" id="movingAverageDropdownButton" style="display:none">3M v</a>
+                                    <div class="dropdown-content">
+                                        <a id="1W v" onclick="handleDisplayMovingAverage(event)">1W</a>
+                                        <a id="1M v" onclick="handleDisplayMovingAverage(event)">1M</a>
+                                        <a id="3M v" onclick="handleDisplayMovingAverage(event)">3M</a>
+                                        <a id="6M v" onclick="handleDisplayMovingAverage(event)">6M</a>
+                                        <a id="1Y v" onclick="handleDisplayMovingAverage(event)">1Y</a>
+                                        <a id="2Y v" onclick="handleDisplayMovingAverage(event)">2Y</a>
+                                        <a id="5Y v" onclick="handleDisplayMovingAverage(event)">5Y</a>
+                                        <a id="10Y v" onclick="handleDisplayMovingAverage(event)">10Y</a>
+                                        <a id="ALL v" onclick="handleDisplayMovingAverage(event)">ALL</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="linear-background padding margin graph-background" id="graphPlaceholder">
+                            <div class="inter-graph"></div>
+                        </div>
                     </div>
                     <!-- EndGraph/Analytics -->
-                  <!-- End Middle Column -->
+                    <!-- End Middle Column -->
                 </div>
 
                 <!-- End Grid -->
