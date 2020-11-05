@@ -93,6 +93,8 @@ function displayStockChart(ticker) {
     updateHeader(stockTitle, prevClosingValue, lastDay.getOpen(), lastDay.getClose(),lastDay.getLow(), lastDay.getHigh(), lastDay.getVolume(), ticker, prevClosingValue)
 
     //fillChartJS(prevClosingValue, chartValues, volumes, dateValues, selectedDisplayValue);
+    //fillPlotlyChart(dateValues, chartValues);
+    //fillCandleChart(dateValues, ticker);
 
     //fillChartJS(prevClosingValue, chartValues, volumes, dateValues, selectedDisplayValue);
     fillPlotlyChart(dateValues, chartValues);
@@ -133,6 +135,62 @@ function fillPlotlyChart(dateValues, chartValues) {
     }
     Plotly.newPlot(chartDiv, data, layout=layout);
 }
+
+function fillCandleChart(dateValues, ticker) {
+    chartDiv.innerHTML = "";
+    chartDiv = document.getElementById('chartDiv');
+
+    var trace1 = {
+        type: "candlestick",
+        //mode: "lines",
+        x: dateValues,
+        xaxis : 'x',
+        yaxis: 'y',
+        close: getClosingValuesByTicker(ticker),
+        high: getHighValuesByTicker(ticker),
+        low: getLowValuesByTicker(ticker),
+        open: getOpeningValuesByTicker(ticker),
+
+       decreasing: {
+           line: {color: '#c2331f'},
+           fillcolor: '#c2331f'
+        },
+       increasing: {
+           line: {color: '#209e54'},
+           fillcolor : '#209e54'   
+        },
+       
+    };
+    var data = [trace1];
+
+    var layout = {
+        showlegend: false, 
+        xaxis: {
+            autorange: true, 
+            rangeslider: {visible: false}, 
+            gridcolor: '#373c42',
+            gridwidth: 1,
+            linecolor: '#636363',
+            type: 'date',
+        },
+        yaxis: {
+            gridcolor: '#373c42',
+            gridwidth: 1,
+            linecolor: '#636363',
+            
+          },
+        plot_bgcolor: "rgba(0,0,0,0)",
+        paper_bgcolor: "rgba(0,0,0,0)",
+        font: {
+            //family: 'Courier New, monospace',
+            size: 14,
+            color: '#FFFFFF'
+          }
+        
+      };
+      Plotly.newPlot(chartDiv, data, layout);
+}
+
 
 function fillChartJS(prevClosingValue, chartValues, volumes, dateValues, selectedDisplayValue) {
     //Fill chart
