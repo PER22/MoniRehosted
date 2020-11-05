@@ -7,7 +7,6 @@ Quick access to everything that you might need to refference
 * [The dataset](#the-dataset)
 * [Technology](#technology)
 * [Features and Functions](#features-and-functions)
-* [Architecture Design](#architecture-design)
 * [The Team](#the-team)
 <br/><br/><br/><br/>
 
