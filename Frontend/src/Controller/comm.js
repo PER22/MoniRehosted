@@ -241,3 +241,12 @@ function getData(label) {
 
     myPortfolio.addStock(stock)
 };
+
+{
+    "requester": "Client",
+    "operation": "CrossOver",
+    "stock": ticker
+    "field": "Open"/"Close"/"High"/"Low"
+    "firstTimePeriod": "100"
+    "secondTimePeriod": "100"
+}
