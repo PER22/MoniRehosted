@@ -3,12 +3,12 @@ by Julian Beaulieu, Mohamed Rayyaan, Hayden Pour, Nick Cardinal, and Padraic Rei
 
 ## Table of Contents
 Quick access to everything that you might need to refference
-* [What is Moni?](#what*is*moni)
-* [The dataset](#the*dataset)
+* [What is Moni?](#what-is-moni)
+* [The dataset](#the-dataset)
 * [Technology](#technology)
-* [Features and Functions](#features*and*functions)
-* [Architecture Design](#architecture*design)
-* [The Team](#the*team)
+* [Features and Functions](#features-and-functions)
+* [Architecture Design](#architecture-design)
+* [The Team](#the-team)
 <br/><br/><br/><br/>
 
 ## What is Moni?
