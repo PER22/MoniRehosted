@@ -6,7 +6,9 @@ class Portfolio {
         this.startDate;
         this.endDate;
         this.activeStockIndex = 0;
-        this.dateFilter = "1W";
+        this.dateFilter = "3M";
+        this.valueFilter = "Closing";
+        this.analyticFilter = "Plot";
     }
     setName(name) {
         this.name = name;
@@ -44,6 +46,24 @@ class Portfolio {
     getDateFilter() {
         return this.dateFilter;
     }
+    setValueFilter(valueFilter) {
+        this.valueFilter = valueFilter;
+    }
+    getValueFilter() {
+        return this.valueFilter;
+    }
+    setAnalyticFilter(analyticFilter) {
+        this.analyticFilter = analyticFilter;
+    }
+    getAnalyticFilter() {
+        return this.analyticFilter;
+    }
+    setMovingAverageFilter(analyticFilter) {
+        this.analyticFilter = analyticFilter;
+    }
+    getMovingAverageFilter() {
+        return this.analyticFilter;
+    }
     setActiveStockIndexByTicker(ticker) {
         for (var i = 0; i < this.stocks.length; i++) {
             if (this.stocks[i].getLabel() == ticker) {
@@ -61,36 +81,45 @@ class Portfolio {
     getActiveStockTicker() {
         return this.stocks[this.activeStockIndex].getLabel();
     }
+    getActiveStock() {
+        return this.stocks[this.activeStockIndex];
+    }
+    //Translates dateFilter to numeric day value
+    translateDateFilterToNumericValue(dateFilter) {
+        var numericValue = 0;
+        if (dateFilter == "1W") {
+            numericValue = 7;
+        }
+        else if (dateFilter == "1M") {
+            numericValue = 31;
+        }
+        else if (dateFilter == "3M") {
+            numericValue = 93;
+        }
+        else if (dateFilter == "6M") {
+            numericValue = 183;
+        }
+        else if (dateFilter == "1Y") {
+            numericValue = 365;
+        }
+        else if (dateFilter == "2Y") {
+            numericValue = 730;
+        }
+        else if (dateFilter == "5Y") {
+            numericValue = 1825;
+        }
+        else if (dateFilter == "10Y") {
+            numericValue = 3750;
+        }
+        else if (dateFilter == "ALL") {
+            numericValue = 18250;
+        }
+        return numericValue;
+    }
     //Sets startDate and endDate depending on selected datePickerButton
     setStartDateBasedOnEndDate() {
-        var newDate = "";
-        if (this.dateFilter == "1W") {
-            newDate = this.dateManipulation(this.endDate, 7, 0, 0, "-");
-        }
-        else if (this.dateFilter == "1M") {
-            newDate = this.dateManipulation(this.endDate, 31, 0, 0, "-");
-        }
-        else if (this.dateFilter == "3M") {
-            newDate = this.dateManipulation(this.endDate, 93, 0, 0, "-");
-        }
-        else if (this.dateFilter == "6M") {
-            newDate = this.dateManipulation(this.endDate, 183, 0, 0, "-");
-        }
-        else if (this.dateFilter == "1Y") {
-            newDate = this.dateManipulation(this.endDate, 365, 0, 0, "-");
-        }
-        else if (this.dateFilter == "2Y") {
-            newDate = this.dateManipulation(this.endDate, 730, 0, 0, "-");
-        }
-        else if (this.dateFilter == "5Y") {
-            newDate = this.dateManipulation(this.endDate, 1825, 0, 0, "-");
-        }
-        else if (this.dateFilter == "10Y") {
-            newDate = this.dateManipulation(this.endDate, 3650, 0, 0, "-");
-        }
-        else if (this.dateFilter == "ALL") {
-            newDate = this.dateManipulation(this.endDate, 18250, 0, 0, "-");
-        }
+        var numericDayValue = this.translateDateFilterToNumericValue(this.dateFilter);
+        var newDate = this.dateManipulation(this.endDate, numericDayValue, 0, 0, "-");
         this.setStartDate(newDate);
     }
     //https://stackoverflow.com/questions/1296358/subtract-days-from-a-date-in-javascript
@@ -123,6 +152,10 @@ class Portfolio {
     async populateStocksFromServer() {
         this.stocks = generateStock();
     }
+    importMovingAverage(type, ticker, key, response) {
+        var activeStock = this.getActiveStock();
+        activeStock.addMovingAverageRecord(key, response);
+    }
     importStocks(portfolio) {
         portfolio.forEach(stock => {
             let add = new Stock();
@@ -142,6 +175,10 @@ class Portfolio {
             }
         }
         return stockFound;
+    }
+    getNumberOfStockDetailsInRange() {
+        var activeStock = this.getActiveStock();
+        return activeStock.getStockDetailCount(this.startDate, this.endDate)
     }
 
 

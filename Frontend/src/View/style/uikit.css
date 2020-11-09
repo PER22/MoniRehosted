@@ -48,7 +48,6 @@ a:hover,
 .uk-link:hover,
 .uk-link-toggle:hover .uk-link,
 .uk-link-toggle:focus .uk-link {
-  color: #0f6ecd;
   text-decoration: underline;
 }
 /* Text-level semantics
@@ -222,7 +221,7 @@ figure {
 * + address,
 * + fieldset,
 * + figure {
-  margin-top: 20px;
+  margin-top: 0px;
 }
 /* Headings
  ========================================================================== */
@@ -315,10 +314,7 @@ h6,
 }
 /* Lists
  ========================================================================== */
-ul,
-ol {
-  padding-left: 30px;
-}
+
 /*
  * Reset margin for nested lists
  */
@@ -5539,7 +5535,7 @@ ul.uk-nav-sub {
 /* Divider modifier
  ========================================================================== */
 /*
- * Set gutter 
+ * Set gutter
  */
 .uk-subnav-divider {
   margin-left: -41px;
@@ -5724,7 +5720,7 @@ ul.uk-nav-sub {
   bottom: 0;
   left: 20px;
   right: 0;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 3px solid #2D3134;
 }
 /*
  * 1. Space is allocated solely based on content dimensions: 0 0 auto
@@ -5753,7 +5749,7 @@ ul.uk-nav-sub {
   /* 2 */
   padding: 5px 10px;
   color: #999;
-  border-bottom: 1px solid transparent;
+  border-bottom: 3px solid transparent;
   font-size: 0.875rem;
   text-transform: uppercase;
   transition: color 0.1s ease-in-out;
@@ -5761,13 +5757,13 @@ ul.uk-nav-sub {
 /* Hover + Focus */
 .uk-tab > * > a:hover,
 .uk-tab > * > a:focus {
-  color: #666;
+  color: #ddd;
   text-decoration: none;
 }
 /* Active */
 .uk-tab > .uk-active > a {
-  color: #333;
-  border-color: #1e87f0;
+  color: #ddd;
+  border-color: #363C41;
 }
 /* Disabled */
 .uk-tab > .uk-disabled > a {
