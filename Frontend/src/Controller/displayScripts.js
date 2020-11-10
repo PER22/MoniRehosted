@@ -118,15 +118,15 @@ function displayStockChart(ticker, candleChart) {
 
     updateHeader(stockTitle, prevClosingValue, lastDay.getOpen(), lastDay.getClose(), lastDay.getLow(), lastDay.getHigh(), lastDay.getVolume(), ticker, prevClosingValue)
 
-    //fillChartJS(prevClosingValue, chartValues, volumes, dateValues, selectedDisplayValue);
-    //fillPlotlyChart(dateValues, chartValues);
-    //fillCandleChart(dateValues, ticker);
+    //Wipe chart div
+    var chartDiv = document.getElementById('chartDiv');
+    chartDiv.innerHTML = "";
 
-    //fillChartJS(prevClosingValue, chartValues, volumes, dateValues, selectedDisplayValue);
+    var graph = new Graphing();
     if (candleChart)
-        fillCandleChart(dateValues, ticker);
+        graph.displayCandleChart(chartDiv, getHighValuesByTicker(ticker), getLowValuesByTicker(ticker), getOpeningValuesByTicker(ticker), getClosingValuesByTicker(ticker), xData);
     else
-        fillPlotlyChart(dateValues, chartValues);
+        fillChartJS(prevClosingValue, chartValues, volumes, dateValues, selectedDisplayValue);//graph.displayTrendChartJS(document.getElementById('myChart').getContext('2d'), [dateValues], [chartValues], true);
     setCursor("default");
 }
 
