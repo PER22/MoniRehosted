@@ -149,7 +149,7 @@ class Graphing {
         var myChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: xData,
+                labels: xData[0],
                 datasets: dataSets,
                 options: {
                     tooltips: {
