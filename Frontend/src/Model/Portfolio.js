@@ -8,7 +8,7 @@ class Portfolio {
         this.activeStockIndex = 0;
         this.dateFilter = "3M";
         this.valueFilter = "Closing";
-        this.analyticFilter = "Plot";
+        this.analyticFilter = "Trend";
     }
     setName(name) {
         this.name = name;

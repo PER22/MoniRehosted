@@ -273,3 +273,14 @@ div:active {
 .etf-stock-picker-button:focus {
 		outline: 0;
 }
+
+/* Configuration Box */
+.vertical-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.horizontal-container {
+	text-align: center;
+}

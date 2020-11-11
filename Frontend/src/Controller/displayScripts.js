@@ -58,6 +58,7 @@ function handleFilterAnalytics(e) {
     toggleMovingAverageDateFilterDropDownVisibility((analytic == "Moving Average"));
 }
 
+//Function used when clicking 'Moving Average' in the Analytics drop down
 function handleDisplayMovingAverage(e) {
     var sender = e.srcElement || e.target;
     var dateRangeValue = sender.innerHTML;
@@ -180,6 +181,120 @@ function displayStockList() {
     //setDatePickerBackcolor(document.getElementById('button-1W'));
     //setETFStockPickerBackColor(document.getElementById('button-stock'));
     getStockDataByTicker(getActiveStockTicker(), false, displayStockChart);
+}
+
+function displayConfigurationBox() {
+    var headerDiv = document.getElementById('testDiv');
+    var displayConfigurationBox =
+        "<div class=\"vertical-container\" id=\"divConfigurationBox\">" +
+        createAnalyticsDiv() +
+        createDefaultsDiv() +
+        createConfigurationDiv() +
+        createActionsDiv() +
+        "</div>";
+    headerDiv.innerHTML = displayConfigurationBox;
+    return displayConfigurationBox;
+}
+
+function createAnalyticsDiv() {
+    var analyticsDiv =
+        "<div id=\"divAnalytics\">" +
+        "    <li class=\"dropdown\">" +
+        "             <a class=\"dropbtn\" id=\"analyticDropdownButton\">Trend v</a>" +
+        "             <div class=\"dropdown-content\">" +
+        "                 <a onclick=\"handleFilterAnalytics(event)\">Trend</a>" +
+        "                 <a onclick=\"handleFilterAnalytics(event)\">Candle Stick</a>" +
+        "                 <a onclick=\"handleFilterAnalytics(event)\">Moving Average</a>" +
+        "             </div>" +
+        "    </li>" +
+        "</div>";
+    return analyticsDiv;
+}
+
+function createDefaultsDiv() {
+    var defaultsDiv =
+        "<div id=\"divAnalytics\">" +
+        "    <li class=\"dropdown\">" +
+        "             <a class=\"dropbtn\" id=\"stockPropertyDropdownButton\">Closing Prices v</a>" +
+        "             <div class=\"dropdown-content\">" +
+        "                 <a id=\"Closing Prices v\" onclick=\"handlFilterDisplayValue(event)\">Closing Prices</a>" +
+        "                 <a id=\"Opening Prices v\" onclick=\"handlFilterDisplayValue(event)\">Opening Prices</a>" +
+        "                 <a id=\"Highs v\" onclick=\"handlFilterDisplayValue(event)\">Highs</a>" +
+        "                 <a id=\"Lows v\" onclick=\"handlFilterDisplayValue(event)\">Lows</a>" +
+        "             </div>" +
+        "    </li>" +
+        "    <li class=\"dropdown\">" +
+        "             <a class=\"dropbtn\" id=\"periodDropdownButton\">3M v</a>" +
+        "             <div class=\"dropdown-content\">" +
+        "                 <a id=\"1W v\" onclick=\"handleFilterDateRange(event)\">1W</a>"+
+        "                 <a id=\"1M v\" onclick=\"handleFilterDateRange(event)\">1M</a>" +
+        "                 <a id=\"3M v\" onclick=\"handleFilterDateRange(event)\">3M</a>" +
+        "                 <a id=\"6M v\" onclick=\"handleFilterDateRange(event)\">6M</a>" +
+        "                 <a id=\"1Y v\" onclick=\"handleFilterDateRange(event)\">1Y</a>" +
+        "                 <a id=\"2Y v\" onclick=\"handleFilterDateRange(event)\">2Y</a>" +
+        "                 <a id=\"5Y v\" onclick=\"handleFilterDateRange(event)\">5Y</a>" +
+        "                 <a id=\"10Y v\" onclick=\"handleFilterDateRange(event)\">10Y</a>" +
+        "                 <a id=\"ALL v\" onclick=\"handleFilterDateRange(event)\">ALL</a>" +
+        "             </div>" +
+        "    </li>" +
+        "</div>";
+    return defaultsDiv;
+}
+
+function createConfigurationDiv(analytic) {
+    var configurationDiv = "";
+    if (analytic == "Moving Average") {
+        configurationDiv = createMovingAverageConfigurationDiv();
+    }
+    return configurationDiv;
+}
+
+function createMovingAverageConfigurationDiv() {
+    var configurationDiv =
+        "<div id=\"divConfigurations\">" +
+        "    <li class=\"dropdown\">" +
+        "             <a class=\"dropbtn\" id=\"periodDropdownButton\">3M v</a>" +
+        "             <div class=\"dropdown-content\">" +
+        "                 <a id=\"1W v\" onclick=\"handleFilterDateRange(event)\">1W</a>" +
+        "                 <a id=\"1M v\" onclick=\"handleFilterDateRange(event)\">1M</a>" +
+        "                 <a id=\"3M v\" onclick=\"handleFilterDateRange(event)\">3M</a>" +
+        "                 <a id=\"6M v\" onclick=\"handleFilterDateRange(event)\">6M</a>" +
+        "                 <a id=\"1Y v\" onclick=\"handleFilterDateRange(event)\">1Y</a>" +
+        "                 <a id=\"2Y v\" onclick=\"handleFilterDateRange(event)\">2Y</a>" +
+        "                 <a id=\"5Y v\" onclick=\"handleFilterDateRange(event)\">5Y</a>" +
+        "                 <a id=\"10Y v\" onclick=\"handleFilterDateRange(event)\">10Y</a>" +
+        "                 <a id=\"ALL v\" onclick=\"handleFilterDateRange(event)\">ALL</a>" +
+        "             </div>" +
+        "    </li>" +
+        "    <li class=\"dropdown\">" +
+        "             <a class=\"dropbtn\" id=\"periodDropdownButton\">3M v</a>" +
+        "             <div class=\"dropdown-content\">" +
+        "                 <a id=\"1W v\" onclick=\"handleFilterDateRange(event)\">1W</a>" +
+        "                 <a id=\"1M v\" onclick=\"handleFilterDateRange(event)\">1M</a>" +
+        "                 <a id=\"3M v\" onclick=\"handleFilterDateRange(event)\">3M</a>" +
+        "                 <a id=\"6M v\" onclick=\"handleFilterDateRange(event)\">6M</a>" +
+        "                 <a id=\"1Y v\" onclick=\"handleFilterDateRange(event)\">1Y</a>" +
+        "                 <a id=\"2Y v\" onclick=\"handleFilterDateRange(event)\">2Y</a>" +
+        "                 <a id=\"5Y v\" onclick=\"handleFilterDateRange(event)\">5Y</a>" +
+        "                 <a id=\"10Y v\" onclick=\"handleFilterDateRange(event)\">10Y</a>" +
+        "                 <a id=\"ALL v\" onclick=\"handleFilterDateRange(event)\">ALL</a>" +
+        "             </div>" +
+        "    </li>" +
+        "</div>";
+    return configurationDiv;
+}
+
+function createActionsDiv() {
+    var actionsDiv =
+        "<div class=\"horizontal-container\" id=\"divActions\" >" +
+        "    <button>" +
+        "         Test1"+
+        "    </button>" +
+        "    <button>" +
+        "         Test2" +
+        "    </button>" +
+        "</div>";
+    return actionsDiv;
 }
 
 //
