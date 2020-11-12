@@ -167,12 +167,12 @@ function getChartValuesByTicker(valueType, ticker) {
     if (analyticFilter == "Moving Average" || analyticFilter == "Crossover") {
         var dataFilters = getMovingAverageDateFilter();
         trendOne = getActiveStockMovingAverage(dataFilters[0] + "-" + myPortfolio.getValueFilter());
-        trendTwo = getActiveStockMovingAverage(dataFilters[1] + "-" + myPortfolio.getValueFilter());
         if (analyticFilter == "Crossover") {
+            trendTwo = getActiveStockMovingAverage(dataFilters[1] + "-" + myPortfolio.getValueFilter());
             valuesArray = [trendOne, trendTwo, getTrendDataByDisplayValue(ticker, myPortfolio.getValueFilter())];
         }
         else {
-            valuesArray = [trendOne, trendTwo];
+            valuesArray = [trendOne, getTrendDataByDisplayValue(ticker, myPortfolio.getValueFilter())];
         }
     }
     else if (valueType == "Closing Prices v") {

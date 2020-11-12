@@ -20,6 +20,9 @@ function handleChartDisplay(e) {
     setStockListBackcolor(sender.parentElement.parentElement);
     setActiveStock(ticker);
     getStockDataByTicker(ticker, false, displayStockChart);
+    setAnalyticFilterValue("Trend");
+    setAnalyticsDropDownName("Trend v");
+    displayConfigurationBox("Trend");
 }
 
 //Function used when clicking an item in the DateRange drop down
@@ -39,7 +42,7 @@ function handleFilterDisplayValue(e) {
     setDisplayValueDropDownName(displayValue + " v");
     var val = document.getElementById("analyticDropdownButton").innerHTML.replace(' v', '');
     if (val == "Moving Average" || val == "Crossover")
-        loadMovingAverage();
+        loadMovingAverage(val == "Crossover");
     else
         displayStockChart(getActiveStockTicker());
 }
@@ -52,12 +55,11 @@ function handleFilterAnalytics(e) {
     setAnalyticFilterValue(analytic);
     setAnalyticsDropDownName(analytic + " v");
     if (analytic == "Moving Average" || analytic == "Crossover")
-        loadMovingAverage();
+        loadMovingAverage(analytic == "Crossover");
     else
         displayStockChart(getActiveStockTicker(), (analytic == "Candle Stick"));
     toggleChartJSVisibility((analytic == "Trend"));
     displayConfigurationBox(analytic);
-
 }
 
 //Function used when changing a period drop down for Moving Average
@@ -66,15 +68,15 @@ function handleFilterMovingAverage(e) {
     var sender = e.srcElement || e.target;
     var dateRangeValue = sender.innerHTML;
     var trendOneFilter = document.getElementById('trendOnePeriodDropDown').innerHTML.replace(' v', '');
-    var trendTwoFilter = document.getElementById('trendTwoPeriodDropDown').innerHTML.replace(' v', '');
-    if (sender.parentElement.parentElement.firstElementChild.id == "trendOnePeriodDropDown") {
-        trendOneFilter = dateRangeValue;
-    }
-    else {
+    var trendTwoFilter = (getAnalyticFilterValue() == "Crossover") ? document.getElementById('trendTwoPeriodDropDown').innerHTML.replace(' v', '') : "";
+    if (sender.parentElement.parentElement.firstElementChild.id == "trendTwoPeriodDropDown") {
         trendTwoFilter = dateRangeValue;
     }
+    else {
+        trendOneFilter = dateRangeValue;
+    }
     setPeriodDropDownName(sender, dateRangeValue + " v");
-    setMovingAverageFilterValue([trendOneFilter, trendTwoFilter]);
+    setMovingAverageFilterValue((getAnalyticFilterValue() == "Crossover") ? [trendOneFilter, trendTwoFilter] : [trendOneFilter]);
     getAnalytics('StockMovingAverage', getActiveStockTicker(), getDisplayValueFilter(), getNumberOfDaysByDateFilter(dateRangeValue), dateRangeValue, displayStockChart);
 }
 
@@ -136,7 +138,7 @@ function displayStockChart(ticker, candleChart) {
             dateValues.push(getClosingDatesByTicker(ticker));
         }
     }
-    else if(!candleChart) {
+    else if (!candleChart) {
         chartValues = [chartValues];
         dateValues = [dateValues];
     }
@@ -280,13 +282,44 @@ function createDefaultsDiv() {
 
 function createConfigurationDiv(analytic) {
     var configurationDiv = "";
-    if (analytic == "Moving Average" || analytic == "Crossover") {
+    if (analytic == "Moving Average") {
         configurationDiv = createMovingAverageConfigurationDiv();
+    }
+    else if (analytic == "Crossover") {
+        configurationDiv = createCrossoverConfigurationDiv();
     }
     return configurationDiv;
 }
 
 function createMovingAverageConfigurationDiv() {
+    var configurationDiv =
+        "<div id=\"divConfigurations\">" +
+        "    <div class=\"title-container\">" +
+        "             <label>Configuration</label>" +
+        "    </div>" +
+        "    <div class=\"row\">" +
+        "           <div class=\"col m4 padding-small centered\">" +
+        "               <label style=\"text-decoration: underline;\">Trend 1</label>" +
+        "               <li class=\"dropdown\">" +
+        "                       <a class=\"dropbtn\" id=\"trendOnePeriodDropDown\">1W v</a>" +
+        "                       <div class=\"dropdown-content\">" +
+        "                           <a id=\"1W v\" onclick=\"handleFilterMovingAverage(event)\">1W</a>" +
+        "                           <a id=\"1M v\" onclick=\"handleFilterMovingAverage(event)\">1M</a>" +
+        "                           <a id=\"3M v\" onclick=\"handleFilterMovingAverage(event)\">3M</a>" +
+        "                           <a id=\"6M v\" onclick=\"handleFilterMovingAverage(event)\">6M</a>" +
+        "                           <a id=\"1Y v\" onclick=\"handleFilterMovingAverage(event)\">1Y</a>" +
+        "                           <a id=\"2Y v\" onclick=\"handleFilterMovingAverage(event)\">2Y</a>" +
+        "                           <a id=\"5Y v\" onclick=\"handleFilterMovingAverage(event)\">5Y</a>" +
+        "                           <a id=\"10Y v\" onclick=\"handleFilterMovingAverage(event)\">10Y</a>" +
+        "                           <a id=\"ALL v\" onclick=\"handleFilterMovingAverage(event)\">ALL</a>" +
+        "                    </div>" +
+        "               </li>" +
+        "           </div>" +
+        "    </div>" +
+        "</div>";
+    return configurationDiv;
+}
+function createCrossoverConfigurationDiv() {
     var configurationDiv =
         "<div id=\"divConfigurations\">" +
         "    <div class=\"title-container\">" +
@@ -355,12 +388,12 @@ function createActionsDiv() {
 // Utility functions
 //
 
-function loadMovingAverage() {
+function loadMovingAverage(crossover) {
     var ticker = getActiveStockTicker();
     var displayValue = getDisplayValueFilter();
-    var dateFilters = getMovingAverageDateFilter();
-    var movingAverageDateFilter = getNumberOfDaysByDateFilter(dateFilters[0]);
-    getAnalytics('StockMovingAverage', ticker, displayValue, movingAverageDateFilter, dateFilters[0], loadSecondMovingAverage);
+    var dateFilters = (crossover) ? ["1W","3M"]: getMovingAverageDateFilter();
+    var movingAverageDateFilter = getNumberOfDaysByDateFilter(dateFilters[0]);    
+    getAnalytics('StockMovingAverage', ticker, displayValue, movingAverageDateFilter, dateFilters[0], (crossover) ? loadSecondMovingAverage : displayStockChart);
 }
 
 function loadSecondMovingAverage() {
