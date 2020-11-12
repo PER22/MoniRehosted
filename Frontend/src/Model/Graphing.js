@@ -134,7 +134,8 @@ class Graphing {
             }
         }
         else {
-            gradient = null;
+            gradient.addColorStop(0, 'rgba(255,0,0,0.0)');
+            gradient.addColorStop(1, 'rgba(255,0,0,0.0)');
             lineColor = [(!isPositive) ? "#FF0000" : "#00FF00", "#0000FF", "#FFFF00"];
         }
 
@@ -162,8 +163,10 @@ class Graphing {
                 datasets: dataSets,
                 options: {
                     tooltips: {
-                        mode: 'nearest',
-                        mode: 'x'
+                      mode: "index",
+                      intersect: true,
+                      position: 'nearest',
+                      bodySpacing: 4
                     },
                     scales: {
                         yAxes: [{

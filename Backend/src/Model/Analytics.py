@@ -52,6 +52,9 @@ class Analytics:
     @staticmethod
     def calculateMovingAverageChunked(stock, field, period):
 
+        if(period < 1):
+            return([])
+
         data = Analytics.calculateMovingAverage(stock, field, period)
 
         refferenceVal = 500 #3494
