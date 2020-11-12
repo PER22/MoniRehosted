@@ -245,10 +245,10 @@ function createDefaultsDiv() {
     var defaultsDiv =
         "<div id=\"divAnalytics\">" +
         "    <div class=\"row\">" +
-        "           <div class=\"vertical-container left\">" +
+        "           <div class=\"col m8 padding-small txt-center\">" +
         "                  <label style=\"text-decoration: underline;\">Display Value</label>" +
         "                   <li class=\"dropdown\">" +
-        "                       <a class=\"dropbtn\" id=\"stockPropertyDropdownButton\">Closing Prices v</a>" +
+        "                       <a class=\"dropbttn\" id=\"stockPropertyDropdownButton\">Closing Prices v</a>" +
         "                           <div class=\"dropdown-content\">" +
         "                               <a id=\"Closing Prices v\" onclick=\"handleFilterDisplayValue(event)\">Closing Prices</a>" +
         "                               <a id=\"Opening Prices v\" onclick=\"handleFilterDisplayValue(event)\">Opening Prices</a>" +
@@ -257,10 +257,10 @@ function createDefaultsDiv() {
         "                           </div>" +
         "                   </li>" +
         "           </div>" +
-        "            <div class=\"vertical-container right\">" +
+        "            <div class=\"col m4 padding-small txt-center\">" +
         "                   <label style=\"text-decoration: underline;\">Period</label>" +
         "                       <li class=\"dropdown\">" +
-        "                           <a class=\"dropbtn\" id=\"periodDropdownButton\">3M v</a>" +
+        "                           <a class=\"dropbttn\" id=\"periodDropdownButton\">3M v</a>" +
         "                                <div class=\"dropdown-content\">" +
         "                                   <a id=\"1W v\" onclick=\"handleFilterDateRange(event)\">1W</a>" +
         "                                   <a id=\"1M v\" onclick=\"handleFilterDateRange(event)\">1M</a>" +
@@ -294,7 +294,7 @@ function createMovingAverageConfigurationDiv() {
         "             <label>Configuration</label>" +
         "    </div>" +
         "    <div class=\"row\">" +
-        "           <div class=\"vertical-container left\">" +
+        "           <div class=\"col m4 padding-small centered\">" +
         "               <label style=\"text-decoration: underline;\">Trend 1</label>" +
         "               <li class=\"dropdown\">" +
         "                       <a class=\"dropbtn\" id=\"trendOnePeriodDropDown\">1W v</a>" +
@@ -311,7 +311,7 @@ function createMovingAverageConfigurationDiv() {
         "                    </div>" +
         "               </li>" +
         "           </div>" +
-        "            <div class=\"vertical-container right\">" +
+        "            <div class=\"col m4 padding-small centered\">" +
         "               <label style=\"text-decoration: underline;\">Trend 2</label>" +
         "               <li class=\"dropdown\">" +
         "                       <a class=\"dropbtn\" id=\"trendTwoPeriodDropDown\">3M v</a>" +
@@ -339,9 +339,15 @@ function createActionsDiv() {
         "    <div class=\"title-container\">" +
         "             <label>Actions</label>" +
         "    </div>" +
+        "<div class=\"col m4 padding-small\">" +
         "    <a onclick=\"handleReloadStock(event)\" class=\"dropbtn\">Reload</a>" +
+        "</div>" +
+        "<div class=\"col m4 padding-small\">" +
         "    <a  onclick=\"handleDeleteStock(event)\" class=\"dropbtn\">Delete</a>" +
+        "</div>" +
+        "<div class=\"col m4 padding-small\">" +
         "    <a class=\"dropbtn\">Export</a>" +
+        "</div>" +
         "</div>";
     return actionsDiv;
 }

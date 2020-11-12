@@ -1385,7 +1385,7 @@ a {
 }
 
 .padding-small {
-	padding: 4px 8px!important
+	padding: 2px 2px!important
 }
 
 .padding {
@@ -2059,6 +2059,17 @@ li.dropbtn a.dropbtn, .dropbtn {
   width: 100%;
 }
 
+li.dropbttn a.dropbttn, .dropbttn {
+  display: inline-block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  border-radius: 10px;
+  background-color: #363C41;
+  width: 100%;
+}
+
 li.dropdown {
   padding: 5px;
   display: inline-block;
@@ -2210,4 +2221,12 @@ li.dropdown {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #363C41;
+}
+
+.txt-center {
+    text-align: center;
+}
+
+.txt-left {
+    text-align: center;
 }
