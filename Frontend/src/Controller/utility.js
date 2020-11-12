@@ -149,9 +149,9 @@ function getActiveStockMovingAverage(key) {
 
 function getTrendDataByDisplayValue(ticker, displayValue) {
     var data = [];
-    if (displayValue == "High")
+    if (displayValue == "Highs")
         data = getHighValuesByTicker(ticker);
-    else if (displayValue == "Low")
+    else if (displayValue == "Lows")
         data = getLowValuesByTicker(ticker);
     else if (displayValue == "Opening")
         data = getOpeningValuesByTicker(ticker);
