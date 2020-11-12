@@ -14,8 +14,8 @@ function getPortfolioTitle() {
 function loadStocksFromServer() {
     myPortfolio = new Portfolio();
     myPortfolio.setName("Tester");
-    //getSideBarData(displayStockList);
-    displayConfigurationBox();
+    getSideBarData(displayStockList);
+    displayConfigurationBox(myPortfolio.analyticFilter);
 }
 
 //Returns stocks array from myPortfolio
@@ -93,22 +93,28 @@ function getDisplayValueFilter() {
 function setAnalyticFilterValue(analyticPickerButtonValue) {
     myPortfolio.setAnalyticFilter(analyticPickerButtonValue);
 }
+//Gets analytic filter for pulling data to display on chart
+function getAnalyticFilterValue() {
+   return myPortfolio.getAnalyticFilter();
+}
 //Sets analytic filter for pulling data to display on chart
-function setMovingAverageFilterValue(movingAveragePickerButtonValue) {
+function setMovingAverageFilterValue(movingAveragePickerButtonValues) {
     var activeStock = myPortfolio.getActiveStock();
-    activeStock.setMovingAverageFilter(movingAveragePickerButtonValue);
+    activeStock.setMovingAverageFilter(movingAveragePickerButtonValues);
 }
-function getMovingAverageDateFilterNumOfDays() {
-    var activeStock = myPortfolio.getActiveStock();
-    return myPortfolio.translateDateFilterToNumericValue(activeStock.getMovingAverageFilter());
+//Returns number of days in dateFilter
+function getNumberOfDaysByDateFilter(dateFilter) {
+    return myPortfolio.translateDateFilterToNumericValue(dateFilter);
 }
+//Returns array containing Trend1 and Trend 2 dateFilters
 function getMovingAverageDateFilter() {
     var activeStock = myPortfolio.getActiveStock();
     return activeStock.getMovingAverageFilter();
 }
 //Sets date range for current active stock
 function setActiveStockDateRange() {
-    myPortfolio.setEndDate(myPortfolio.stocks[myPortfolio.getActiveStockIndex()].data[myPortfolio.stocks[myPortfolio.getActiveStockIndex()].data.length - 1].getDate());
+    var activeStock = myPortfolio.getActiveStock();
+    myPortfolio.setEndDate(activeStock.data[activeStock.data.length - 1].getDate());
     myPortfolio.setStartDateBasedOnEndDate();
 }
 //Sets endDate depending on final day in dataset, startDate by offsetting endDate by whichever button is clicked
@@ -120,7 +126,6 @@ function setDateRangeByTicker(ticker) {
 function setActiveStock(ticker) {
     if (ticker == "") {
         myPortfolio.setActiveStockIndex(0);
-
     }
     else {
         myPortfolio.setActiveStockIndexByTicker(ticker);
@@ -147,7 +152,10 @@ function getChartValuesByTicker(valueType, ticker) {
     var analyticFilter = myPortfolio.getAnalyticFilter();
     var valuesArray = [];
     if (analyticFilter == "Moving Average") {
-        valuesArray = getActiveStockMovingAverage(getMovingAverageDateFilter() + "-" + myPortfolio.getValueFilter());
+        var dataFilters = getMovingAverageDateFilter();
+        trendOne = getActiveStockMovingAverage(dataFilters[0] + "-" + myPortfolio.getValueFilter());
+        trendTwo = getActiveStockMovingAverage(dataFilters[1] + "-" + myPortfolio.getValueFilter());
+        valuesArray = [trendOne, trendTwo];
     }
     else if (valueType == "Closing Prices v") {
         valuesArray = getClosingValuesByTicker(ticker);

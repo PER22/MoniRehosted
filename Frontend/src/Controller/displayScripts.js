@@ -26,13 +26,13 @@ function handleChartDisplay(e) {
 function handleFilterDateRange(e) {
     var sender = e.srcElement || e.target;
     var dateRangeValue = sender.innerHTML;
-    setPeriodDropDownName(dateRangeValue + " v");
+    setPeriodDropDownName(sender, dateRangeValue + " v");
     setDateFilterValue(dateRangeValue);
     displayStockChart(getActiveStockTicker(), (document.getElementById("analyticDropdownButton").innerHTML.replace(' v', '') == "Candle Stick"));
 }
 
 //Function used when clicking an item in the DisplayValue drop down
-function handlFilterDisplayValue(e) {
+function handleFilterDisplayValue(e) {
     var sender = e.srcElement || e.target;
     var displayValue = sender.innerHTML;
     setDisplayFilterValue(displayValue.split(' ')[0]);
@@ -55,8 +55,29 @@ function handleFilterAnalytics(e) {
         loadMovingAverage();
     else
         displayStockChart(getActiveStockTicker(), (analytic == "Candle Stick"));
-    toggleMovingAverageDateFilterDropDownVisibility((analytic == "Moving Average"));
+    toggleChartJSVisibility((analytic == "Trend"));
+    displayConfigurationBox(analytic);
+
 }
+
+//Function used when changing a period drop down for Moving Average
+function handleFilterMovingAverage(e) {
+    setCursor("wait");
+    var sender = e.srcElement || e.target;
+    var dateRangeValue = sender.innerHTML;
+    var trendOneFilter = document.getElementById('trendOnePeriodDropDown').innerHTML.replace(' v', '');
+    var trendTwoFilter = document.getElementById('trendTwoPeriodDropDown').innerHTML.replace(' v', '');
+    if (sender.parentElement.parentElement.firstElementChild.id == "trendOnePeriodDropDown") {
+        trendOneFilter = dateRangeValue;
+    }
+    else {
+        trendTwoFilter = dateRangeValue;
+    }
+    setPeriodDropDownName(sender, dateRangeValue + " v");
+    setMovingAverageFilterValue([trendOneFilter, trendTwoFilter]);
+    getAnalytics('StockMovingAverage', getActiveStockTicker(), getDisplayValueFilter(), getNumberOfDaysByDateFilter(dateRangeValue), dateRangeValue, displayStockChart);
+}
+
 
 //Function used when clicking 'Moving Average' in the Analytics drop down
 function handleDisplayMovingAverage(e) {
@@ -86,15 +107,8 @@ function handleDeleteStock(e) {
 function handleReloadStock(e) {
     var sender = e.srcElement || e.target;
     var ticker = getActiveStockTicker();
+    setCursor("wait");
     getStockDataByTicker(ticker, true, displayStockChart);
-}
-
-function loadMovingAverage() {
-    var ticker = getActiveStockTicker();
-    var displayValue = getDisplayValueFilter();
-    var movingAverageDateFilter = getMovingAverageDateFilterNumOfDays();
-    var chartDateFilter = getMovingAverageDateFilter();
-    getAnalytics('StockMovingAverage', ticker, displayValue, movingAverageDateFilter, chartDateFilter, displayStockChart);
 }
 
 //
@@ -116,17 +130,27 @@ function displayStockChart(ticker, candleChart) {
     var chartValues = getChartValuesByTicker(selectedDisplayValue, ticker);
     var volumes = getChartVolumeByTicker(selectedDisplayValue, ticker);
     var dateValues = getClosingDatesByTicker(ticker);
+    if (Array.isArray(chartValues[0])) {
+        dateValues = []
+        for (var i = -1; i < chartValues.length; i++) {
+            dateValues.push(getClosingDatesByTicker(ticker));
+        }
+        //chartValues.push(getOpeningValuesByTicker(ticker));
+    }
+    else if(!candleChart) {
+        chartValues = [chartValues];
+        dateValues = [dateValues];
+    }
 
     updateHeader(stockTitle, prevClosingValue, lastDay.getOpen(), lastDay.getClose(), lastDay.getLow(), lastDay.getHigh(), lastDay.getVolume(), ticker, prevClosingValue)
 
-    //Wipe chart div
-    var chartDiv = document.getElementById('chartDiv');
 
     var graph = new Graphing();
+    var chartDiv = document.getElementById('chartDiv');
     if (candleChart)
-        graph.displayCandleChart(chartDiv, getHighValuesByTicker(ticker), getLowValuesByTicker(ticker), getOpeningValuesByTicker(ticker), getClosingValuesByTicker(ticker), xData);
+        graph.displayCandleChart(chartDiv, getHighValuesByTicker(ticker), getLowValuesByTicker(ticker), getOpeningValuesByTicker(ticker), getClosingValuesByTicker(ticker), dateValues);
     else
-        graph.displayTrendChartJS(document.getElementById('myChart').getContext('2d'), [dateValues, dateValues], [chartValues, volumes], true);
+        graph.displayTrendChartJS(chartDiv, dateValues, chartValues, true);
     setCursor("default");
 }
 
@@ -183,13 +207,13 @@ function displayStockList() {
     getStockDataByTicker(getActiveStockTicker(), false, displayStockChart);
 }
 
-function displayConfigurationBox() {
+function displayConfigurationBox(analyticFilter) {
     var headerDiv = document.getElementById('testDiv');
     var displayConfigurationBox =
-        "<div class=\"vertical-container\" id=\"divConfigurationBox\">" +
+        "<div id=\"divConfigurationBox\">" +
         createAnalyticsDiv() +
         createDefaultsDiv() +
-        createConfigurationDiv() +
+        createConfigurationDiv(analyticFilter) +
         createActionsDiv() +
         "</div>";
     headerDiv.innerHTML = displayConfigurationBox;
@@ -198,15 +222,21 @@ function displayConfigurationBox() {
 
 function createAnalyticsDiv() {
     var analyticsDiv =
-        "<div id=\"divAnalytics\">" +
-        "    <li class=\"dropdown\">" +
-        "             <a class=\"dropbtn\" id=\"analyticDropdownButton\">Trend v</a>" +
-        "             <div class=\"dropdown-content\">" +
-        "                 <a onclick=\"handleFilterAnalytics(event)\">Trend</a>" +
-        "                 <a onclick=\"handleFilterAnalytics(event)\">Candle Stick</a>" +
-        "                 <a onclick=\"handleFilterAnalytics(event)\">Moving Average</a>" +
-        "             </div>" +
-        "    </li>" +
+        "<div id=\"divAnalytics\" class=\"horizontal-container\">" +
+        "    <div class=\"title-container\">" +
+        "             <label>Select Analytic</label>" +
+        "    </div>" +
+        "    <div class=\"horizontal-container\">" +
+        "           <li class=\"dropdown\">" +
+        "                   <a class=\"dropbtn\" id=\"analyticDropdownButton\">" + getAnalyticFilterValue() + " v</a>" +
+        "                   <div class=\"dropdown-content\">" +
+        "                        <a onclick=\"handleFilterAnalytics(event)\">Trend</a>" +
+        "                        <a onclick=\"handleFilterAnalytics(event)\">Candle Stick</a>" +
+        "                        <a onclick=\"handleFilterAnalytics(event)\">Moving Average</a>" +
+        "                        <a onclick=\"handleFilterAnalytics(event)\">Moving Average</a>" +
+        "                    </div>" +
+        "           </li>" +
+        "    </div>" +
         "</div>";
     return analyticsDiv;
 }
@@ -214,29 +244,37 @@ function createAnalyticsDiv() {
 function createDefaultsDiv() {
     var defaultsDiv =
         "<div id=\"divAnalytics\">" +
-        "    <li class=\"dropdown\">" +
-        "             <a class=\"dropbtn\" id=\"stockPropertyDropdownButton\">Closing Prices v</a>" +
-        "             <div class=\"dropdown-content\">" +
-        "                 <a id=\"Closing Prices v\" onclick=\"handlFilterDisplayValue(event)\">Closing Prices</a>" +
-        "                 <a id=\"Opening Prices v\" onclick=\"handlFilterDisplayValue(event)\">Opening Prices</a>" +
-        "                 <a id=\"Highs v\" onclick=\"handlFilterDisplayValue(event)\">Highs</a>" +
-        "                 <a id=\"Lows v\" onclick=\"handlFilterDisplayValue(event)\">Lows</a>" +
-        "             </div>" +
-        "    </li>" +
-        "    <li class=\"dropdown\">" +
-        "             <a class=\"dropbtn\" id=\"periodDropdownButton\">3M v</a>" +
-        "             <div class=\"dropdown-content\">" +
-        "                 <a id=\"1W v\" onclick=\"handleFilterDateRange(event)\">1W</a>"+
-        "                 <a id=\"1M v\" onclick=\"handleFilterDateRange(event)\">1M</a>" +
-        "                 <a id=\"3M v\" onclick=\"handleFilterDateRange(event)\">3M</a>" +
-        "                 <a id=\"6M v\" onclick=\"handleFilterDateRange(event)\">6M</a>" +
-        "                 <a id=\"1Y v\" onclick=\"handleFilterDateRange(event)\">1Y</a>" +
-        "                 <a id=\"2Y v\" onclick=\"handleFilterDateRange(event)\">2Y</a>" +
-        "                 <a id=\"5Y v\" onclick=\"handleFilterDateRange(event)\">5Y</a>" +
-        "                 <a id=\"10Y v\" onclick=\"handleFilterDateRange(event)\">10Y</a>" +
-        "                 <a id=\"ALL v\" onclick=\"handleFilterDateRange(event)\">ALL</a>" +
-        "             </div>" +
-        "    </li>" +
+        "    <div class=\"row\">" +
+        "           <div class=\"vertical-container left\">" +
+        "                  <label style=\"text-decoration: underline;\">Display Value</label>" +
+        "                   <li class=\"dropdown\">" +
+        "                       <a class=\"dropbtn\" id=\"stockPropertyDropdownButton\">Closing Prices v</a>" +
+        "                           <div class=\"dropdown-content\">" +
+        "                               <a id=\"Closing Prices v\" onclick=\"handleFilterDisplayValue(event)\">Closing Prices</a>" +
+        "                               <a id=\"Opening Prices v\" onclick=\"handleFilterDisplayValue(event)\">Opening Prices</a>" +
+        "                               <a id=\"Highs v\" onclick=\"handleFilterDisplayValue(event)\">Highs</a>" +
+        "                               <a id=\"Lows v\" onclick=\"handleFilterDisplayValue(event)\">Lows</a>" +
+        "                           </div>" +
+        "                   </li>" +
+        "           </div>" +
+        "            <div class=\"vertical-container right\">" +
+        "                   <label style=\"text-decoration: underline;\">Period</label>" +
+        "                       <li class=\"dropdown\">" +
+        "                           <a class=\"dropbtn\" id=\"periodDropdownButton\">3M v</a>" +
+        "                                <div class=\"dropdown-content\">" +
+        "                                   <a id=\"1W v\" onclick=\"handleFilterDateRange(event)\">1W</a>" +
+        "                                   <a id=\"1M v\" onclick=\"handleFilterDateRange(event)\">1M</a>" +
+        "                                   <a id=\"3M v\" onclick=\"handleFilterDateRange(event)\">3M</a>" +
+        "                                   <a id=\"6M v\" onclick=\"handleFilterDateRange(event)\">6M</a>" +
+        "                                   <a id=\"1Y v\" onclick=\"handleFilterDateRange(event)\">1Y</a>" +
+        "                                   <a id=\"2Y v\" onclick=\"handleFilterDateRange(event)\">2Y</a>" +
+        "                                   <a id=\"5Y v\" onclick=\"handleFilterDateRange(event)\">5Y</a>" +
+        "                                   <a id=\"10Y v\" onclick=\"handleFilterDateRange(event)\">10Y</a>" +
+        "                                   <a id=\"ALL v\" onclick=\"handleFilterDateRange(event)\">ALL</a>" +
+        "                             </div>" +
+        "                      </li>" +
+        "            </div>" +
+        "    </div>" +
         "</div>";
     return defaultsDiv;
 }
@@ -252,47 +290,58 @@ function createConfigurationDiv(analytic) {
 function createMovingAverageConfigurationDiv() {
     var configurationDiv =
         "<div id=\"divConfigurations\">" +
-        "    <li class=\"dropdown\">" +
-        "             <a class=\"dropbtn\" id=\"periodDropdownButton\">3M v</a>" +
-        "             <div class=\"dropdown-content\">" +
-        "                 <a id=\"1W v\" onclick=\"handleFilterDateRange(event)\">1W</a>" +
-        "                 <a id=\"1M v\" onclick=\"handleFilterDateRange(event)\">1M</a>" +
-        "                 <a id=\"3M v\" onclick=\"handleFilterDateRange(event)\">3M</a>" +
-        "                 <a id=\"6M v\" onclick=\"handleFilterDateRange(event)\">6M</a>" +
-        "                 <a id=\"1Y v\" onclick=\"handleFilterDateRange(event)\">1Y</a>" +
-        "                 <a id=\"2Y v\" onclick=\"handleFilterDateRange(event)\">2Y</a>" +
-        "                 <a id=\"5Y v\" onclick=\"handleFilterDateRange(event)\">5Y</a>" +
-        "                 <a id=\"10Y v\" onclick=\"handleFilterDateRange(event)\">10Y</a>" +
-        "                 <a id=\"ALL v\" onclick=\"handleFilterDateRange(event)\">ALL</a>" +
-        "             </div>" +
-        "    </li>" +
-        "    <li class=\"dropdown\">" +
-        "             <a class=\"dropbtn\" id=\"periodDropdownButton\">3M v</a>" +
-        "             <div class=\"dropdown-content\">" +
-        "                 <a id=\"1W v\" onclick=\"handleFilterDateRange(event)\">1W</a>" +
-        "                 <a id=\"1M v\" onclick=\"handleFilterDateRange(event)\">1M</a>" +
-        "                 <a id=\"3M v\" onclick=\"handleFilterDateRange(event)\">3M</a>" +
-        "                 <a id=\"6M v\" onclick=\"handleFilterDateRange(event)\">6M</a>" +
-        "                 <a id=\"1Y v\" onclick=\"handleFilterDateRange(event)\">1Y</a>" +
-        "                 <a id=\"2Y v\" onclick=\"handleFilterDateRange(event)\">2Y</a>" +
-        "                 <a id=\"5Y v\" onclick=\"handleFilterDateRange(event)\">5Y</a>" +
-        "                 <a id=\"10Y v\" onclick=\"handleFilterDateRange(event)\">10Y</a>" +
-        "                 <a id=\"ALL v\" onclick=\"handleFilterDateRange(event)\">ALL</a>" +
-        "             </div>" +
-        "    </li>" +
+        "    <div class=\"title-container\">" +
+        "             <label>Configuration</label>" +
+        "    </div>" +
+        "    <div class=\"row\">" +
+        "           <div class=\"vertical-container left\">" +
+        "               <label style=\"text-decoration: underline;\">Trend 1</label>" +
+        "               <li class=\"dropdown\">" +
+        "                       <a class=\"dropbtn\" id=\"trendOnePeriodDropDown\">1W v</a>" +
+        "                       <div class=\"dropdown-content\">" +
+        "                           <a id=\"1W v\" onclick=\"handleFilterMovingAverage(event)\">1W</a>" +
+        "                           <a id=\"1M v\" onclick=\"handleFilterMovingAverage(event)\">1M</a>" +
+        "                           <a id=\"3M v\" onclick=\"handleFilterMovingAverage(event)\">3M</a>" +
+        "                           <a id=\"6M v\" onclick=\"handleFilterMovingAverage(event)\">6M</a>" +
+        "                           <a id=\"1Y v\" onclick=\"handleFilterMovingAverage(event)\">1Y</a>" +
+        "                           <a id=\"2Y v\" onclick=\"handleFilterMovingAverage(event)\">2Y</a>" +
+        "                           <a id=\"5Y v\" onclick=\"handleFilterMovingAverage(event)\">5Y</a>" +
+        "                           <a id=\"10Y v\" onclick=\"handleFilterMovingAverage(event)\">10Y</a>" +
+        "                           <a id=\"ALL v\" onclick=\"handleFilterMovingAverage(event)\">ALL</a>" +
+        "                    </div>" +
+        "               </li>" +
+        "           </div>" +
+        "            <div class=\"vertical-container right\">" +
+        "               <label style=\"text-decoration: underline;\">Trend 2</label>" +
+        "               <li class=\"dropdown\">" +
+        "                       <a class=\"dropbtn\" id=\"trendTwoPeriodDropDown\">3M v</a>" +
+        "                       <div class=\"dropdown-content\">" +
+        "                           <a id=\"1W v\" onclick=\"handleFilterMovingAverage(event)\">1W</a>" +
+        "                           <a id=\"1M v\" onclick=\"handleFilterMovingAverage(event)\">1M</a>" +
+        "                           <a id=\"3M v\" onclick=\"handleFilterMovingAverage(event)\">3M</a>" +
+        "                           <a id=\"6M v\" onclick=\"handleFilterMovingAverage(event)\">6M</a>" +
+        "                           <a id=\"1Y v\" onclick=\"handleFilterMovingAverage(event)\">1Y</a>" +
+        "                           <a id=\"2Y v\" onclick=\"handleFilterMovingAverage(event)\">2Y</a>" +
+        "                           <a id=\"5Y v\" onclick=\"handleFilterMovingAverage(event)\">5Y</a>" +
+        "                           <a id=\"10Y v\" onclick=\"handleFilterMovingAverage(event)\">10Y</a>" +
+        "                           <a id=\"ALL v\" onclick=\"handleFilterMovingAverage(event)\">ALL</a>" +
+        "                       </div>" +
+        "               </li>" +
+        "            </div>" +
+        "    </div>" +
         "</div>";
     return configurationDiv;
 }
 
 function createActionsDiv() {
     var actionsDiv =
-        "<div class=\"horizontal-container\" id=\"divActions\" >" +
-        "    <button>" +
-        "         Test1"+
-        "    </button>" +
-        "    <button>" +
-        "         Test2" +
-        "    </button>" +
+        "<div class=\"row\" id=\"divActions\" >" +
+        "    <div class=\"title-container\">" +
+        "             <label>Actions</label>" +
+        "    </div>" +
+        "    <a onclick=\"handleReloadStock(event)\" class=\"dropbtn\">Reload</a>" +
+        "    <a  onclick=\"handleDeleteStock(event)\" class=\"dropbtn\">Delete</a>" +
+        "    <a class=\"dropbtn\">Export</a>" +
         "</div>";
     return actionsDiv;
 }
@@ -301,9 +350,28 @@ function createActionsDiv() {
 // Utility functions
 //
 
+function loadMovingAverage() {
+    var ticker = getActiveStockTicker();
+    var displayValue = getDisplayValueFilter();
+    var dateFilters = getMovingAverageDateFilter();
+    var movingAverageDateFilter = getNumberOfDaysByDateFilter(dateFilters[0]);
+    getAnalytics('StockMovingAverage', ticker, displayValue, movingAverageDateFilter, dateFilters[0], loadSecondMovingAverage);
+}
+
+function loadSecondMovingAverage() {
+    var ticker = getActiveStockTicker();
+    var displayValue = getDisplayValueFilter();
+    var dateFilters = getMovingAverageDateFilter();
+    var movingAverageDateFilter = getNumberOfDaysByDateFilter(dateFilters[1]);
+    getAnalytics('StockMovingAverage', ticker, displayValue, movingAverageDateFilter, dateFilters[1], displayStockChart);
+}
+
 function toggleMovingAverageDateFilterDropDownVisibility(on) {
 
     document.getElementById("movingAverageDropdownButton").style.display = (on) ? "block" : "none";
+}
+function toggleChartJSVisibility(on) {
+    document.getElementById('myChart').style.display = (on) ? "block" : "none";
 }
 
 function getSelectedDisplayValue() {
@@ -357,8 +425,8 @@ function setETFStockPickerBackColor(sender) {
 }
 
 //Updates Period Drop Down name when list item is clicked
-function setPeriodDropDownName(name) {
-    document.getElementById('periodDropdownButton').innerHTML = name;
+function setPeriodDropDownName(sender, name) {
+    sender.parentElement.parentElement.firstElementChild.innerHTML = name;
 }
 
 //Updates Display Value Drop Down name when list item is clicked

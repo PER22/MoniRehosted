@@ -178,7 +178,11 @@ class Portfolio {
     }
     getNumberOfStockDetailsInRange() {
         var activeStock = this.getActiveStock();
-        return activeStock.getStockDetailCount(this.startDate, this.endDate)
+        return activeStock.getStockDetailCount(this.startDate, this.endDate);
+    }
+    getNumberOfStockDetailsByRange(startDate, endDate) {
+        var activeStock = this.getActiveStock();
+        return activeStock.getStockDetailCount(startDate, endDate);
     }
 
 

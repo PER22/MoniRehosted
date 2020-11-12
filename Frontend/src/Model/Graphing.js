@@ -5,12 +5,14 @@ class Graphing {
     displayTrendPlotly(chartDiv, xData, yData, isPositive) {
         //Validate data passed in
         if (!this.validateData(xData, yData)) return;
+        this.clearChartDiv(chartDiv);
         this.fillPlotlyChart(chartDiv, xData, yData, isPositive)
     }
-    displayTrendChartJS(chart, xData, yData, isPositive) {
+    displayTrendChartJS(chartDiv, xData, yData, isPositive) {
         //Validate data passed in
         if (!this.validateData(xData, yData)) return;
-        this.fillChartJS(chart, xData, yData, isPositive);
+        this.clearChartDiv(chartDiv);
+        this.fillChartJS(chartDiv, xData, yData, isPositive);
     }
 
     displayCandleChart(chartDiv, high, low, open, close, xData) {
@@ -19,7 +21,7 @@ class Graphing {
         if (!this.validateData(low, xData)) return;
         if (!this.validateData(open, xData)) return;
         if (!this.validateData(close, xData)) return;
-
+        //this.clearChartDiv(chartDiv);
         this.fillCandleChart(chartDiv, high, low, open, close, xData);
     }
 
@@ -108,9 +110,9 @@ class Graphing {
         }
         Plotly.newPlot(chartDiv, traces, layout = layout);
     }
-    fillChartJS(chart, xData, yData, isPositive) {
+    fillChartJS(chartDiv, xData, yData, isPositive) {
         //Fill chart
-        var ctx = chart;
+        var ctx = document.getElementById('myChart').getContext('2d')
         //Scale volume data
         //for (var i = 0, length = volumes.length; i < length; i++) {
         //    volumes[i] = volumes[i] / 1000000;
@@ -178,16 +180,17 @@ class Graphing {
             console.log("Number of datasets in xData does not match that of yData");
             valid = false;
         }
-        for (var i = 0; i < xData.length; i++) {
-            if (xData[i].length != yData[i].length) {
-                console.log("Number of records in xData[" + i + "] does not match that of yData[" + i + "] ");
-                valid = false;
+        if (Array.isArray(xData[0])) {
+            for (var i = 0; i < xData.length; i++) {
+                if (xData[i].length != yData[i].length) {
+                    console.log("Number of records in xData[" + i + "] does not match that of yData[" + i + "] ");
+                    valid = false;
+                }
             }
         }
         return valid;
     }
-
-    getColorGradient(gradient, isPositive) {
-
+    clearChartDiv(chartDiv) {
+        chartDiv.innerHTML = '<canvas id="myChart"></canvas>';
     }
 }

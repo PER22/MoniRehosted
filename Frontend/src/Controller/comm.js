@@ -71,7 +71,7 @@ function requestData(dataString, ticker, operation, field, timePeriod) {
     return message;
 }
 
-function getAnalytics(operation, ticker, displayValue, numberOfDays, date, _callback) {
+function getAnalytics(operation, ticker, displayValue, numberOfDays, dateFilter, _callback) {
     var packetIndex = 0;
     var dataRequest = requestData('getAnalytics', ticker, operation, displayValue, numberOfDays.toString());
     response = [];
@@ -102,9 +102,12 @@ function getAnalytics(operation, ticker, displayValue, numberOfDays, date, _call
                         })
                     }
                     console.log(res)
-                    myPortfolio.importMovingAverage(type, ticker, date + '-' + displayValue, res);
+                    myPortfolio.importMovingAverage(type, ticker, dateFilter + '-' + displayValue, res);
                     pubnub.removeListener(listener);
-                    _callback(ticker);
+                    if (_callback.name == "loadSecondMovingAverage")
+                        _callback();
+                    else
+                        _callback(ticker);
                 }
             }
         }

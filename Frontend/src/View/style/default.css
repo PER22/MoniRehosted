@@ -266,7 +266,7 @@ div:active {
 	font-size: 20px;
 	border-radius: 25px;
 	background: #373c42;
-	margin : 0px 10px 4px 10px;;
+	margin : 0px 10px 4px 10px;
 
 }
 
@@ -275,12 +275,31 @@ div:active {
 }
 
 /* Configuration Box */
+.configuration-container{
+	width: 500px;
+}
 .vertical-container {
-	display: flex;
 	align-items: center;
 	justify-content: center;
+	display: grid;
+	align-content: end;
 }
-
+.vertical-container.left {
+	width: 60%;
+	display: inline-block;
+}
+.vertical-container.right {
+	width: 30%;
+	display: inline-block;
+}
 .horizontal-container {
+	width: 250px;
+	display: grid;
+	border-bottom: 1px solid gray;
+}
+.title-container {
 	text-align: center;
+	font-display: inherit;
+	border-bottom: 1px solid gray;
+	width: 100%;
 }

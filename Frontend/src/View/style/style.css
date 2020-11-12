@@ -699,7 +699,7 @@ a {
 	}
 	.col.m3,
 	.quarter {
-		width: 24.99999%
+		width: 20.4%
 	}
 	.col.m4,
 	.third {
@@ -2056,6 +2056,7 @@ li.dropbtn a.dropbtn, .dropbtn {
   text-decoration: none;
   border-radius: 10px;
   background-color: #363C41;
+  width: 100%;
 }
 
 li.dropdown {

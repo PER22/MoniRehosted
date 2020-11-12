@@ -9,7 +9,7 @@ class Stock {
         this.price = 0;
         this.data = [];
         this.movingAverage = {};
-        this.movingAverageFilter = "3M";
+        this.movingAverageFilters = ["1W","3M"];
         this.priceChangeFromPreviousDay = 0;
         this.loaded = false;
     }
@@ -155,11 +155,11 @@ class Stock {
     addMovingAverageRecord(key, data) {
         this.movingAverage[key] = data;
     }
-    setMovingAverageFilter(movingAverageFilter) {
-        this.movingAverageFilter = movingAverageFilter;
+    setMovingAverageFilter(movingAverageFilters) {
+        this.movingAverageFilters = movingAverageFilters;
     }
     getMovingAverageFilter() {
-        return this.movingAverageFilter;
+        return this.movingAverageFilters;
     }
 }
 
