@@ -95,7 +95,7 @@ function setAnalyticFilterValue(analyticPickerButtonValue) {
 }
 //Gets analytic filter for pulling data to display on chart
 function getAnalyticFilterValue() {
-   return myPortfolio.getAnalyticFilter();
+    return myPortfolio.getAnalyticFilter();
 }
 //Sets analytic filter for pulling data to display on chart
 function setMovingAverageFilterValue(movingAveragePickerButtonValues) {
@@ -140,22 +140,40 @@ function getVolumeValuesByTicker(datePickerButtonValue) {
     var stock = myPortfolio.getStockByTicker(datePickerButtonValue);
     return stock.getVolumes();
 }
-
+//Gets moving average from stock
 function getActiveStockMovingAverage(key) {
-    var activeStock = myPortfolio.getActiveStock();   
+    var activeStock = myPortfolio.getActiveStock();
     var numberOfDays = myPortfolio.getNumberOfStockDetailsInRange();
     return activeStock.getMovingAverage(key, numberOfDays);
+}
+
+function getTrendDataByDisplayValue(ticker, displayValue) {
+    var data = [];
+    if (displayValue == "High")
+        data = getHighValuesByTicker(ticker);
+    else if (displayValue == "Low")
+        data = getLowValuesByTicker(ticker);
+    else if (displayValue == "Opening")
+        data = getOpeningValuesByTicker(ticker);
+    else if (displayValue == "Closing")
+        data = getClosingValuesByTicker(ticker);
+    return data;
 }
 
 //Returns dataset based on selected radio button
 function getChartValuesByTicker(valueType, ticker) {
     var analyticFilter = myPortfolio.getAnalyticFilter();
     var valuesArray = [];
-    if (analyticFilter == "Moving Average") {
+    if (analyticFilter == "Moving Average" || analyticFilter == "Crossover") {
         var dataFilters = getMovingAverageDateFilter();
         trendOne = getActiveStockMovingAverage(dataFilters[0] + "-" + myPortfolio.getValueFilter());
         trendTwo = getActiveStockMovingAverage(dataFilters[1] + "-" + myPortfolio.getValueFilter());
-        valuesArray = [trendOne, trendTwo];
+        if (analyticFilter == "Crossover") {
+            valuesArray = [trendOne, trendTwo, getTrendDataByDisplayValue(ticker, myPortfolio.getValueFilter())];
+        }
+        else {
+            valuesArray = [trendOne, trendTwo];
+        }
     }
     else if (valueType == "Closing Prices v") {
         valuesArray = getClosingValuesByTicker(ticker);

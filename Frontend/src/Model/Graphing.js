@@ -120,25 +120,32 @@ class Graphing {
 
         //Set up colors for graph
         var gradient = ctx.createLinearGradient(0, 0, 0, 400);
-        var lineColor = "#FFFFFF";
-        if (!isPositive) {
-            gradient.addColorStop(0, 'rgba(255,0,0,0.5)');
-            gradient.addColorStop(1, 'rgba(255,0,0,0.0)');
-            lineColor = "#FF0000";
-        } else {
-            gradient.addColorStop(0, 'rgba(0,255,0, 0.7)');
-            gradient.addColorStop(1, 'rgba(0,255,0, 0.1)');
-            lineColor = "#00FF00";
+        var lineColor = ["#FFFFFF"];
+        var seriesNames = ["Trend 1", "Trend 2", "Trend 3"];
+        if (yData.length == 1) {
+            if (!isPositive) {
+                gradient.addColorStop(0, 'rgba(255,0,0,0.5)');
+                gradient.addColorStop(1, 'rgba(255,0,0,0.0)');
+                lineColor = ["#FF0000"];
+            } else {
+                gradient.addColorStop(0, 'rgba(0,255,0, 0.7)');
+                gradient.addColorStop(1, 'rgba(0,255,0, 0.1)');
+                lineColor = ["#00FF00"];
+            }
+        }
+        else {
+            gradient = null;
+            lineColor = [(!isPositive) ? "#FF0000" : "#00FF00", "#0000FF", "#FFFF00"];
         }
 
         var dataSets = [];
         for (var i = 0; i < yData.length; i++) {
             var dataset = {
-                label: 'Price',
+                label: seriesNames[i],
                 type: 'line',
                 fill: true,
                 data: yData[i],
-                borderColor: lineColor,
+                borderColor: lineColor[i],
                 backgroundColor: gradient,
                 pointHoverBorderColor: "#0000FF",
                 pointRadius: 0,

@@ -38,7 +38,7 @@ function handleFilterDisplayValue(e) {
     setDisplayFilterValue(displayValue.split(' ')[0]);
     setDisplayValueDropDownName(displayValue + " v");
     var val = document.getElementById("analyticDropdownButton").innerHTML.replace(' v', '');
-    if (val == "Moving Average")
+    if (val == "Moving Average" || val == "Crossover")
         loadMovingAverage();
     else
         displayStockChart(getActiveStockTicker());
@@ -51,7 +51,7 @@ function handleFilterAnalytics(e) {
     setCursor("wait");
     setAnalyticFilterValue(analytic);
     setAnalyticsDropDownName(analytic + " v");
-    if (analytic == "Moving Average")
+    if (analytic == "Moving Average" || analytic == "Crossover")
         loadMovingAverage();
     else
         displayStockChart(getActiveStockTicker(), (analytic == "Candle Stick"));
@@ -132,10 +132,9 @@ function displayStockChart(ticker, candleChart) {
     var dateValues = getClosingDatesByTicker(ticker);
     if (Array.isArray(chartValues[0])) {
         dateValues = []
-        for (var i = -1; i < chartValues.length; i++) {
+        for (var i = 0; i < chartValues.length; i++) {
             dateValues.push(getClosingDatesByTicker(ticker));
         }
-        //chartValues.push(getOpeningValuesByTicker(ticker));
     }
     else if(!candleChart) {
         chartValues = [chartValues];
@@ -233,7 +232,7 @@ function createAnalyticsDiv() {
         "                        <a onclick=\"handleFilterAnalytics(event)\">Trend</a>" +
         "                        <a onclick=\"handleFilterAnalytics(event)\">Candle Stick</a>" +
         "                        <a onclick=\"handleFilterAnalytics(event)\">Moving Average</a>" +
-        "                        <a onclick=\"handleFilterAnalytics(event)\">Moving Average</a>" +
+        "                        <a onclick=\"handleFilterAnalytics(event)\">Crossover</a>" +
         "                    </div>" +
         "           </li>" +
         "    </div>" +
@@ -281,7 +280,7 @@ function createDefaultsDiv() {
 
 function createConfigurationDiv(analytic) {
     var configurationDiv = "";
-    if (analytic == "Moving Average") {
+    if (analytic == "Moving Average" || analytic == "Crossover") {
         configurationDiv = createMovingAverageConfigurationDiv();
     }
     return configurationDiv;
