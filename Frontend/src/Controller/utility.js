@@ -14,8 +14,8 @@ function getPortfolioTitle() {
 function loadStocksFromServer() {
     myPortfolio = new Portfolio();
     myPortfolio.setName("Tester");
+    displayConfigurationBox("Trend");
     getSideBarData(displayStockList);
-    displayConfigurationBox(myPortfolio.analyticFilter);
 }
 
 //Returns stocks array from myPortfolio

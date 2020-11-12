@@ -119,6 +119,9 @@ function handleReloadStock(e) {
 
 //Stock chart display function.
 function displayStockChart(ticker, candleChart) {
+    if (document.getElementById('testDiv').innerHTML == "") {
+        displayConfigurationBox(getAnalyticFilterValue());
+    }
     console.log("Displaying Chart");
     //Set stock title and initial date range
     setActiveStockDateRange();
@@ -203,8 +206,6 @@ function displayStockList() {
         index++;
     });
     stockHeader.innerHTML = boxContol;
-    //setDatePickerBackcolor(document.getElementById('button-1W'));
-    //setETFStockPickerBackColor(document.getElementById('button-stock'));
     getStockDataByTicker(getActiveStockTicker(), false, displayStockChart);
 }
 
@@ -212,7 +213,7 @@ function displayConfigurationBox(analyticFilter) {
     var headerDiv = document.getElementById('testDiv');
     var displayConfigurationBox =
         "<div id=\"divConfigurationBox\">" +
-        createAnalyticsDiv() +
+        createAnalyticsDiv(analyticFilter) +
         createDefaultsDiv() +
         createConfigurationDiv(analyticFilter) +
         createActionsDiv() +
@@ -221,7 +222,7 @@ function displayConfigurationBox(analyticFilter) {
     return displayConfigurationBox;
 }
 
-function createAnalyticsDiv() {
+function createAnalyticsDiv(analyticFilter) {
     var analyticsDiv =
         "<div id=\"divAnalytics\" class=\"horizontal-container\">" +
         "    <div class=\"title-container\">" +
@@ -229,7 +230,7 @@ function createAnalyticsDiv() {
         "    </div>" +
         "    <div class=\"horizontal-container\">" +
         "           <li class=\"dropdown\">" +
-        "                   <a class=\"dropbtn\" id=\"analyticDropdownButton\">" + getAnalyticFilterValue() + " v</a>" +
+        "                   <a class=\"dropbtn\" id=\"analyticDropdownButton\">" + analyticFilter + " v</a>" +
         "                   <div class=\"dropdown-content\">" +
         "                        <a onclick=\"handleFilterAnalytics(event)\">Trend</a>" +
         "                        <a onclick=\"handleFilterAnalytics(event)\">Candle Stick</a>" +
