@@ -57,7 +57,7 @@ function requestData(dataString, ticker, operation, field, timePeriod) {
                 "stock": ticker
             }
             break;
-        case "getAnalytics":
+        case "StockMovingAverage":
             message = {
                 "requester": "Client",
                 "operation": operation, //"StockMovingAverage",
@@ -66,14 +66,31 @@ function requestData(dataString, ticker, operation, field, timePeriod) {
                 "numberOfDays": timePeriod //"100"
             }
             break;
+        case "StockVelocity":
+            message = {
+                "requester": "Client",
+                "operation": operation, //"StockVelocity",
+                "stock": ticker,
+                "displayValue": field
+            }
+            break;
         default:
     }
     return message;
 }
 
 function getAnalytics(operation, ticker, displayValue, numberOfDays, dateFilter, _callback) {
+    if (operation.includes("MovingAverage") && doesMovingAverageExist(dateFilter + '-' + displayValue)) {
+        _callback(ticker);
+        return;
+    }
+    if (operation.includes("Velocity") && doesVelocityExist()) {
+        _callback(ticker);
+        return;
+    }
+
     var packetIndex = 0;
-    var dataRequest = requestData('getAnalytics', ticker, operation, displayValue, numberOfDays.toString());
+    var dataRequest = requestData(operation, ticker, operation, displayValue, numberOfDays.toString());
     response = [];
     var listener = {
         status: function (statusEvent) {
@@ -87,7 +104,7 @@ function getAnalytics(operation, ticker, displayValue, numberOfDays, dateFilter,
                 packetIndex++;
                 console.log("Imported " + ticker + ": " + operation);
                 if (packetIndex == msg.message.total) {
-                    type = (operation == "StockMovingAverage" ? 'stock' : 'etf');
+                    type = (operation.includes("Stock") ? 'stock' : 'etf');
                     res = [];
                     //Sort response by
                     response.sort((a, b) => {
@@ -95,14 +112,18 @@ function getAnalytics(operation, ticker, displayValue, numberOfDays, dateFilter,
                         else if (a.part < b.part) return -1;
                         else return 0;
                     });
-                    //??
+                    //Clean up response
                     for (var i = 0; i < response.length; i++) {
                         response[i].data.split(",").forEach(a => {
                             res.push(parseFloat(a.replace(/[^\d.-]/g, '')));
                         })
                     }
-                    console.log(res)
-                    myPortfolio.importMovingAverage(type, ticker, dateFilter + '-' + displayValue, res);
+                    console.log(res);
+                    if (operation.includes("MovingAverage"))
+                        myPortfolio.importMovingAverage(type, ticker, dateFilter + '-' + displayValue, res);
+                    else if (operation.includes("Velocity"))
+                        myPortfolio.importVelocity(type, res);
+
                     pubnub.removeListener(listener);
                     if (_callback.name == "loadSecondMovingAverage")
                         _callback();
