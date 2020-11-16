@@ -44,6 +44,8 @@ function handleFilterDisplayValue(e) {
     var val = document.getElementById("analyticDropdownButton").innerHTML.replace(' v', '');
     if (val == "Moving Average" || val == "Crossover")
         loadMovingAverage(val == "Crossover");
+    else if (val == "Velocity")
+        loadVelocity();
     else
         displayStockChart(getActiveStockTicker(), val == "Candle Stick");
 }

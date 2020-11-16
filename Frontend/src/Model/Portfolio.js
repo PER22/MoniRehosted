@@ -156,17 +156,17 @@ class Portfolio {
         var activeStock = this.getActiveStock();
         return activeStock.doesMovingAverageExist(key);
     }
-    validateVelocityImport() {
+    validateVelocityImport(key) {
         var activeStock = this.getActiveStock();
-        return (activeStock.getVelocity(10).length != 0);
+        return (activeStock.getVelocity(key, 10).length != 0);
     }
     importMovingAverage(type, ticker, key, response) {
         var activeStock = this.getActiveStock();
         activeStock.addMovingAverageRecord(key, response);
-    }    
-    importVelocity(type, response) {
+    }
+    importVelocity(type, key, response) {
         var activeStock = this.getActiveStock();
-        activeStock.setVelocity(response);
+        activeStock.addVelocityRecord(key, response);
     }
     importStocks(portfolio) {
         portfolio.forEach(stock => {

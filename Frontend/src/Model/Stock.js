@@ -8,7 +8,7 @@ class Stock {
         this.label = "";
         this.price = 0;
         this.data = [];
-        this.velocity = [];
+        this.velocity = {};
         this.movingAverage = {};
         this.movingAverageFilters = ["1W", "3M"];
         this.priceChangeFromPreviousDay = 0;
@@ -156,12 +156,12 @@ class Stock {
     doesMovingAverageExist(key) {
         return (key in this.movingAverage);
     }
-    getVelocity(numberOfDays) {
-        var dataSet = this.velocity;
-        return dataSet.slice(dataSet.length - numberOfDays, dataSet.length - 1);
+    addVelocityRecord(key, data) {
+        this.velocity[key] = data;
     }
-    setVelocity(data) {
-        this.velocity = data;
+    getVelocity(key, numberOfDays) {
+        var dataSet = this.velocity[key];
+        return (dataSet == undefined) ? [] : dataSet.slice(dataSet.length - numberOfDays, dataSet.length - 1);
     }
     addMovingAverageRecord(key, data) {
         this.movingAverage[key] = data;

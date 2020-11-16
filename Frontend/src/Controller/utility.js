@@ -70,10 +70,10 @@ function getChartVolumeByTicker(valueType, ticker) {
     return stock.getVolumes(myPortfolio.getStartDate(), myPortfolio.getEndDate());
 }
 //Returns array of velocities for a given ticker
-function getVelocityValuesByTicker(ticker) {
+function getVelocityValuesByTicker(key, ticker) {
     var stock = myPortfolio.getStockByTicker(ticker);
     var numberOfDays = myPortfolio.getNumberOfStockDetailsInRange();
-    return stock.getVelocity(numberOfDays);
+    return stock.getVelocity(key, numberOfDays);
 }
 //Sets Portfolio date range based off selected date-picker-button
 function setDateRangeByDatePickerButton(datePickerButtonValue) {
@@ -151,8 +151,8 @@ function doesMovingAverageExist(key) {
     return myPortfolio.validateMovingAverageImport(key);
 }
 //Checks if velocity array has been filled.
-function doesVelocityExist() {
-    return myPortfolio.validateVelocityImport();
+function doesVelocityExist(key) {
+    return myPortfolio.validateVelocityImport(key);
 }
 //Gets moving average from stock
 function getActiveStockMovingAverage(key) {
@@ -190,7 +190,8 @@ function getChartValuesByTicker(valueType, ticker) {
         }
     }
     else if (analyticFilter == "Velocity") {
-        valuesArray = [getVelocityValuesByTicker(ticker), getTrendDataByDisplayValue(ticker, myPortfolio.getValueFilter())];
+        var displayValueFilter = myPortfolio.getValueFilter();
+        valuesArray = [getVelocityValuesByTicker(displayValueFilter, ticker), getTrendDataByDisplayValue(ticker, myPortfolio.getValueFilter())];
     }
     else {
         valuesArray = getTrendDataByDisplayValue(ticker, myPortfolio.getValueFilter());

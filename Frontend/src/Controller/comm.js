@@ -84,7 +84,7 @@ function getAnalytics(operation, ticker, displayValue, numberOfDays, dateFilter,
         _callback(ticker);
         return;
     }
-    if (operation.includes("Velocity") && doesVelocityExist()) {
+    if (operation.includes("Velocity") && doesVelocityExist(displayValue)) {
         _callback(ticker);
         return;
     }
@@ -122,7 +122,7 @@ function getAnalytics(operation, ticker, displayValue, numberOfDays, dateFilter,
                     if (operation.includes("MovingAverage"))
                         myPortfolio.importMovingAverage(type, ticker, dateFilter + '-' + displayValue, res);
                     else if (operation.includes("Velocity"))
-                        myPortfolio.importVelocity(type, res);
+                        myPortfolio.importVelocity(type, displayValue, res);
 
                     pubnub.removeListener(listener);
                     if (_callback.name == "loadSecondMovingAverage")
