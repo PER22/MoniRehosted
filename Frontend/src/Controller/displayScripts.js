@@ -411,7 +411,7 @@ function loadMovingAverage(crossover) {
 function loadSecondMovingAverage() {
     var ticker = getActiveStockTicker();
     var displayValue = getDisplayValueFilter();
-    var dateFilters = getMovingAverageDateFilter();
+    var dateFilters = (crossover) ? ["1W", "3M"] : getMovingAverageDateFilter();
     var movingAverageDateFilter = getNumberOfDaysByDateFilter(dateFilters[1]);
     getAnalytics('StockMovingAverage', ticker, displayValue, movingAverageDateFilter, dateFilters[1], displayStockChart);
 }
