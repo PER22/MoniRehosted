@@ -152,9 +152,21 @@ class Portfolio {
     async populateStocksFromServer() {
         this.stocks = generateStock();
     }
+    validateMovingAverageImport(key) {
+        var activeStock = this.getActiveStock();
+        return activeStock.doesMovingAverageExist(key);
+    }
+    validateVelocityImport() {
+        var activeStock = this.getActiveStock();
+        return (activeStock.getVelocity(10).length != 0);
+    }
     importMovingAverage(type, ticker, key, response) {
         var activeStock = this.getActiveStock();
         activeStock.addMovingAverageRecord(key, response);
+    }    
+    importVelocity(type, response) {
+        var activeStock = this.getActiveStock();
+        activeStock.setVelocity(response);
     }
     importStocks(portfolio) {
         portfolio.forEach(stock => {
@@ -183,26 +195,5 @@ class Portfolio {
     getNumberOfStockDetailsByRange(startDate, endDate) {
         var activeStock = this.getActiveStock();
         return activeStock.getStockDetailCount(startDate, endDate);
-    }
-
-
-    generateStock() {
-        var stocks = []
-        for (var i = 0; i < 1; i++) {
-            var data = []
-            for (var k = 0; k < 20; k++) {
-                var low = (Math.random() * 200);
-                this.lows.push(low);
-                var d = new Date();
-                d.setDate(d.getDate() + k);
-                this.dates.push(d.getMonth() + "-" + d.getDate());
-                data[k] = new StockData(d, (Math.random() * 500), (Math.random() * 600), low,
-                    (Math.random() * 600), (Math.random() * 200));
-            }
-            stocks[i] = new Stock('Telsa', 'TSLA', data);
-
-        }
-        //console.log(this.dates);
-        return stocks;
     }
 }

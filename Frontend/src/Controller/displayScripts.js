@@ -19,10 +19,10 @@ function handleChartDisplay(e) {
     setCursor("wait");
     setStockListBackcolor(sender.parentElement.parentElement);
     setActiveStock(ticker);
-    getStockDataByTicker(ticker, false, displayStockChart);
     setAnalyticFilterValue("Trend");
     setAnalyticsDropDownName("Trend v");
-    displayConfigurationBox("Trend");
+    displayConfigurationBox("Trend", getDisplayValueFilter(), getDateFilterValue());
+    getStockDataByTicker(ticker, false, displayStockChart);
 }
 
 //Function used when clicking an item in the DateRange drop down
@@ -44,7 +44,7 @@ function handleFilterDisplayValue(e) {
     if (val == "Moving Average" || val == "Crossover")
         loadMovingAverage(val == "Crossover");
     else
-        displayStockChart(getActiveStockTicker());
+        displayStockChart(getActiveStockTicker(), val == "Candle Stick");
 }
 
 //Function used when clicking an item in the Analytics drop down
@@ -56,10 +56,13 @@ function handleFilterAnalytics(e) {
     setAnalyticsDropDownName(analytic + " v");
     if (analytic == "Moving Average" || analytic == "Crossover")
         loadMovingAverage(analytic == "Crossover");
+    else if (analytic == "Velocity")
+        loadVelocity();
     else
         displayStockChart(getActiveStockTicker(), (analytic == "Candle Stick"));
-    toggleChartJSVisibility((analytic == "Trend"));
-    displayConfigurationBox(analytic);
+    if ((analytic == "Candle Stick"))
+        toggleChartJSVisibility(false);
+    displayConfigurationBox(analytic, getDisplayValueFilter(), getDateFilterValue());
 }
 
 //Function used when changing a period drop down for Moving Average
@@ -119,8 +122,8 @@ function handleReloadStock(e) {
 
 //Stock chart display function.
 function displayStockChart(ticker, candleChart) {
-    if (document.getElementById('testDiv').innerHTML == "") {
-        displayConfigurationBox(getAnalyticFilterValue());
+    if (document.getElementById('testDiv').innerHTML.trim() == "") {
+        displayConfigurationBox(getAnalyticFilterValue(), getDisplayValueFilter(), getDateFilterValue());
     }
     console.log("Displaying Chart");
     //Set stock title and initial date range
@@ -154,7 +157,7 @@ function displayStockChart(ticker, candleChart) {
     if (candleChart)
         graph.displayCandleChart(chartDiv, getHighValuesByTicker(ticker), getLowValuesByTicker(ticker), getOpeningValuesByTicker(ticker), getClosingValuesByTicker(ticker), dateValues);
     else
-        graph.displayTrendChartJS(chartDiv, dateValues, chartValues, true);
+        graph.displayTrendChartJS(chartDiv, dateValues, chartValues, (prevClosingValue > 0));
     setCursor("default");
 }
 
@@ -209,12 +212,12 @@ function displayStockList() {
     getStockDataByTicker(getActiveStockTicker(), false, displayStockChart);
 }
 
-function displayConfigurationBox(analyticFilter) {
+function displayConfigurationBox(analyticFilter, displayValue, period) {
     var headerDiv = document.getElementById('testDiv');
     var displayConfigurationBox =
         "<div id=\"divConfigurationBox\">" +
         createAnalyticsDiv(analyticFilter) +
-        createDefaultsDiv() +
+        createDefaultsDiv(displayValue, period) +
         createConfigurationDiv(analyticFilter) +
         createActionsDiv() +
         "</div>";
@@ -236,6 +239,7 @@ function createAnalyticsDiv(analyticFilter) {
         "                        <a onclick=\"handleFilterAnalytics(event)\">Candle Stick</a>" +
         "                        <a onclick=\"handleFilterAnalytics(event)\">Moving Average</a>" +
         "                        <a onclick=\"handleFilterAnalytics(event)\">Crossover</a>" +
+        "                        <a onclick=\"handleFilterAnalytics(event)\">Velocity</a>" +
         "                    </div>" +
         "           </li>" +
         "    </div>" +
@@ -243,14 +247,14 @@ function createAnalyticsDiv(analyticFilter) {
     return analyticsDiv;
 }
 
-function createDefaultsDiv() {
+function createDefaultsDiv(displayValue, period) {
     var defaultsDiv =
         "<div id=\"divAnalytics\">" +
         "    <div class=\"row\">" +
         "           <div class=\"col m8 padding-small txt-center\">" +
         "                  <label style=\"text-decoration: underline;\">Display Value</label>" +
         "                   <li class=\"dropdown\">" +
-        "                       <a class=\"dropbttn\" id=\"stockPropertyDropdownButton\">Closing Prices v</a>" +
+        "                       <a class=\"dropbttn\" id=\"stockPropertyDropdownButton\">" + displayValue + " Prices v</a>" +
         "                           <div class=\"dropdown-content\">" +
         "                               <a id=\"Closing Prices v\" onclick=\"handleFilterDisplayValue(event)\">Closing Prices</a>" +
         "                               <a id=\"Opening Prices v\" onclick=\"handleFilterDisplayValue(event)\">Opening Prices</a>" +
@@ -262,7 +266,7 @@ function createDefaultsDiv() {
         "            <div class=\"col m4 padding-small txt-center\">" +
         "                   <label style=\"text-decoration: underline;\">Period</label>" +
         "                       <li class=\"dropdown\">" +
-        "                           <a class=\"dropbttn\" id=\"periodDropdownButton\">3M v</a>" +
+        "                           <a class=\"dropbttn\" id=\"periodDropdownButton\">" + period + " v</a>" +
         "                                <div class=\"dropdown-content\">" +
         "                                   <a id=\"1W v\" onclick=\"handleFilterDateRange(event)\">1W</a>" +
         "                                   <a id=\"1M v\" onclick=\"handleFilterDateRange(event)\">1M</a>" +
@@ -389,11 +393,18 @@ function createActionsDiv() {
 // Utility functions
 //
 
+function loadVelocity() {
+    var ticker = getActiveStockTicker();
+    var displayValue = getDisplayValueFilter();
+    var dateFilter = getDateFilterValue();
+    getAnalytics('StockVelocity', ticker, displayValue, 0, dateFilter, displayStockChart);
+}
+
 function loadMovingAverage(crossover) {
     var ticker = getActiveStockTicker();
     var displayValue = getDisplayValueFilter();
-    var dateFilters = (crossover) ? ["1W","3M"]: getMovingAverageDateFilter();
-    var movingAverageDateFilter = getNumberOfDaysByDateFilter(dateFilters[0]);    
+    var dateFilters = (crossover) ? ["1W", "3M"] : getMovingAverageDateFilter();
+    var movingAverageDateFilter = getNumberOfDaysByDateFilter(dateFilters[0]);
     getAnalytics('StockMovingAverage', ticker, displayValue, movingAverageDateFilter, dateFilters[0], (crossover) ? loadSecondMovingAverage : displayStockChart);
 }
 

@@ -14,7 +14,7 @@ function getPortfolioTitle() {
 function loadStocksFromServer() {
     myPortfolio = new Portfolio();
     myPortfolio.setName("Tester");
-    displayConfigurationBox("Trend");
+    //displayConfigurationBox("Trend", getDisplayValueFilter(), getDateFilterValue());
     getSideBarData(displayStockList);
 }
 
@@ -68,6 +68,12 @@ function getLowValuesByTicker(ticker) {
 function getChartVolumeByTicker(valueType, ticker) {
     var stock = myPortfolio.getStockByTicker(ticker);
     return stock.getVolumes(myPortfolio.getStartDate(), myPortfolio.getEndDate());
+}
+//Returns array of velocities for a given ticker
+function getVelocityValuesByTicker(ticker) {
+    var stock = myPortfolio.getStockByTicker(ticker);
+    var numberOfDays = myPortfolio.getNumberOfStockDetailsInRange();
+    return stock.getVelocity(numberOfDays);
 }
 //Sets Portfolio date range based off selected date-picker-button
 function setDateRangeByDatePickerButton(datePickerButtonValue) {
@@ -140,6 +146,14 @@ function getVolumeValuesByTicker(datePickerButtonValue) {
     var stock = myPortfolio.getStockByTicker(datePickerButtonValue);
     return stock.getVolumes();
 }
+//Checks if the moving average data already exists in dataset
+function doesMovingAverageExist(key) {
+    return myPortfolio.validateMovingAverageImport(key);
+}
+//Checks if velocity array has been filled.
+function doesVelocityExist() {
+    return myPortfolio.validateVelocityImport();
+}
 //Gets moving average from stock
 function getActiveStockMovingAverage(key) {
     var activeStock = myPortfolio.getActiveStock();
@@ -175,17 +189,11 @@ function getChartValuesByTicker(valueType, ticker) {
             valuesArray = [trendOne, getTrendDataByDisplayValue(ticker, myPortfolio.getValueFilter())];
         }
     }
-    else if (valueType == "Closing Prices v") {
-        valuesArray = getClosingValuesByTicker(ticker);
+    else if (analyticFilter == "Velocity") {
+        valuesArray = [getVelocityValuesByTicker(ticker), getTrendDataByDisplayValue(ticker, myPortfolio.getValueFilter())];
     }
-    else if (valueType == "Opening Prices v") {
-        valuesArray = getOpeningValuesByTicker(ticker);
-    }
-    else if (valueType == "Highs v") {
-        valuesArray = getHighValuesByTicker(ticker);
-    }
-    else if (valueType == "Lows v") {
-        valuesArray = getLowValuesByTicker(ticker);
+    else {
+        valuesArray = getTrendDataByDisplayValue(ticker, myPortfolio.getValueFilter());
     }
     return valuesArray;
 }

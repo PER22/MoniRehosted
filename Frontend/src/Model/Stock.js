@@ -8,8 +8,9 @@ class Stock {
         this.label = "";
         this.price = 0;
         this.data = [];
+        this.velocity = [];
         this.movingAverage = {};
-        this.movingAverageFilters = ["1W","3M"];
+        this.movingAverageFilters = ["1W", "3M"];
         this.priceChangeFromPreviousDay = 0;
         this.loaded = false;
     }
@@ -59,7 +60,7 @@ class Stock {
 
     //Turns json element into StockData object and adds to data array.
     addStockDetailFromServer(element) {
-        var stockData = new StockData(element.Date, element.Open, element.High, element.Low, element.Close, element.Volume, element.OpenInt)
+        var stockData = new StockData(element.Date, parseFloat(element.Open), parseFloat(element.High), parseFloat(element.Low), parseFloat(element.Close), parseFloat(element.Volume), element.OpenInt)
         this.data.push(stockData);
     }
 
@@ -151,6 +152,16 @@ class Stock {
     getMovingAverage(key, numberOfDays) {
         var dataSet = this.movingAverage[key];
         return dataSet.slice(dataSet.length - numberOfDays, dataSet.length - 1);
+    }
+    doesMovingAverageExist(key) {
+        return (key in this.movingAverage);
+    }
+    getVelocity(numberOfDays) {
+        var dataSet = this.velocity;
+        return dataSet.slice(dataSet.length - numberOfDays, dataSet.length - 1);
+    }
+    setVelocity(data) {
+        this.velocity = data;
     }
     addMovingAverageRecord(key, data) {
         this.movingAverage[key] = data;
