@@ -36,6 +36,7 @@ function handleFilterDateRange(e) {
 
 //Function used when clicking an item in the DisplayValue drop down
 function handleFilterDisplayValue(e) {
+    setCursor("wait");
     var sender = e.srcElement || e.target;
     var displayValue = sender.innerHTML;
     setDisplayFilterValue(displayValue.split(' ')[0]);
