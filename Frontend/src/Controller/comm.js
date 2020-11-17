@@ -155,7 +155,7 @@ function getSideBarData(_callback) {
         },
         message: function (msg) {
             if (msg.message.requester == "Server") {
-                if (myPortfolio.isETFActive) { myPortfolio.importETFs(msg.message.data); }
+                if (getIsETF()) { myPortfolio.importETFs(msg.message.data); }
                 else {
                     myPortfolio.importStocks(msg.message.data);
                 }

@@ -215,11 +215,12 @@ class Portfolio {
             add.setLabel(stock.label);
             add.setPrice(stock.price);
             add.setPriceChangeFromPreviousDay(stock.change);
+            this.etfs.push(add);
         });
     }
     getStockByTicker(ticker) {
         var stockFound = new Stock();
-        if (this.isETFActive()) {
+        if (this.isETFActive) {
             for (var i = 0; i < this.ETFs.length; i++) {
                 if (this.ETFs[i].getLabel() == ticker) {
                     stockFound = this.ETFs[i];
