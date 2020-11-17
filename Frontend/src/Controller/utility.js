@@ -163,10 +163,10 @@ function getActiveStockMovingAverage(key) {
     return activeStock.getMovingAverage(key, numberOfDays);
 }
 
-function setIsETF(etf) {
+function setIsETFActive(etf) {
     myPortfolio.setIsETF(etf);
 }
-function getIsETF() {
+function getIsETFActive() {
     return myPortfolio.getIsETF();
 }
 

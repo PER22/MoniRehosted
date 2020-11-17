@@ -50,10 +50,24 @@ function requestData(dataString, ticker, operation, field, timePeriod) {
                 "amount": "a"
             };
             break;
+        case "GetETFLabels":
+            message = {
+                "requester": "Client",
+                "operation": "GetETFLabels",
+                "amount": "a"
+            };
+            break;
         case "GetStockData":
             message = {
                 "requester": "Client",
                 "operation": "GetStockData",
+                "stock": ticker
+            }
+            break;
+        case "GetETFData":
+            message = {
+                "requester": "Client",
+                "operation": "GetETFData",
                 "stock": ticker
             }
             break;
@@ -144,8 +158,13 @@ function getAnalytics(operation, ticker, displayValue, numberOfDays, dateFilter,
 function getSideBarData(_callback) {
     //Set up variables
     var packetIndex = 0;
-    var dataRequest = requestData("GetStockLabels");
-
+    var dataRequest;
+    if (getIsETFActive()) {
+        dataRequest = requestData("GetStockLabels");
+    }
+    else {
+        dataRequest = requestData("GetStockLabels");
+    }
     //Listen for response
     var listener = {
         status: function (statusEvent) {
@@ -155,11 +174,15 @@ function getSideBarData(_callback) {
         },
         message: function (msg) {
             if (msg.message.requester == "Server") {
-                if (getIsETF()) { myPortfolio.importETFs(msg.message.data); }
+                if (getIsETFActive()) {
+                    myPortfolio.importETFs(msg.message.data);
+                    console.log("Imported SideBar ETF Data");
+                }
                 else {
                     myPortfolio.importStocks(msg.message.data);
+                    console.log("Imported SideBar STOCK Data");
                 }
-                console.log("Imported SideBarData");
+                
                 packetIndex++;
                 if (packetIndex == msg.message.total) {
                     pubnub.removeListener(listener);

@@ -101,7 +101,8 @@ function handleDisplayMovingAverage(e) {
 function handleSwapStockAndETF(e) {
     var sender = e.srcElement || e.target;
     var type = sender.innerHTML;
-    setIsETF((type == "ETF"));
+    setIsETFActive((type == "ETFs"));
+    getSideBarData(displayStockList);
 }
 
 //Function used to delete a stock
@@ -176,7 +177,7 @@ function displayStockList() {
     var boxControl = "";
     var index = 0;
 
-    if (getIsETF()) {
+    if (getIsETFActive()) {
         console.log("Displaying ETF List");
         getETFsInPortfolio().forEach(stock => {
             if (index < 20) {
