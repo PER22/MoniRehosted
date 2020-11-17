@@ -3,13 +3,14 @@ class Portfolio {
         this.name;
         this.owner;
         this.stocks = [];
+        this.ETFs = [];
         this.startDate;
         this.endDate;
         this.activeStockIndex = 0;
         this.dateFilter = "3M";
         this.valueFilter = "Closing";
         this.analyticFilter = "Trend";
-        this.isETF = false;
+        this.isETFActive = false;
     }
     setName(name) {
         this.name = name;
@@ -53,11 +54,19 @@ class Portfolio {
     getValueFilter() {
         return this.valueFilter;
     }
-    setIsETF(etf) {
-        this.isETF = etf;
+    getETFs() {
+        return this.ETFs;
+    }
+
+    setETFs(etfs) {
+        this.ETFs = etfs;
+    }
+
+    setIsETF(etfActive) {
+        this.isETFActive = etfActive;
     }
     getIsETF() {
-        return this.isETF;
+        return this.isETFActive;
     }
     setAnalyticFilter(analyticFilter) {
         this.analyticFilter = analyticFilter;
@@ -71,14 +80,26 @@ class Portfolio {
     getMovingAverageFilter() {
         return this.analyticFilter;
     }
-    setActiveStockIndexByTicker(ticker) {        
-        for (var i = 0; i < this.stocks.length; i++) {
-            if (this.stocks[i].getLabel() == ticker) {
-                this.activeStockIndex = i;
-                break;
+    setActiveStockIndexByTicker(ticker) {
+        if (this.isETFActive) {
+            for (var i = 0; i < this.ETFs.length; i++) {
+                if (this.ETFs[i].getLabel() == ticker) {
+                    this.activeStockIndex = i;
+                    break;
+                }
+            }
+        }
+        else {
+            for (var i = 0; i < this.stocks.length; i++) {
+                if (this.stocks[i].getLabel() == ticker) {
+                    this.activeStockIndex = i;
+                    break;
+                }
             }
         }
     }
+
+
     setActiveStockIndex(activeStockIndex) {
         this.activeStockIndex = activeStockIndex;
     }
@@ -86,10 +107,13 @@ class Portfolio {
         return this.activeStockIndex;
     }
     getActiveStockTicker() {
-        return this.stocks[this.activeStockIndex].getLabel();
+        if (this.isETFActive) { return this.ETFs[this.activeStockIndex].getLabel(); }
+        else { return this.stocks[this.activeStockIndex].getLabel();}
+        
     }
     getActiveStock() {
-        return this.stocks[this.activeStockIndex];
+        if (this.isETFActive) { return this.stocks[this.activeStockIndex]; }
+        else { return this.stocks[this.activeStockIndex]; }
     }
     //Translates dateFilter to numeric day value
     translateDateFilterToNumericValue(dateFilter) {
@@ -172,6 +196,7 @@ class Portfolio {
         var activeStock = this.getActiveStock();
         activeStock.addVelocityRecord(key, response);
     }
+
     importStocks(portfolio) {
         portfolio.forEach(stock => {
             let add = new Stock();
@@ -182,12 +207,32 @@ class Portfolio {
             this.stocks.push(add);
         });
     }
+
+    importETFs(portfolio) {
+        portfolio.forEach(stock => {
+            let add = new Stock();
+            add.setName(stock.name);
+            add.setLabel(stock.label);
+            add.setPrice(stock.price);
+            add.setPriceChangeFromPreviousDay(stock.change);
+        });
+    }
     getStockByTicker(ticker) {
         var stockFound = new Stock();
-        for (var i = 0; i < this.stocks.length; i++) {
-            if (this.stocks[i].getLabel() == ticker) {
-                stockFound = this.stocks[i];
-                break;
+        if (this.isETFActive()) {
+            for (var i = 0; i < this.ETFs.length; i++) {
+                if (this.ETFs[i].getLabel() == ticker) {
+                    stockFound = this.ETFs[i];
+                    break;
+                }
+            }    
+        }
+        else {
+            for (var i = 0; i < this.stocks.length; i++) {
+                if (this.stocks[i].getLabel() == ticker) {
+                    stockFound = this.stocks[i];
+                    break;
+                }
             }
         }
         return stockFound;

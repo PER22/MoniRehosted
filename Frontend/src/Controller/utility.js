@@ -22,6 +22,8 @@ function loadStocksFromServer() {
 function getStocksInPortfolio() {
     return myPortfolio.getStocks();
 }
+
+
 //Returns stock object from myPortfolio
 function getStockInPortfolioByTicker(ticker) {
     return myPortfolio.getStockByTicker(ticker);
@@ -166,6 +168,10 @@ function setIsETF(etf) {
 }
 function getIsETF() {
     return myPortfolio.getIsETF();
+}
+
+function getETFsInPortfolio() {
+    return myPortfolio.getETFs();
 }
 
 function getTrendDataByDisplayValue(ticker, displayValue) {

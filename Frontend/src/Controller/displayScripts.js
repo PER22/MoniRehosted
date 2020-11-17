@@ -173,45 +173,84 @@ function displayStockList() {
     }
 
     var stockHeader = document.getElementById('stockHeader');
-    var boxContol = "";
+    var boxControl = "";
     var index = 0;
-    console.log("Displaying Stock List");
 
-    getStocksInPortfolio().forEach(stock => {
-        if (index < 20) {
-            var cssType;
-            if (stock.priceChangeFromPreviousDay < 0) {
-                cssType = "\"box red detail-label-small\""
-            }
-            else if (stock.priceChangeFromPreviousDay >= 0) {
-                cssType = "\"box green detail-label-small\""
-            }
-            boxContol +=
-                "<div onclick = handleChartDisplay(event)>" +
-                "   <div name=\"stockSummary\" class=\"stock-selection-summary\" id=\"outer-" + stock.label + "\">" +
-                "       <div class=\"stock-selection-left\" id=\"left-" + stock.label + "\">" +
-                "           <div class=\"stock-selection-summary-stock-name\"id=\"divName-" + stock.label + "\">" +
-                "               <label class=\"detail-label\" id=\"fullName-" + stock.label + "\">" + stock.name + "</label>" +
-                "           </div>" +
-                "           <div class=\"stock-selection-summary-short-name\" id=\"ticker-" + stock.label + "\">" +
-                "               <label class=\"detail-label-small\" id=\"shortName-" + stock.label + "\">" + stock.label + "</label>" +
-                "           </div>" +
-                "      </div>" +
-                "      <div class=\"stock-selection-right\" id=\"right-" + stock.label + "\">" +
-                "           <div class=\"stock-selection-summary-price\" id=\"price-" + stock.label + "\">" +
-                "               <label class=\"detail-label-price\" id=\"labelPrice-" + stock.label + "\">$" + stock.price + "</label>" +
-                "           </div>" +
-                "           <div class=\".stock-selection-change-value\" id=\"change-" + stock.label + "\">" +
-                "               <label class= " + cssType + " id=\"labelChange-" + stock.label + "\">" + stock.priceChangeFromPreviousDay + "%</label>" +
-                "           </div>" +
-                "       </div>" +
-                "   </div>" +
-                "</div>";
+    if (getIsETF()) {
+        console.log("Displaying ETF List");
+        getETFsInPortfolio().forEach(stock => {
+            if (index < 20) {
+                var cssType;
+                if (stock.priceChangeFromPreviousDay < 0) {
+                    cssType = "\"box red detail-label-small\""
+                }
+                else if (stock.priceChangeFromPreviousDay >= 0) {
+                    cssType = "\"box green detail-label-small\""
+                }
+                boxControl +=
+                    "<div onclick = handleChartDisplay(event)>" +
+                    "   <div name=\"stockSummary\" class=\"stock-selection-summary\" id=\"outer-" + stock.label + "\">" +
+                    "       <div class=\"stock-selection-left\" id=\"left-" + stock.label + "\">" +
+                    "           <div class=\"stock-selection-summary-stock-name\"id=\"divName-" + stock.label + "\">" +
+                    "               <label class=\"detail-label\" id=\"fullName-" + stock.label + "\">" + stock.name + "</label>" +
+                    "           </div>" +
+                    "           <div class=\"stock-selection-summary-short-name\" id=\"ticker-" + stock.label + "\">" +
+                    "               <label class=\"detail-label-small\" id=\"shortName-" + stock.label + "\">" + stock.label + "</label>" +
+                    "           </div>" +
+                    "      </div>" +
+                    "      <div class=\"stock-selection-right\" id=\"right-" + stock.label + "\">" +
+                    "           <div class=\"stock-selection-summary-price\" id=\"price-" + stock.label + "\">" +
+                    "               <label class=\"detail-label-price\" id=\"labelPrice-" + stock.label + "\">$" + stock.price + "</label>" +
+                    "           </div>" +
+                    "           <div class=\".stock-selection-change-value\" id=\"change-" + stock.label + "\">" +
+                    "               <label class= " + cssType + " id=\"labelChange-" + stock.label + "\">" + stock.priceChangeFromPreviousDay + "%</label>" +
+                    "           </div>" +
+                    "       </div>" +
+                    "   </div>" +
+                    "</div>";
 
-        }
-        index++;
-    });
-    stockHeader.innerHTML = boxContol;
+            }
+            index++;
+        });
+    }
+    else {
+        console.log("Displaying Stock List");
+        getStocksInPortfolio().forEach(stock => {
+            if (index < 20) {
+                var cssType;
+                if (stock.priceChangeFromPreviousDay < 0) {
+                    cssType = "\"box red detail-label-small\""
+                }
+                else if (stock.priceChangeFromPreviousDay >= 0) {
+                    cssType = "\"box green detail-label-small\""
+                }
+                boxControl +=
+                    "<div onclick = handleChartDisplay(event)>" +
+                    "   <div name=\"stockSummary\" class=\"stock-selection-summary\" id=\"outer-" + stock.label + "\">" +
+                    "       <div class=\"stock-selection-left\" id=\"left-" + stock.label + "\">" +
+                    "           <div class=\"stock-selection-summary-stock-name\"id=\"divName-" + stock.label + "\">" +
+                    "               <label class=\"detail-label\" id=\"fullName-" + stock.label + "\">" + stock.name + "</label>" +
+                    "           </div>" +
+                    "           <div class=\"stock-selection-summary-short-name\" id=\"ticker-" + stock.label + "\">" +
+                    "               <label class=\"detail-label-small\" id=\"shortName-" + stock.label + "\">" + stock.label + "</label>" +
+                    "           </div>" +
+                    "      </div>" +
+                    "      <div class=\"stock-selection-right\" id=\"right-" + stock.label + "\">" +
+                    "           <div class=\"stock-selection-summary-price\" id=\"price-" + stock.label + "\">" +
+                    "               <label class=\"detail-label-price\" id=\"labelPrice-" + stock.label + "\">$" + stock.price + "</label>" +
+                    "           </div>" +
+                    "           <div class=\".stock-selection-change-value\" id=\"change-" + stock.label + "\">" +
+                    "               <label class= " + cssType + " id=\"labelChange-" + stock.label + "\">" + stock.priceChangeFromPreviousDay + "%</label>" +
+                    "           </div>" +
+                    "       </div>" +
+                    "   </div>" +
+                    "</div>";
+
+            }
+            index++;
+        });
+    }
+    stockHeader.innerHTML = boxControl;
     getStockDataByTicker(getActiveStockTicker(), false, displayStockChart);
 }
 
