@@ -161,6 +161,13 @@ function getActiveStockMovingAverage(key) {
     return activeStock.getMovingAverage(key, numberOfDays);
 }
 
+function setIsETF(etf) {
+    myPortfolio.setIsETF(etf);
+}
+function getIsETF() {
+    return myPortfolio.getIsETF();
+}
+
 function getTrendDataByDisplayValue(ticker, displayValue) {
     var data = [];
     if (displayValue == "Highs")

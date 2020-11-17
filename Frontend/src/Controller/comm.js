@@ -43,14 +43,14 @@ function requestData(dataString, ticker, operation, field, timePeriod) {
                 "stock": ticker
             };
             break;
-        case "getSideBar":
+        case "GetStockLabels":
             message = {
                 "requester": "Client",
                 "operation": "GetStockLabels",
                 "amount": "a"
             };
             break;
-        case "getStockData":
+        case "GetStockData":
             message = {
                 "requester": "Client",
                 "operation": "GetStockData",
@@ -60,7 +60,7 @@ function requestData(dataString, ticker, operation, field, timePeriod) {
         case "StockMovingAverage":
             message = {
                 "requester": "Client",
-                "operation": operation, //"StockMovingAverage",
+                "operation": "StockMovingAverage",
                 "stock": ticker,
                 "displayValue": field, //"Open"/"Close"/"High"/"Low"
                 "numberOfDays": timePeriod //"100"
@@ -69,7 +69,7 @@ function requestData(dataString, ticker, operation, field, timePeriod) {
         case "StockVelocity":
             message = {
                 "requester": "Client",
-                "operation": operation, //"StockVelocity",
+                "operation": "StockVelocity",
                 "stock": ticker,
                 "displayValue": field
             }
@@ -144,7 +144,7 @@ function getAnalytics(operation, ticker, displayValue, numberOfDays, dateFilter,
 function getSideBarData(_callback) {
     //Set up variables
     var packetIndex = 0;
-    var dataRequest = requestData("getSideBar");
+    var dataRequest = requestData("GetStockLabels");
 
     //Listen for response
     var listener = {
@@ -207,7 +207,7 @@ function getStockDataByTicker(ticker, reload, _callback) {
     var stock = new Stock();
     var indx = 0;
     var reloaded = false;
-    var dataRequest = requestData("getStockData", ticker);
+    var dataRequest = requestData("GetStockData", ticker);
 
     //Listener to wait for response from server
     var listener = {

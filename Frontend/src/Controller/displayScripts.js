@@ -100,8 +100,8 @@ function handleDisplayMovingAverage(e) {
 //Function used when switching between Stock and ETF
 function handleSwapStockAndETF(e) {
     var sender = e.srcElement || e.target;
-    setETFStockPickerBackColor(sender);
-    //filter by etf/stock
+    var type = sender.innerHTML;
+    setIsETF((type == "ETF"));
 }
 
 //Function used to delete a stock
@@ -160,7 +160,7 @@ function displayStockChart(ticker, candleChart) {
     if (candleChart)
         graph.displayCandleChart(chartDiv, getHighValuesByTicker(ticker), getLowValuesByTicker(ticker), getOpeningValuesByTicker(ticker), getClosingValuesByTicker(ticker), dateValues);
     else
-        graph.displayTrendChartJS(chartDiv, dateValues, chartValues, (prevClosingValue > 0));
+        graph.displayTrendChartJS(chartDiv, dateValues, chartValues, (prevClosingValue >= 0));
     setCursor("default");
 }
 
@@ -414,7 +414,7 @@ function loadMovingAverage(crossover) {
 function loadSecondMovingAverage() {
     var ticker = getActiveStockTicker();
     var displayValue = getDisplayValueFilter();
-    var dateFilters = (crossover) ? ["1W", "3M"] : getMovingAverageDateFilter();
+    var dateFilters = ["1W", "3M"];
     var movingAverageDateFilter = getNumberOfDaysByDateFilter(dateFilters[1]);
     getAnalytics('StockMovingAverage', ticker, displayValue, movingAverageDateFilter, dateFilters[1], displayStockChart);
 }
@@ -457,26 +457,6 @@ function setStockListBackcolor(sender) {
         }
     }
 }
-
-//Sets the back color of the Stock/ETF picker buttons to indicate which is selected
-function setETFStockPickerBackColor(sender) {
-    console.log(myPortfolio);
-    var dateButtons = document.getElementsByName('ETForStockPicker');
-    for (var i = 0; i < dateButtons.length; i++) {
-        if (dateButtons[i] == sender) {
-            dateButtons[i].style.background = '#FFFFFF';
-            dateButtons[i].style.fontWeight = "bold";
-            dateButtons[i].style.color = 'black';
-            dateButtons[i].style.borderColor = 'black';
-        }
-        else {
-            dateButtons[i].style.background = '#373c42';
-            dateButtons[i].style.fontWeight = "normal";
-            dateButtons[i].style.color = '#D8D8D8';
-        }
-    }
-}
-
 //Updates Period Drop Down name when list item is clicked
 function setPeriodDropDownName(sender, name) {
     sender.parentElement.parentElement.firstElementChild.innerHTML = name;
