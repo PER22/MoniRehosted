@@ -160,7 +160,7 @@ function getSideBarData(_callback) {
     var packetIndex = 0;
     var dataRequest;
     if (getIsETFActive()) {
-        dataRequest = requestData("GetStockLabels");
+        dataRequest = requestData("GetETFLabels");
     }
     else {
         dataRequest = requestData("GetStockLabels");
