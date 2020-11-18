@@ -82,39 +82,52 @@ class MySubscribeCallback(SubscribeCallback):
 
                 elif("MovingAverage" in controlCommand["operation"]):
                     asset = database.get(assetType, controlCommand['asset'])
-                    data = Analytics.calculateMovingAverageChunked(asset, Analytics.fieldFilter(controlCommand["displayValue"]), int(controlCommand["numberOfDays"]))
 
-                    for i in range(len(data)):
+                    if("True" in str(controlCommand["incremental"])):
+                        data = Analytics.calculateMovingAverageChunked(asset, Analytics.fieldFilter(controlCommand["displayValue"]), int(controlCommand["numberOfDays"]))
+
+                        for i in range(len(data)):
+                            pubnub.publish().channel('FinanceSub').message({
+                                "requester": serverID,
+                                "operation": "MovingAverage",
+                                "part": (i + 1),
+                                "total": len(data),
+                                "data": json.dumps(data[i])
+                            }).pn_async(my_publish_callback)
+                    else:
+                        data = Analytics.calculatePartialMovingAverage(asset, Analytics.fieldFilter(controlCommand["displayValue"]), int(controlCommand["numberOfDays"]))
+
                         pubnub.publish().channel('FinanceSub').message({
                             "requester": serverID,
                             "operation": "MovingAverage",
-                            "part": (i + 1),
                             "total": len(data),
-                            "data": json.dumps(data[i])
+                            "data": data
                         }).pn_async(my_publish_callback)
-
 
                 elif("Velocity" in controlCommand["operation"]):
                     asset = database.get(assetType, controlCommand['asset'])
-                    data = Analytics.calculateVelocityChunked(asset, Analytics.fieldFilter(controlCommand["displayValue"]))
 
-                    for i in range(len(data)):
+                    if("True" in str(controlCommand["incremental"])):
+                        data = Analytics.calculateVelocityChunked(asset, Analytics.fieldFilter(controlCommand["displayValue"]))
+
+                        for i in range(len(data)):
+                            pubnub.publish().channel('FinanceSub').message({
+                                "requester": serverID,
+                                "operation": "Velocity",
+                                "part": (i + 1),
+                                "total": len(data),
+                                "data": json.dumps(data[i])
+                            }).pn_async(my_publish_callback)
+
+                    else:
+                        data = Analytics.calculateVelocityChunked(asset, Analytics.fieldFilter(controlCommand["displayValue"]))
+
                         pubnub.publish().channel('FinanceSub').message({
                             "requester": serverID,
                             "operation": "Velocity",
-                            "part": (i + 1),
                             "total": len(data),
-                            "data": json.dumps(data[i])
+                            "data": data
                         }).pn_async(my_publish_callback)
-
-                elif("CrossOver" in controlCommand["operation"]):
-                    asset = database.get(assetType, controlCommand['asset'])
-
-                    pubnub.publish().channel('FinanceSub').message({
-                        "requester": serverID,
-                        "operation": "CrossOver",
-                        "status": Analytics.calculateCrossOver(asset, Analytics.fieldFilter(controlCommand["displayValue"]), int(controlCommand["firstTimePeriod"]), int(controlCommand["secondTimePeriod"]))
-                    }).pn_async(my_publish_callback)
 
                 else:
                     print("OOPS something went wrong")

@@ -50,6 +50,15 @@ class Analytics:
         return(chunkList)
 
     @staticmethod
+    def calculatePartialVelocity(stock, field):
+
+        data = [float(i) for i in Analytics.getAllFields(stock, field)]
+
+        length = len(data) - 1
+
+        return(((data[length] - data[length-1]) / data[length-1]) * 100)
+
+    @staticmethod
     def calculateMovingAverageChunked(stock, field, period):
 
         data = Analytics.calculateMovingAverage(stock, field, period)
@@ -87,18 +96,13 @@ class Analytics:
         return(scores)
 
     @staticmethod
-    def calculateCrossOver(stock, field, firstPeriod, secondPeriod):
-        movingAverages = [Analytics.calculateMovingAverage(stock, field, firstPeriod),
-                          Analytics.calculateMovingAverage(stock, field, secondPeriod)]
+    def calculatePartialMovingAverage(stock, field, period):
 
+        data = [float(i) for i in Analytics.getAllFields(stock, field)]
 
+        length = len(data) - 1
 
-        return(movingAverages)
-
-    @staticmethod
-    def calculateGoldenDeath(stock, field, firstPeriod, secondPeriod):
-
-        return(None)
+        return(mean(data[length-period:length]))
 
     @staticmethod
     def getAllFields(stock, field):
