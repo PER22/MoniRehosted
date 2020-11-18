@@ -31,8 +31,10 @@ class MySubscribeCallback(SubscribeCallback):
         controlCommand = message.message
         print(message)
         try:
-            if(controlCommand["requester"] == "Client"):
+            if("Client" in str(controlCommand["requester"])):
                 assetType = ("stock" if ("stock" in controlCommand["operation"].lower()) else "etf")
+                print("before")
+                serverID = int(str(controlCommand["requester"]).replace("Client-", "")) + 1
                 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
                 #-=-=-=-=-=-=-=- Stocks -=-=-==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
                 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -41,8 +43,8 @@ class MySubscribeCallback(SubscribeCallback):
                     for i in range(len(listOfLabels)):
                         print(str(i) + ". Chunk")
                         pubnub.publish().channel('FinanceSub').message({
-                            "requester": "Server",
-                            "operation": "ReturnStockLabels" if (assetType == "stock") else "ReturnETFLabels",
+                            "requester": serverID,
+                            "operation": "ReturnAssetLabels",
                             "amount": controlCommand["amount"],
                             "part": (i + 1),
                             "total": len(listOfLabels),
@@ -51,13 +53,13 @@ class MySubscribeCallback(SubscribeCallback):
 
 
                 elif("Data" in controlCommand["operation"]):
-                    originalAsset = database.getChunked(assetType, controlCommand[assetType])
+                    originalAsset = database.getChunked(assetType, controlCommand['asset'])
                     for i in range(len(originalAsset)):
                         print(str(i) + ". Chunk")
                         pubnub.publish().channel('FinanceSub').message({
-                            "requester": "Server",
-                            "operation": "ReturnStockData" if (assetType == "stock") else "ReturnETFData",
-                            "assetType": controlCommand[assetType],
+                            "requester": serverID,
+                            "operation": "ReturnAssetData",
+                            "assetType": controlCommand['asset'],
                             "part": (i + 1),
                             "total": len(originalAsset),
                             "data": originalAsset[i].toJSON()
@@ -65,26 +67,26 @@ class MySubscribeCallback(SubscribeCallback):
 
                 elif("Delete" in controlCommand["operation"]):
                     pubnub.publish().channel('FinanceSub').message({
-                        "requester": "Server",
-                        "operation": "DeleteStock" if (assetType == "stock") else "DeleteETF",
-                        "status": database.delete(assetType, controlCommand[assetType])
+                        "requester": serverID,
+                        "operation": "DeleteAsset",
+                        "status": database.delete(assetType, controlCommand['asset'])
                     }).pn_async(my_publish_callback)
 
                 elif("Prediction" in controlCommand["operation"]):
                     pubnub.publish().channel('FinanceSub').message({
-                        "requester": "Server",
-                        "operation": "ReturnStockPredictions" if (assetType == "stock") else "ReturnETFPredictions",
-                        "assetType": controlCommand[assetType],
+                        "requester": serverID,
+                        "operation": "ReturnAssetPredictions",
+                        "assetType": controlCommand['asset'],
                         "data": Stock("Your", "mama", {"open": "4", "cclose": "5"})
                     }).pn_async(my_publish_callback)
 
                 elif("MovingAverage" in controlCommand["operation"]):
-                    asset = database.get(assetType, controlCommand[assetType])
+                    asset = database.get(assetType, controlCommand['asset'])
                     data = Analytics.calculateMovingAverageChunked(asset, Analytics.fieldFilter(controlCommand["displayValue"]), int(controlCommand["numberOfDays"]))
 
                     for i in range(len(data)):
                         pubnub.publish().channel('FinanceSub').message({
-                            "requester": "Server",
+                            "requester": serverID,
                             "operation": "MovingAverage",
                             "part": (i + 1),
                             "total": len(data),
@@ -93,12 +95,12 @@ class MySubscribeCallback(SubscribeCallback):
 
 
                 elif("Velocity" in controlCommand["operation"]):
-                    asset = database.get(assetType, controlCommand[assetType])
+                    asset = database.get(assetType, controlCommand['asset'])
                     data = Analytics.calculateVelocityChunked(asset, Analytics.fieldFilter(controlCommand["displayValue"]))
 
                     for i in range(len(data)):
                         pubnub.publish().channel('FinanceSub').message({
-                            "requester": "Server",
+                            "requester": serverID,
                             "operation": "Velocity",
                             "part": (i + 1),
                             "total": len(data),
@@ -106,10 +108,10 @@ class MySubscribeCallback(SubscribeCallback):
                         }).pn_async(my_publish_callback)
 
                 elif("CrossOver" in controlCommand["operation"]):
-                    asset = database.get(assetType, controlCommand[assetType])
+                    asset = database.get(assetType, controlCommand['asset'])
 
                     pubnub.publish().channel('FinanceSub').message({
-                        "requester": "Server",
+                        "requester": serverID,
                         "operation": "CrossOver",
                         "status": Analytics.calculateCrossOver(asset, Analytics.fieldFilter(controlCommand["displayValue"]), int(controlCommand["firstTimePeriod"]), int(controlCommand["secondTimePeriod"]))
                     }).pn_async(my_publish_callback)
