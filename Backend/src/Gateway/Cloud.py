@@ -53,17 +53,28 @@ class MySubscribeCallback(SubscribeCallback):
 
 
                 elif("Data" in controlCommand["operation"]):
-                    originalAsset = database.getChunked(assetType, controlCommand['asset'])
-                    for i in range(len(originalAsset)):
-                        print(str(i) + ". Chunk")
+                    if("True" in str(controlCommand["incremental"])):
+                        originalAsset = database.getPartialData(assetType, controlCommand['asset'])
                         pubnub.publish().channel('FinanceSub').message({
                             "requester": serverID,
                             "operation": "ReturnAssetData",
                             "assetType": controlCommand['asset'],
-                            "part": (i + 1),
-                            "total": len(originalAsset),
-                            "data": originalAsset[i].toJSON()
+                            "part": 1,
+                            "total": 1,
+                            "data": originalAsset.toJSON()
                         }).pn_async(my_publish_callback)
+                    else:
+                        originalAsset = database.getChunked(assetType, controlCommand['asset'])
+                        for i in range(len(originalAsset)):
+                            print(str(i) + ". Chunk")
+                            pubnub.publish().channel('FinanceSub').message({
+                                "requester": serverID,
+                                "operation": "ReturnAssetData",
+                                "assetType": controlCommand['asset'],
+                                "part": (i + 1),
+                                "total": len(originalAsset),
+                                "data": originalAsset[i].toJSON()
+                            }).pn_async(my_publish_callback)
 
                 elif("Delete" in controlCommand["operation"]):
                     pubnub.publish().channel('FinanceSub').message({
@@ -84,6 +95,15 @@ class MySubscribeCallback(SubscribeCallback):
                     asset = database.get(assetType, controlCommand['asset'])
 
                     if("True" in str(controlCommand["incremental"])):
+                        data = Analytics.calculatePartialMovingAverage(asset, Analytics.fieldFilter(controlCommand["displayValue"]), int(controlCommand["numberOfDays"]))
+
+                        pubnub.publish().channel('FinanceSub').message({
+                            "requester": serverID,
+                            "operation": "MovingAverage",
+                            "total": len(data),
+                            "data": json.dumps(data)
+                        }).pn_async(my_publish_callback)
+                    else:
                         data = Analytics.calculateMovingAverageChunked(asset, Analytics.fieldFilter(controlCommand["displayValue"]), int(controlCommand["numberOfDays"]))
 
                         for i in range(len(data)):
@@ -94,21 +114,21 @@ class MySubscribeCallback(SubscribeCallback):
                                 "total": len(data),
                                 "data": json.dumps(data[i])
                             }).pn_async(my_publish_callback)
-                    else:
-                        data = Analytics.calculatePartialMovingAverage(asset, Analytics.fieldFilter(controlCommand["displayValue"]), int(controlCommand["numberOfDays"]))
-
-                        pubnub.publish().channel('FinanceSub').message({
-                            "requester": serverID,
-                            "operation": "MovingAverage",
-                            "total": len(data),
-                            "data": data
-                        }).pn_async(my_publish_callback)
 
                 elif("Velocity" in controlCommand["operation"]):
                     asset = database.get(assetType, controlCommand['asset'])
 
                     if("True" in str(controlCommand["incremental"])):
                         data = Analytics.calculateVelocityChunked(asset, Analytics.fieldFilter(controlCommand["displayValue"]))
+
+                        pubnub.publish().channel('FinanceSub').message({
+                            "requester": serverID,
+                            "operation": "Velocity",
+                            "total": len(data),
+                            "data": json.dumps(data)
+                        }).pn_async(my_publish_callback)
+                    else:
+                        data = Analytics.calculatePartialVelocity(asset, Analytics.fieldFilter(controlCommand["displayValue"]))
 
                         for i in range(len(data)):
                             pubnub.publish().channel('FinanceSub').message({
@@ -118,16 +138,6 @@ class MySubscribeCallback(SubscribeCallback):
                                 "total": len(data),
                                 "data": json.dumps(data[i])
                             }).pn_async(my_publish_callback)
-
-                    else:
-                        data = Analytics.calculateVelocityChunked(asset, Analytics.fieldFilter(controlCommand["displayValue"]))
-
-                        pubnub.publish().channel('FinanceSub').message({
-                            "requester": serverID,
-                            "operation": "Velocity",
-                            "total": len(data),
-                            "data": data
-                        }).pn_async(my_publish_callback)
 
                 else:
                     print("OOPS something went wrong")

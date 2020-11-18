@@ -78,6 +78,31 @@ class Database:
         else:
             return(Stock("Error", "Error", None))
 
+    def getPartialData(self, assetType, label):
+        print("Type: " + str(assetType) + " | Label: " + str(label))
+        if((str(label).lower() in self.Stocks) or (str(label).lower() in self.ETFs)):
+            asset = (self.Stocks[str(label).lower()]) if("stock" in str(assetType).lower()) else (self.ETFs[str(label).lower()])
+
+            #get starting and ending date
+            length = len(asset.data)
+            startingDate = str(asset.data[length - 1])
+
+            print("\n\nstartingDate: ",startingDate)
+            endningDate = str(date.today())
+
+            #Don't update anything if there is nothing to update
+
+            if(startingDate != endningDate):
+                print("Updating data")
+                self.updateData(assetType, label)
+                self.updateCSV(assetType, label)
+            else:
+                print("Nothing to update")
+
+            return(Stock(asset.name, asset.label, [asset.data[-1]]))
+        else:
+            return(Stock("Error", "Error", None))
+
     def getChunked(self, assetType, label):
         print("Type: " + str(assetType) + " | Label: " + str(label))
         if((str(label).lower() in self.Stocks) or (str(label).lower() in self.ETFs)):
