@@ -3,12 +3,15 @@ class Portfolio {
         this.name;
         this.owner;
         this.stocks = [];
+        this.ETFs = [];
         this.startDate;
         this.endDate;
         this.activeStockIndex = 0;
         this.dateFilter = "3M";
         this.valueFilter = "Closing";
-        this.analyticFilter = "Plot";
+        this.analyticFilter = "Trend";
+        this.isETFActive = false;
+        this.pubNubClient = Math.floor(Math.random() * (999999 - 100000) + 100000);
     }
     setName(name) {
         this.name = name;
@@ -52,6 +55,20 @@ class Portfolio {
     getValueFilter() {
         return this.valueFilter;
     }
+    getETFs() {
+        return this.ETFs;
+    }
+
+    setETFs(etfs) {
+        this.ETFs = etfs;
+    }
+
+    setIsETF(etfActive) {
+        this.isETFActive = etfActive;
+    }
+    getIsETF() {
+        return this.isETFActive;
+    }
     setAnalyticFilter(analyticFilter) {
         this.analyticFilter = analyticFilter;
     }
@@ -65,13 +82,27 @@ class Portfolio {
         return this.analyticFilter;
     }
     setActiveStockIndexByTicker(ticker) {
-        for (var i = 0; i < this.stocks.length; i++) {
-            if (this.stocks[i].getLabel() == ticker) {
-                this.activeStockIndex = i;
-                break;
+        if (this.isETFActive) {
+            for (var i = 0; i < this.ETFs.length; i++) {
+                if (this.ETFs[i].getLabel() == ticker) {
+                    this.activeStockIndex = i;
+                    break;
+                }
+            }
+        }
+        else {
+            for (var i = 0; i < this.stocks.length; i++) {
+                if (this.stocks[i].getLabel() == ticker) {
+                    this.activeStockIndex = i;
+                    break;
+                }
             }
         }
     }
+    getPubNubClient() {
+        return this.pubNubClient;
+    }
+
     setActiveStockIndex(activeStockIndex) {
         this.activeStockIndex = activeStockIndex;
     }
@@ -79,10 +110,13 @@ class Portfolio {
         return this.activeStockIndex;
     }
     getActiveStockTicker() {
-        return this.stocks[this.activeStockIndex].getLabel();
+        if (this.isETFActive) { return this.ETFs[this.activeStockIndex].getLabel(); }
+        else { return this.stocks[this.activeStockIndex].getLabel(); }
+
     }
     getActiveStock() {
-        return this.stocks[this.activeStockIndex];
+        if (this.isETFActive) { return this.ETFs[this.activeStockIndex]; }
+        else { return this.stocks[this.activeStockIndex]; }
     }
     //Translates dateFilter to numeric day value
     translateDateFilterToNumericValue(dateFilter) {
@@ -149,13 +183,23 @@ class Portfolio {
     getStocks() {
         return this.stocks;
     }
-    async populateStocksFromServer() {
-        this.stocks = generateStock();
+    validateMovingAverageImport(key) {
+        var activeStock = this.getActiveStock();
+        return activeStock.doesMovingAverageExist(key);
+    }
+    validateVelocityImport(key) {
+        var activeStock = this.getActiveStock();
+        return (activeStock.getVelocity(key, 10).length != undefined);
     }
     importMovingAverage(type, ticker, key, response) {
         var activeStock = this.getActiveStock();
         activeStock.addMovingAverageRecord(key, response);
     }
+    importVelocity(type, key, response) {
+        var activeStock = this.getActiveStock();
+        activeStock.addVelocityRecord(key, response);
+    }
+
     importStocks(portfolio) {
         portfolio.forEach(stock => {
             let add = new Stock();
@@ -166,39 +210,43 @@ class Portfolio {
             this.stocks.push(add);
         });
     }
+
+    importETFs(portfolio) {
+        portfolio.forEach(stock => {
+            let add = new Stock();
+            add.setName(stock.name);
+            add.setLabel(stock.label);
+            add.setPrice(stock.price);
+            add.setPriceChangeFromPreviousDay(stock.change);
+            this.ETFs.push(add);
+        });
+    }
     getStockByTicker(ticker) {
         var stockFound = new Stock();
-        for (var i = 0; i < this.stocks.length; i++) {
-            if (this.stocks[i].getLabel() == ticker) {
-                stockFound = this.stocks[i];
-                break;
+        if (this.isETFActive) {
+            for (var i = 0; i < this.ETFs.length; i++) {
+                if (this.ETFs[i].getLabel() == ticker) {
+                    stockFound = this.ETFs[i];
+                    break;
+                }
+            }
+        }
+        else {
+            for (var i = 0; i < this.stocks.length; i++) {
+                if (this.stocks[i].getLabel() == ticker) {
+                    stockFound = this.stocks[i];
+                    break;
+                }
             }
         }
         return stockFound;
     }
     getNumberOfStockDetailsInRange() {
         var activeStock = this.getActiveStock();
-        return activeStock.getStockDetailCount(this.startDate, this.endDate)
+        return activeStock.getStockDetailCount(this.startDate, this.endDate);
     }
-
-
-    generateStock() {
-        var stocks = []
-        for (var i = 0; i < 1; i++) {
-            var data = []
-            for (var k = 0; k < 20; k++) {
-                var low = (Math.random() * 200);
-                this.lows.push(low);
-                var d = new Date();
-                d.setDate(d.getDate() + k);
-                this.dates.push(d.getMonth() + "-" + d.getDate());
-                data[k] = new StockData(d, (Math.random() * 500), (Math.random() * 600), low,
-                    (Math.random() * 600), (Math.random() * 200));
-            }
-            stocks[i] = new Stock('Telsa', 'TSLA', data);
-
-        }
-        //console.log(this.dates);
-        return stocks;
+    getNumberOfStockDetailsByRange(startDate, endDate) {
+        var activeStock = this.getActiveStock();
+        return activeStock.getStockDetailCount(startDate, endDate);
     }
 }

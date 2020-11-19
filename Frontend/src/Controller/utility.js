@@ -14,6 +14,7 @@ function getPortfolioTitle() {
 function loadStocksFromServer() {
     myPortfolio = new Portfolio();
     myPortfolio.setName("Tester");
+    //displayConfigurationBox("Trend", getDisplayValueFilter(), getDateFilterValue());
     getSideBarData(displayStockList);
 }
 
@@ -21,6 +22,8 @@ function loadStocksFromServer() {
 function getStocksInPortfolio() {
     return myPortfolio.getStocks();
 }
+
+
 //Returns stock object from myPortfolio
 function getStockInPortfolioByTicker(ticker) {
     return myPortfolio.getStockByTicker(ticker);
@@ -68,6 +71,12 @@ function getChartVolumeByTicker(valueType, ticker) {
     var stock = myPortfolio.getStockByTicker(ticker);
     return stock.getVolumes(myPortfolio.getStartDate(), myPortfolio.getEndDate());
 }
+//Returns array of velocities for a given ticker
+function getVelocityValuesByTicker(key, ticker) {
+    var stock = myPortfolio.getStockByTicker(ticker);
+    var numberOfDays = myPortfolio.getNumberOfStockDetailsInRange();
+    return stock.getVelocityByKey(key, numberOfDays);
+}
 //Sets Portfolio date range based off selected date-picker-button
 function setDateRangeByDatePickerButton(datePickerButtonValue) {
     //myPortfolio.setPortfolioDateRange(datePickerButtonValue);
@@ -92,22 +101,28 @@ function getDisplayValueFilter() {
 function setAnalyticFilterValue(analyticPickerButtonValue) {
     myPortfolio.setAnalyticFilter(analyticPickerButtonValue);
 }
+//Gets analytic filter for pulling data to display on chart
+function getAnalyticFilterValue() {
+    return myPortfolio.getAnalyticFilter();
+}
 //Sets analytic filter for pulling data to display on chart
-function setMovingAverageFilterValue(movingAveragePickerButtonValue) {
+function setMovingAverageFilterValue(movingAveragePickerButtonValues) {
     var activeStock = myPortfolio.getActiveStock();
-    activeStock.setMovingAverageFilter(movingAveragePickerButtonValue);
+    activeStock.setMovingAverageFilter(movingAveragePickerButtonValues);
 }
-function getMovingAverageDateFilterNumOfDays() {
-    var activeStock = myPortfolio.getActiveStock();
-    return myPortfolio.translateDateFilterToNumericValue(activeStock.getMovingAverageFilter());
+//Returns number of days in dateFilter
+function getNumberOfDaysByDateFilter(dateFilter) {
+    return myPortfolio.translateDateFilterToNumericValue(dateFilter);
 }
+//Returns array containing Trend1 and Trend 2 dateFilters
 function getMovingAverageDateFilter() {
     var activeStock = myPortfolio.getActiveStock();
     return activeStock.getMovingAverageFilter();
 }
 //Sets date range for current active stock
 function setActiveStockDateRange() {
-    myPortfolio.setEndDate(myPortfolio.stocks[myPortfolio.getActiveStockIndex()].data[myPortfolio.stocks[myPortfolio.getActiveStockIndex()].data.length - 1].getDate());
+    var activeStock = myPortfolio.getActiveStock();
+    myPortfolio.setEndDate(activeStock.data[activeStock.data.length - 1].getDate());
     myPortfolio.setStartDateBasedOnEndDate();
 }
 //Sets endDate depending on final day in dataset, startDate by offsetting endDate by whichever button is clicked
@@ -119,7 +134,6 @@ function setDateRangeByTicker(ticker) {
 function setActiveStock(ticker) {
     if (ticker == "") {
         myPortfolio.setActiveStockIndex(0);
-
     }
     else {
         myPortfolio.setActiveStockIndexByTicker(ticker);
@@ -134,31 +148,89 @@ function getVolumeValuesByTicker(datePickerButtonValue) {
     var stock = myPortfolio.getStockByTicker(datePickerButtonValue);
     return stock.getVolumes();
 }
-
+//Checks if the moving average data already exists in dataset
+function doesMovingAverageExist(key) {
+    return myPortfolio.validateMovingAverageImport(key);
+}
+//Checks if velocity array has been filled.
+function doesVelocityExist(key) {
+    return myPortfolio.validateVelocityImport(key);
+}
+//Gets moving average from stock
 function getActiveStockMovingAverage(key) {
-    var activeStock = myPortfolio.getActiveStock();   
+    var activeStock = myPortfolio.getActiveStock();
     var numberOfDays = myPortfolio.getNumberOfStockDetailsInRange();
-    return activeStock.getMovingAverage(key, numberOfDays);
+    return activeStock.getMovingAverageByKey(key, numberOfDays);
+}
+function getLatestDateInSet(type, key) {
+    var activeStock = myPortfolio.getActiveStock();
+    var noReload = false;
+    if (type == "Trend") {
+        noReload = (activeStock.data.length == 0);
+    }
+    else if (type == "MovingAverage") {
+        noReload = !isActiveMovingAverageLoaded(key);
+    }
+    else if (type == "Velocity") {
+        noReload = !isActiveVelocityLoaded();
+    }
+    return (noReload) ? "" : activeStock.data[activeStock.data.length - 1].getDate();
+}
+
+function setIsETFActive(etf) {
+    myPortfolio.setIsETF(etf);
+}
+function getIsETFActive() {
+    return myPortfolio.getIsETF();
+}
+
+function getETFsInPortfolio() {
+    return myPortfolio.getETFs();
+}
+
+function isActiveMovingAverageLoaded(key) {
+    var activeStock = myPortfolio.getActiveStock();
+    return (myPortfolio.validateMovingAverageImport(key));
+}
+function isActiveVelocityLoaded() {
+    var activeStock = myPortfolio.getActiveStock();
+    return (Object.keys(activeStock.getVelocity()).length != 0);
+}
+
+function getTrendDataByDisplayValue(ticker, displayValue) {
+    var data = [];
+    if (displayValue == "Highs")
+        data = getHighValuesByTicker(ticker);
+    else if (displayValue == "Lows")
+        data = getLowValuesByTicker(ticker);
+    else if (displayValue == "Opening")
+        data = getOpeningValuesByTicker(ticker);
+    else if (displayValue == "Closing")
+        data = getClosingValuesByTicker(ticker);
+    return data;
 }
 
 //Returns dataset based on selected radio button
 function getChartValuesByTicker(valueType, ticker) {
     var analyticFilter = myPortfolio.getAnalyticFilter();
     var valuesArray = [];
-    if (analyticFilter == "Moving Average") {
-        valuesArray = getActiveStockMovingAverage(getMovingAverageDateFilter() + "-" + myPortfolio.getValueFilter());
+    if (analyticFilter == "Moving Average" || analyticFilter == "Crossover") {
+        var dataFilters = getMovingAverageDateFilter();
+        trendOne = getActiveStockMovingAverage(dataFilters[0] + "-" + myPortfolio.getValueFilter());
+        if (analyticFilter == "Crossover") {
+            trendTwo = getActiveStockMovingAverage(dataFilters[1] + "-" + myPortfolio.getValueFilter());
+            valuesArray = [trendOne, trendTwo, getTrendDataByDisplayValue(ticker, myPortfolio.getValueFilter())];
+        }
+        else {
+            valuesArray = [trendOne, getTrendDataByDisplayValue(ticker, myPortfolio.getValueFilter())];
+        }
     }
-    else if (valueType == "Closing Prices v") {
-        valuesArray = getClosingValuesByTicker(ticker);
+    else if (analyticFilter == "Velocity") {
+        var displayValueFilter = myPortfolio.getValueFilter();
+        valuesArray = [getVelocityValuesByTicker(displayValueFilter, ticker), getTrendDataByDisplayValue(ticker, myPortfolio.getValueFilter())];
     }
-    else if (valueType == "Opening Prices v") {
-        valuesArray = getOpeningValuesByTicker(ticker);
-    }
-    else if (valueType == "Highs v") {
-        valuesArray = getHighValuesByTicker(ticker);
-    }
-    else if (valueType == "Lows v") {
-        valuesArray = getLowValuesByTicker(ticker);
+    else {
+        valuesArray = getTrendDataByDisplayValue(ticker, myPortfolio.getValueFilter());
     }
     return valuesArray;
 }

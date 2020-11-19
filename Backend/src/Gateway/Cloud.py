@@ -119,16 +119,16 @@ class MySubscribeCallback(SubscribeCallback):
                     asset = database.get(assetType, controlCommand['asset'])
 
                     if("True" in str(controlCommand["incremental"])):
-                        data = Analytics.calculateVelocityChunked(asset, Analytics.fieldFilter(controlCommand["displayValue"]))
+                        data = Analytics.calculatePartialVelocity(asset, Analytics.fieldFilter(controlCommand["displayValue"]))
 
                         pubnub.publish().channel('FinanceSub').message({
                             "requester": serverID,
                             "operation": "Velocity",
-                            "total": len(data),
-                            "data": json.dumps(data)
+                            "total": 1,
+                            "data": json.dumps([data])
                         }).pn_async(my_publish_callback)
                     else:
-                        data = Analytics.calculatePartialVelocity(asset, Analytics.fieldFilter(controlCommand["displayValue"]))
+                        data = Analytics.calculateVelocityChunked(asset, Analytics.fieldFilter(controlCommand["displayValue"]))
 
                         for i in range(len(data)):
                             pubnub.publish().channel('FinanceSub').message({
@@ -149,8 +149,8 @@ class MySubscribeCallback(SubscribeCallback):
 class Cloud:
     def __init__(self):
         pnconfig = PNConfiguration()
-        pnconfig.publish_key = 'pub-c-9ec7d15f-4966-4f9e-9f34-b7ca51622aac'
-        pnconfig.subscribe_key = 'sub-c-08c91d8c-196f-11eb-bc34-ce6fd967af95'
+        pnconfig.publish_key = 'pub-c-7a762d1f-b8f0-4463-a1aa-8bb59616f2b4'
+        pnconfig.subscribe_key = 'sub-c-200f3c34-29f4-11eb-8e02-129fdf4b0d84'
         global pubnub
         pubnub = PubNub(pnconfig)
 

@@ -8,8 +8,9 @@ class Stock {
         this.label = "";
         this.price = 0;
         this.data = [];
+        this.velocity = {};
         this.movingAverage = {};
-        this.movingAverageFilter = "3M";
+        this.movingAverageFilters = ["1W", "3M"];
         this.priceChangeFromPreviousDay = 0;
         this.loaded = false;
     }
@@ -49,6 +50,12 @@ class Stock {
     isLoaded() {
         return this.loaded;
     }
+    getVelocity() {
+        return this.velocity;
+    }
+    getMovingAverage() {
+        return this.movingAverage;
+    }
     sortDataByDate() {
         this.data.sort((a, b) => {
             if (a.date > b.date) return 1;
@@ -59,7 +66,7 @@ class Stock {
 
     //Turns json element into StockData object and adds to data array.
     addStockDetailFromServer(element) {
-        var stockData = new StockData(element.Date, element.Open, element.High, element.Low, element.Close, element.Volume, element.OpenInt)
+        var stockData = new StockData(element.Date, parseFloat(element.Open), parseFloat(element.High), parseFloat(element.Low), parseFloat(element.Close), parseFloat(element.Volume), element.OpenInt)
         this.data.push(stockData);
     }
 
@@ -148,18 +155,37 @@ class Stock {
     getLastData() {
         return this.data[this.data.length - 1];
     }
-    getMovingAverage(key, numberOfDays) {
+    getMovingAverageByKey(key, numberOfDays) {
         var dataSet = this.movingAverage[key];
         return dataSet.slice(dataSet.length - numberOfDays, dataSet.length - 1);
     }
-    addMovingAverageRecord(key, data) {
-        this.movingAverage[key] = data;
+    doesMovingAverageExist(key) {
+        return (key in this.movingAverage);
     }
-    setMovingAverageFilter(movingAverageFilter) {
-        this.movingAverageFilter = movingAverageFilter;
+    doesVelocityExist(key) {
+        return (key in this.velocity);
+    }
+    addVelocityRecord(key, data) {
+        if (this.velocity[key] == undefined)
+            this.velocity[key] = data;
+        else
+            this.velocity[key].push(data);
+    }
+    getVelocityByKey(key, numberOfDays) {
+        var dataSet = this.velocity[key];
+        return (dataSet == undefined) ? [] : dataSet.slice(dataSet.length - numberOfDays, dataSet.length - 1);
+    }
+    addMovingAverageRecord(key, data) {
+        if (this.movingAverage[key] == undefined)
+            this.movingAverage[key] = data;
+        else
+            this.movingAverage[key].push(data);
+    }
+    setMovingAverageFilter(movingAverageFilters) {
+        this.movingAverageFilters = movingAverageFilters;
     }
     getMovingAverageFilter() {
-        return this.movingAverageFilter;
+        return this.movingAverageFilters;
     }
 }
 

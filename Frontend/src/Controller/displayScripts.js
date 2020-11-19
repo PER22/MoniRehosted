@@ -19,29 +19,35 @@ function handleChartDisplay(e) {
     setCursor("wait");
     setStockListBackcolor(sender.parentElement.parentElement);
     setActiveStock(ticker);
-    getStockDataByTicker(ticker, false, displayStockChart);
+    setAnalyticFilterValue("Trend");
+    setAnalyticsDropDownName("Trend v");
+    displayConfigurationBox("Trend", getDisplayValueFilter(), getDateFilterValue());
+    getAssetDataByTicker(ticker, false, displayStockChart);
 }
 
 //Function used when clicking an item in the DateRange drop down
 function handleFilterDateRange(e) {
     var sender = e.srcElement || e.target;
     var dateRangeValue = sender.innerHTML;
-    setPeriodDropDownName(dateRangeValue + " v");
+    setPeriodDropDownName(sender, dateRangeValue + " v");
     setDateFilterValue(dateRangeValue);
     displayStockChart(getActiveStockTicker(), (document.getElementById("analyticDropdownButton").innerHTML.replace(' v', '') == "Candle Stick"));
 }
 
 //Function used when clicking an item in the DisplayValue drop down
-function handlFilterDisplayValue(e) {
+function handleFilterDisplayValue(e) {
+    setCursor("wait");
     var sender = e.srcElement || e.target;
     var displayValue = sender.innerHTML;
     setDisplayFilterValue(displayValue.split(' ')[0]);
     setDisplayValueDropDownName(displayValue + " v");
     var val = document.getElementById("analyticDropdownButton").innerHTML.replace(' v', '');
-    if (val == "Moving Average")
-        loadMovingAverage();
+    if (val == "Moving Average" || val == "Crossover")
+        loadMovingAverage(val == "Crossover");
+    else if (val == "Velocity")
+        loadVelocity();
     else
-        displayStockChart(getActiveStockTicker());
+        displayStockChart(getActiveStockTicker(), val == "Candle Stick");
 }
 
 //Function used when clicking an item in the Analytics drop down
@@ -51,27 +57,54 @@ function handleFilterAnalytics(e) {
     setCursor("wait");
     setAnalyticFilterValue(analytic);
     setAnalyticsDropDownName(analytic + " v");
-    if (analytic == "Moving Average")
-        loadMovingAverage();
+    if (analytic == "Moving Average" || analytic == "Crossover")
+        loadMovingAverage(analytic == "Crossover");
+    else if (analytic == "Velocity")
+        loadVelocity();
     else
         displayStockChart(getActiveStockTicker(), (analytic == "Candle Stick"));
-    toggleMovingAverageDateFilterDropDownVisibility((analytic == "Moving Average"));
+    if ((analytic == "Candle Stick"))
+        toggleChartJSVisibility(false);
+    displayConfigurationBox(analytic, getDisplayValueFilter(), getDateFilterValue());
 }
 
+//Function used when changing a period drop down for Moving Average
+function handleFilterMovingAverage(e) {
+    setCursor("wait");
+    var sender = e.srcElement || e.target;
+    var dateRangeValue = sender.innerHTML;
+    var trendOneFilter = document.getElementById('trendOnePeriodDropDown').innerHTML.replace(' v', '');
+    var trendTwoFilter = (getAnalyticFilterValue() == "Crossover") ? document.getElementById('trendTwoPeriodDropDown').innerHTML.replace(' v', '') : "";
+    if (sender.parentElement.parentElement.firstElementChild.id == "trendTwoPeriodDropDown") {
+        trendTwoFilter = dateRangeValue;
+    }
+    else {
+        trendOneFilter = dateRangeValue;
+    }
+    setPeriodDropDownName(sender, dateRangeValue + " v");
+    setMovingAverageFilterValue((getAnalyticFilterValue() == "Crossover") ? [trendOneFilter, trendTwoFilter] : [trendOneFilter]);
+    var prefix = (getIsETFActive()) ? "ETF" : "Stock";
+    getAnalytics(prefix + 'MovingAverage', getActiveStockTicker(), getDisplayValueFilter(), getNumberOfDaysByDateFilter(dateRangeValue), dateRangeValue, displayStockChart);
+}
+
+
+//Function used when clicking 'Moving Average' in the Analytics drop down
 function handleDisplayMovingAverage(e) {
     var sender = e.srcElement || e.target;
     var dateRangeValue = sender.innerHTML;
     setCursor("wait");
     setMovingAverageFilterValue(dateRangeValue);
     setMovingAverageDripDownName(dateRangeValue + " v");
-    getAnalytics('StockMovingAverage', getActiveStockTicker(), getDisplayValueFilter(), getMovingAverageDateFilterNumOfDays(), getMovingAverageDateFilter(), displayStockChart);
+    getAnalytics(prefix + 'MovingAverage', getActiveStockTicker(), getDisplayValueFilter(), getMovingAverageDateFilterNumOfDays(), getMovingAverageDateFilter(), displayStockChart);
 }
 
 //Function used when switching between Stock and ETF
 function handleSwapStockAndETF(e) {
+    setCursor("wait");
     var sender = e.srcElement || e.target;
-    setETFStockPickerBackColor(sender);
-    //filter by etf/stock
+    var type = sender.innerHTML;
+    setIsETFActive((type == "ETFs"));
+    getSideBarData(displayStockList);
 }
 
 //Function used to delete a stock
@@ -85,15 +118,8 @@ function handleDeleteStock(e) {
 function handleReloadStock(e) {
     var sender = e.srcElement || e.target;
     var ticker = getActiveStockTicker();
-    getStockDataByTicker(ticker, true, displayStockChart);
-}
-
-function loadMovingAverage() {
-    var ticker = getActiveStockTicker();
-    var displayValue = getDisplayValueFilter();
-    var movingAverageDateFilter = getMovingAverageDateFilterNumOfDays();
-    var chartDateFilter = getMovingAverageDateFilter();
-    getAnalytics('StockMovingAverage', ticker, displayValue, movingAverageDateFilter, chartDateFilter, displayStockChart);
+    setCursor("wait");
+    getAssetDataByTicker(ticker, true, displayStockChart);
 }
 
 //
@@ -102,6 +128,9 @@ function loadMovingAverage() {
 
 //Stock chart display function.
 function displayStockChart(ticker, candleChart) {
+    if (document.getElementById('testDiv').innerHTML.trim() == "") {
+        displayConfigurationBox(getAnalyticFilterValue(), getDisplayValueFilter(), getDateFilterValue());
+    }
     console.log("Displaying Chart");
     //Set stock title and initial date range
     setActiveStockDateRange();
@@ -115,164 +144,27 @@ function displayStockChart(ticker, candleChart) {
     var chartValues = getChartValuesByTicker(selectedDisplayValue, ticker);
     var volumes = getChartVolumeByTicker(selectedDisplayValue, ticker);
     var dateValues = getClosingDatesByTicker(ticker);
+    if (Array.isArray(chartValues[0])) {
+        dateValues = []
+        for (var i = 0; i < chartValues.length; i++) {
+            dateValues.push(getClosingDatesByTicker(ticker));
+        }
+    }
+    else if (!candleChart) {
+        chartValues = [chartValues];
+        dateValues = [dateValues];
+    }
 
     updateHeader(stockTitle, prevClosingValue, lastDay.getOpen(), lastDay.getClose(), lastDay.getLow(), lastDay.getHigh(), lastDay.getVolume(), ticker, prevClosingValue)
 
-    //fillChartJS(prevClosingValue, chartValues, volumes, dateValues, selectedDisplayValue);
-    //fillPlotlyChart(dateValues, chartValues);
-    //fillCandleChart(dateValues, ticker);
 
-    //fillChartJS(prevClosingValue, chartValues, volumes, dateValues, selectedDisplayValue);
+    var graph = new Graphing();
+    var chartDiv = document.getElementById('chartDiv');
     if (candleChart)
-        fillCandleChart(dateValues, ticker);
+        graph.displayCandleChart(chartDiv, getHighValuesByTicker(ticker), getLowValuesByTicker(ticker), getOpeningValuesByTicker(ticker), getClosingValuesByTicker(ticker), dateValues);
     else
-        fillPlotlyChart(dateValues, chartValues);
+        graph.displayTrendChartJS(chartDiv, dateValues, chartValues, (prevClosingValue >= 0));
     setCursor("default");
-}
-
-function fillPlotlyChart(dateValues, chartValues) {
-    chartDiv.innerHTML = "";
-    chartDiv = document.getElementById('chartDiv');
-    var min = Math.min(...chartValues) - 2;
-    var max = Math.max(...chartValues) + 2;
-
-    var trace1 = {
-        type: "scatter",
-        mode: "lines",
-        x: dateValues,
-        y: chartValues,
-        fill: 'tonexty',
-        line: { color: '#17BECF' }
-    }
-    var data = [trace1];
-
-    var layout = {
-        plot_bgcolor: "rgba(0,0,0,0)",
-        paper_bgcolor: "rgba(0,0,0,0)",
-        height: 735,
-        xaxis: {
-            gridcolor: '#373c42',
-            gridwidth: 1,
-            linecolor: '#636363',
-        },
-        yaxis: {
-            gridcolor: '#373c42',
-            gridwidth: 1,
-            linecolor: '#636363',
-            range: [min, max]
-        }
-    }
-    Plotly.newPlot(chartDiv, data, layout = layout);
-}
-
-function fillCandleChart(dateValues, ticker) {
-    chartDiv.innerHTML = "";
-    chartDiv = document.getElementById('chartDiv');
-
-    var trace1 = {
-        type: "candlestick",
-        //mode: "lines",
-        x: dateValues,
-        xaxis: 'x',
-        yaxis: 'y',
-        close: getClosingValuesByTicker(ticker),
-        high: getHighValuesByTicker(ticker),
-        low: getLowValuesByTicker(ticker),
-        open: getOpeningValuesByTicker(ticker),
-
-        decreasing: {
-            line: { color: '#c2331f' },
-            fillcolor: '#c2331f'
-        },
-        increasing: {
-            line: { color: '#209e54' },
-            fillcolor: '#209e54'
-        },
-
-    };
-    var data = [trace1];
-
-    var layout = {
-        showlegend: false,
-        xaxis: {
-            autorange: true,
-            rangeslider: { visible: false },
-            gridcolor: '#373c42',
-            gridwidth: 1,
-            linecolor: '#636363',
-            type: 'date',
-        },
-        yaxis: {
-            gridcolor: '#373c42',
-            gridwidth: 1,
-            linecolor: '#636363',
-
-        },
-        plot_bgcolor: "rgba(0,0,0,0)",
-        paper_bgcolor: "rgba(0,0,0,0)",
-        font: {
-            //family: 'Courier New, monospace',
-            size: 14,
-            color: '#FFFFFF'
-        }
-
-    };
-    Plotly.newPlot(chartDiv, data, layout);
-}
-
-
-function fillChartJS(prevClosingValue, chartValues, volumes, dateValues, selectedDisplayValue) {
-    //Fill chart
-    var ctx = document.getElementById('myChart').getContext('2d');
-    for (var i = 0, length = volumes.length; i < length; i++) {
-        volumes[i] = volumes[i] / 1000000;
-    }
-    var gradient = ctx.createLinearGradient(0, 0, 0, 400);
-    var lineColor = "#FFFFFF"
-
-    if (parseFloat(prevClosingValue) < 0) {
-        gradient.addColorStop(0, 'rgba(255,0,0,0.5)');
-        gradient.addColorStop(1, 'rgba(255,0,0,0.0)');
-        lineColor = "#FF0000";
-    } else {
-        gradient.addColorStop(0, 'rgba(0,255,0, 0.7)');
-        gradient.addColorStop(1, 'rgba(0,255,0, 0.1)');
-        lineColor = "#00FF00";
-    }
-
-
-
-    var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: dateValues,
-            datasets: [{
-                label: String(selectedDisplayValue) + ' Price',
-                type: 'line',
-                fill: true,
-                data: chartValues,
-                borderColor: lineColor,
-                backgroundColor: gradient,
-                pointHoverBorderColor: "#0000FF",
-                pointRadius: 0,
-                borderWidth: 1,
-                order: 1
-            }],
-            options: {
-                tooltips: {
-                    mode: 'nearest',
-                    mode: 'x'
-                },
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: false
-                        }
-                    }]
-                }
-            }
-        }
-    });
 }
 
 //Dynamic Stock list display function
@@ -284,11 +176,11 @@ function displayStockList() {
     }
 
     var stockHeader = document.getElementById('stockHeader');
-    var boxContol = "";
+    var boxControl = "";
     var index = 0;
-    console.log("Displaying Stock List");
-
-    getStocksInPortfolio().forEach(stock => {
+    var dataSet = (getIsETFActive()) ? getETFsInPortfolio() : getStocksInPortfolio();
+    console.log("Displaying Asset List");
+    dataSet.forEach(stock => {
         if (index < 20) {
             var cssType;
             if (stock.priceChangeFromPreviousDay < 0) {
@@ -297,7 +189,7 @@ function displayStockList() {
             else if (stock.priceChangeFromPreviousDay >= 0) {
                 cssType = "\"box green detail-label-small\""
             }
-            boxContol +=
+            boxControl +=
                 "<div onclick = handleChartDisplay(event)>" +
                 "   <div name=\"stockSummary\" class=\"stock-selection-summary\" id=\"outer-" + stock.label + "\">" +
                 "       <div class=\"stock-selection-left\" id=\"left-" + stock.label + "\">" +
@@ -322,19 +214,223 @@ function displayStockList() {
         }
         index++;
     });
-    stockHeader.innerHTML = boxContol;
-    //setDatePickerBackcolor(document.getElementById('button-1W'));
-    //setETFStockPickerBackColor(document.getElementById('button-stock'));
-    getStockDataByTicker(getActiveStockTicker(), false, displayStockChart);
+    stockHeader.innerHTML = boxControl;
+    getAssetDataByTicker(getActiveStockTicker(), false, displayStockChart);
+}
+
+function displayConfigurationBox(analyticFilter, displayValue, period) {
+    var headerDiv = document.getElementById('testDiv');
+    var displayConfigurationBox =
+        "<div id=\"divConfigurationBox\">" +
+        createAnalyticsDiv(analyticFilter) +
+        createDefaultsDiv(displayValue, period) +
+        createConfigurationDiv(analyticFilter) +
+        createActionsDiv() +
+        "</div>";
+    headerDiv.innerHTML = displayConfigurationBox;
+    return displayConfigurationBox;
+}
+
+function createAnalyticsDiv(analyticFilter) {
+    var analyticsDiv =
+        "<div id=\"divAnalytics\" class=\"horizontal-container\">" +
+        "    <div class=\"title-container\">" +
+        "             <label>Select Analytic</label>" +
+        "    </div>" +
+        "    <div class=\"horizontal-container\">" +
+        "           <li class=\"dropdown\">" +
+        "                   <a class=\"dropbtn\" id=\"analyticDropdownButton\">" + analyticFilter + " v</a>" +
+        "                   <div class=\"dropdown-content\">" +
+        "                        <a onclick=\"handleFilterAnalytics(event)\">Trend</a>" +
+        "                        <a onclick=\"handleFilterAnalytics(event)\">Candle Stick</a>" +
+        "                        <a onclick=\"handleFilterAnalytics(event)\">Moving Average</a>" +
+        "                        <a onclick=\"handleFilterAnalytics(event)\">Crossover</a>" +
+        "                        <a onclick=\"handleFilterAnalytics(event)\">Velocity</a>" +
+        "                    </div>" +
+        "           </li>" +
+        "    </div>" +
+        "</div>";
+    return analyticsDiv;
+}
+
+function createDefaultsDiv(displayValue, period) {
+    var defaultsDiv =
+        "<div id=\"divAnalytics\">" +
+        "    <div class=\"row\">" +
+        "           <div class=\"col m8 padding-small txt-center\">" +
+        "                  <label style=\"text-decoration: underline;\">Display Value</label>" +
+        "                   <li class=\"dropdown\">" +
+        "                       <a class=\"dropbttn\" id=\"stockPropertyDropdownButton\">" + displayValue + " Prices v</a>" +
+        "                           <div class=\"dropdown-content\">" +
+        "                               <a id=\"Closing Prices v\" onclick=\"handleFilterDisplayValue(event)\">Closing Prices</a>" +
+        "                               <a id=\"Opening Prices v\" onclick=\"handleFilterDisplayValue(event)\">Opening Prices</a>" +
+        "                               <a id=\"Highs v\" onclick=\"handleFilterDisplayValue(event)\">Highs</a>" +
+        "                               <a id=\"Lows v\" onclick=\"handleFilterDisplayValue(event)\">Lows</a>" +
+        "                           </div>" +
+        "                   </li>" +
+        "           </div>" +
+        "            <div class=\"col m4 padding-small txt-center\">" +
+        "                   <label style=\"text-decoration: underline;\">Period</label>" +
+        "                       <li class=\"dropdown\">" +
+        "                           <a class=\"dropbttn\" id=\"periodDropdownButton\">" + period + " v</a>" +
+        "                                <div class=\"dropdown-content\">" +
+        "                                   <a id=\"1W v\" onclick=\"handleFilterDateRange(event)\">1W</a>" +
+        "                                   <a id=\"1M v\" onclick=\"handleFilterDateRange(event)\">1M</a>" +
+        "                                   <a id=\"3M v\" onclick=\"handleFilterDateRange(event)\">3M</a>" +
+        "                                   <a id=\"6M v\" onclick=\"handleFilterDateRange(event)\">6M</a>" +
+        "                                   <a id=\"1Y v\" onclick=\"handleFilterDateRange(event)\">1Y</a>" +
+        "                                   <a id=\"2Y v\" onclick=\"handleFilterDateRange(event)\">2Y</a>" +
+        "                                   <a id=\"5Y v\" onclick=\"handleFilterDateRange(event)\">5Y</a>" +
+        "                                   <a id=\"10Y v\" onclick=\"handleFilterDateRange(event)\">10Y</a>" +
+        "                                   <a id=\"ALL v\" onclick=\"handleFilterDateRange(event)\">ALL</a>" +
+        "                             </div>" +
+        "                      </li>" +
+        "            </div>" +
+        "    </div>" +
+        "</div>";
+    return defaultsDiv;
+}
+
+function createConfigurationDiv(analytic) {
+    var configurationDiv = "";
+    if (analytic == "Moving Average") {
+        configurationDiv = createMovingAverageConfigurationDiv();
+    }
+    else if (analytic == "Crossover") {
+        configurationDiv = createCrossoverConfigurationDiv();
+    }
+    return configurationDiv;
+}
+
+function createMovingAverageConfigurationDiv() {
+    var configurationDiv =
+        "<div id=\"divConfigurations\">" +
+        "    <div class=\"title-container\">" +
+        "             <label>Configuration</label>" +
+        "    </div>" +
+        "    <div class=\"row\">" +
+        "           <div class=\"col m4 padding-small centered\">" +
+        "               <label style=\"text-decoration: underline;\">Trend 1</label>" +
+        "               <li class=\"dropdown\">" +
+        "                       <a class=\"dropbtn\" id=\"trendOnePeriodDropDown\">1W v</a>" +
+        "                       <div class=\"dropdown-content\">" +
+        "                           <a id=\"1W v\" onclick=\"handleFilterMovingAverage(event)\">1W</a>" +
+        "                           <a id=\"1M v\" onclick=\"handleFilterMovingAverage(event)\">1M</a>" +
+        "                           <a id=\"3M v\" onclick=\"handleFilterMovingAverage(event)\">3M</a>" +
+        "                           <a id=\"6M v\" onclick=\"handleFilterMovingAverage(event)\">6M</a>" +
+        "                           <a id=\"1Y v\" onclick=\"handleFilterMovingAverage(event)\">1Y</a>" +
+        "                           <a id=\"2Y v\" onclick=\"handleFilterMovingAverage(event)\">2Y</a>" +
+        "                           <a id=\"5Y v\" onclick=\"handleFilterMovingAverage(event)\">5Y</a>" +
+        "                           <a id=\"10Y v\" onclick=\"handleFilterMovingAverage(event)\">10Y</a>" +
+        "                           <a id=\"ALL v\" onclick=\"handleFilterMovingAverage(event)\">ALL</a>" +
+        "                    </div>" +
+        "               </li>" +
+        "           </div>" +
+        "    </div>" +
+        "</div>";
+    return configurationDiv;
+}
+function createCrossoverConfigurationDiv() {
+    var configurationDiv =
+        "<div id=\"divConfigurations\">" +
+        "    <div class=\"title-container\">" +
+        "             <label>Configuration</label>" +
+        "    </div>" +
+        "    <div class=\"row\">" +
+        "           <div class=\"col m4 padding-small centered\">" +
+        "               <label style=\"text-decoration: underline;\">Trend 1</label>" +
+        "               <li class=\"dropdown\">" +
+        "                       <a class=\"dropbtn\" id=\"trendOnePeriodDropDown\">1W v</a>" +
+        "                       <div class=\"dropdown-content\">" +
+        "                           <a id=\"1W v\" onclick=\"handleFilterMovingAverage(event)\">1W</a>" +
+        "                           <a id=\"1M v\" onclick=\"handleFilterMovingAverage(event)\">1M</a>" +
+        "                           <a id=\"3M v\" onclick=\"handleFilterMovingAverage(event)\">3M</a>" +
+        "                           <a id=\"6M v\" onclick=\"handleFilterMovingAverage(event)\">6M</a>" +
+        "                           <a id=\"1Y v\" onclick=\"handleFilterMovingAverage(event)\">1Y</a>" +
+        "                           <a id=\"2Y v\" onclick=\"handleFilterMovingAverage(event)\">2Y</a>" +
+        "                           <a id=\"5Y v\" onclick=\"handleFilterMovingAverage(event)\">5Y</a>" +
+        "                           <a id=\"10Y v\" onclick=\"handleFilterMovingAverage(event)\">10Y</a>" +
+        "                           <a id=\"ALL v\" onclick=\"handleFilterMovingAverage(event)\">ALL</a>" +
+        "                    </div>" +
+        "               </li>" +
+        "           </div>" +
+        "            <div class=\"col m4 padding-small centered\">" +
+        "               <label style=\"text-decoration: underline;\">Trend 2</label>" +
+        "               <li class=\"dropdown\">" +
+        "                       <a class=\"dropbtn\" id=\"trendTwoPeriodDropDown\">3M v</a>" +
+        "                       <div class=\"dropdown-content\">" +
+        "                           <a id=\"1W v\" onclick=\"handleFilterMovingAverage(event)\">1W</a>" +
+        "                           <a id=\"1M v\" onclick=\"handleFilterMovingAverage(event)\">1M</a>" +
+        "                           <a id=\"3M v\" onclick=\"handleFilterMovingAverage(event)\">3M</a>" +
+        "                           <a id=\"6M v\" onclick=\"handleFilterMovingAverage(event)\">6M</a>" +
+        "                           <a id=\"1Y v\" onclick=\"handleFilterMovingAverage(event)\">1Y</a>" +
+        "                           <a id=\"2Y v\" onclick=\"handleFilterMovingAverage(event)\">2Y</a>" +
+        "                           <a id=\"5Y v\" onclick=\"handleFilterMovingAverage(event)\">5Y</a>" +
+        "                           <a id=\"10Y v\" onclick=\"handleFilterMovingAverage(event)\">10Y</a>" +
+        "                           <a id=\"ALL v\" onclick=\"handleFilterMovingAverage(event)\">ALL</a>" +
+        "                       </div>" +
+        "               </li>" +
+        "            </div>" +
+        "    </div>" +
+        "</div>";
+    return configurationDiv;
+}
+
+function createActionsDiv() {
+    var actionsDiv =
+        "<div class=\"row\" id=\"divActions\" >" +
+        "    <div class=\"title-container\">" +
+        "             <label>Actions</label>" +
+        "    </div>" +
+        "<div class=\"col m4 padding-small\">" +
+        "    <a onclick=\"handleReloadStock(event)\" class=\"dropbtn\">Reload</a>" +
+        "</div>" +
+        "<div class=\"col m4 padding-small\">" +
+        "    <a  onclick=\"handleDeleteStock(event)\" class=\"dropbtn\">Delete</a>" +
+        "</div>" +
+        "<div class=\"col m4 padding-small\">" +
+        "    <a class=\"dropbtn\">Export</a>" +
+        "</div>" +
+        "</div>";
+    return actionsDiv;
 }
 
 //
 // Utility functions
 //
 
+function loadVelocity() {
+    var ticker = getActiveStockTicker();
+    var displayValue = getDisplayValueFilter();
+    var dateFilter = getDateFilterValue();
+    var prefix = (getIsETFActive()) ? "ETF" : "Stock";
+    getAnalytics(prefix + 'Velocity', ticker, displayValue, 0, dateFilter, displayStockChart);
+}
+
+function loadMovingAverage(crossover) {
+    var ticker = getActiveStockTicker();
+    var displayValue = getDisplayValueFilter();
+    var dateFilters = (crossover) ? ["1W", "3M"] : getMovingAverageDateFilter();
+    var movingAverageDateFilter = getNumberOfDaysByDateFilter(dateFilters[0]);
+    var prefix = (getIsETFActive()) ? "ETF" : "Stock";
+    getAnalytics(prefix + 'MovingAverage', ticker, displayValue, movingAverageDateFilter, dateFilters[0], (crossover) ? loadSecondMovingAverage : displayStockChart);
+}
+
+function loadSecondMovingAverage() {
+    var ticker = getActiveStockTicker();
+    var displayValue = getDisplayValueFilter();
+    var dateFilters = ["1W", "3M"];
+    var movingAverageDateFilter = getNumberOfDaysByDateFilter(dateFilters[1]);
+    var prefix = (getIsETFActive()) ? "ETF" : "Stock";
+    getAnalytics(prefix + 'MovingAverage', ticker, displayValue, movingAverageDateFilter, dateFilters[1], displayStockChart);
+}
+
 function toggleMovingAverageDateFilterDropDownVisibility(on) {
 
     document.getElementById("movingAverageDropdownButton").style.display = (on) ? "block" : "none";
+}
+function toggleChartJSVisibility(on) {
+    document.getElementById('myChart').style.display = (on) ? "block" : "none";
 }
 
 function getSelectedDisplayValue() {
@@ -367,29 +463,9 @@ function setStockListBackcolor(sender) {
         }
     }
 }
-
-//Sets the back color of the Stock/ETF picker buttons to indicate which is selected
-function setETFStockPickerBackColor(sender) {
-    console.log(myPortfolio);
-    var dateButtons = document.getElementsByName('ETForStockPicker');
-    for (var i = 0; i < dateButtons.length; i++) {
-        if (dateButtons[i] == sender) {
-            dateButtons[i].style.background = '#FFFFFF';
-            dateButtons[i].style.fontWeight = "bold";
-            dateButtons[i].style.color = 'black';
-            dateButtons[i].style.borderColor = 'black';
-        }
-        else {
-            dateButtons[i].style.background = '#373c42';
-            dateButtons[i].style.fontWeight = "normal";
-            dateButtons[i].style.color = '#D8D8D8';
-        }
-    }
-}
-
 //Updates Period Drop Down name when list item is clicked
-function setPeriodDropDownName(name) {
-    document.getElementById('periodDropdownButton').innerHTML = name;
+function setPeriodDropDownName(sender, name) {
+    sender.parentElement.parentElement.firstElementChild.innerHTML = name;
 }
 
 //Updates Display Value Drop Down name when list item is clicked

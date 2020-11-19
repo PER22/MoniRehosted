@@ -56,10 +56,13 @@ class Analytics:
 
         length = len(data) - 1
 
-        return([((data[length] - data[length-1]) / data[length-1]) * 100])
+        return(((data[length] - data[length-1]) / data[length-1]) * 100)
 
     @staticmethod
     def calculateMovingAverageChunked(stock, field, period):
+
+        if(period < 1):
+            return([])
 
         data = Analytics.calculateMovingAverage(stock, field, period)
 
