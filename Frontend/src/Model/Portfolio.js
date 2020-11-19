@@ -11,6 +11,7 @@ class Portfolio {
         this.valueFilter = "Closing";
         this.analyticFilter = "Trend";
         this.isETFActive = false;
+        this.pubNubClient = Math.floor(Math.random() * (999999 - 100000) + 100000);
     }
     setName(name) {
         this.name = name;
@@ -98,7 +99,9 @@ class Portfolio {
             }
         }
     }
-
+    getPubNubClient() {
+        return this.pubNubClient;
+    }
 
     setActiveStockIndex(activeStockIndex) {
         this.activeStockIndex = activeStockIndex;
@@ -108,11 +111,11 @@ class Portfolio {
     }
     getActiveStockTicker() {
         if (this.isETFActive) { return this.ETFs[this.activeStockIndex].getLabel(); }
-        else { return this.stocks[this.activeStockIndex].getLabel();}
-        
+        else { return this.stocks[this.activeStockIndex].getLabel(); }
+
     }
     getActiveStock() {
-        if (this.isETFActive) { return this.stocks[this.activeStockIndex]; }
+        if (this.isETFActive) { return this.ETFs[this.activeStockIndex]; }
         else { return this.stocks[this.activeStockIndex]; }
     }
     //Translates dateFilter to numeric day value
@@ -186,7 +189,7 @@ class Portfolio {
     }
     validateVelocityImport(key) {
         var activeStock = this.getActiveStock();
-        return (activeStock.getVelocity(key, 10).length != 0);
+        return (activeStock.getVelocity(key, 10).length != undefined);
     }
     importMovingAverage(type, ticker, key, response) {
         var activeStock = this.getActiveStock();
@@ -215,7 +218,7 @@ class Portfolio {
             add.setLabel(stock.label);
             add.setPrice(stock.price);
             add.setPriceChangeFromPreviousDay(stock.change);
-            this.etfs.push(add);
+            this.ETFs.push(add);
         });
     }
     getStockByTicker(ticker) {
@@ -226,7 +229,7 @@ class Portfolio {
                     stockFound = this.ETFs[i];
                     break;
                 }
-            }    
+            }
         }
         else {
             for (var i = 0; i < this.stocks.length; i++) {

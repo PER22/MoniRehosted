@@ -22,7 +22,7 @@ function handleChartDisplay(e) {
     setAnalyticFilterValue("Trend");
     setAnalyticsDropDownName("Trend v");
     displayConfigurationBox("Trend", getDisplayValueFilter(), getDateFilterValue());
-    getStockDataByTicker(ticker, false, displayStockChart);
+    getAssetDataByTicker(ticker, false, displayStockChart);
 }
 
 //Function used when clicking an item in the DateRange drop down
@@ -99,6 +99,7 @@ function handleDisplayMovingAverage(e) {
 
 //Function used when switching between Stock and ETF
 function handleSwapStockAndETF(e) {
+    setCursor("wait");
     var sender = e.srcElement || e.target;
     var type = sender.innerHTML;
     setIsETFActive((type == "ETFs"));
@@ -117,7 +118,7 @@ function handleReloadStock(e) {
     var sender = e.srcElement || e.target;
     var ticker = getActiveStockTicker();
     setCursor("wait");
-    getStockDataByTicker(ticker, true, displayStockChart);
+    getAssetDataByTicker(ticker, true, displayStockChart);
 }
 
 //
@@ -176,83 +177,44 @@ function displayStockList() {
     var stockHeader = document.getElementById('stockHeader');
     var boxControl = "";
     var index = 0;
-
-    if (getIsETFActive()) {
-        console.log("Displaying ETF List");
-        getETFsInPortfolio().forEach(stock => {
-            if (index < 20) {
-                var cssType;
-                if (stock.priceChangeFromPreviousDay < 0) {
-                    cssType = "\"box red detail-label-small\""
-                }
-                else if (stock.priceChangeFromPreviousDay >= 0) {
-                    cssType = "\"box green detail-label-small\""
-                }
-                boxControl +=
-                    "<div onclick = handleChartDisplay(event)>" +
-                    "   <div name=\"stockSummary\" class=\"stock-selection-summary\" id=\"outer-" + stock.label + "\">" +
-                    "       <div class=\"stock-selection-left\" id=\"left-" + stock.label + "\">" +
-                    "           <div class=\"stock-selection-summary-stock-name\"id=\"divName-" + stock.label + "\">" +
-                    "               <label class=\"detail-label\" id=\"fullName-" + stock.label + "\">" + stock.name + "</label>" +
-                    "           </div>" +
-                    "           <div class=\"stock-selection-summary-short-name\" id=\"ticker-" + stock.label + "\">" +
-                    "               <label class=\"detail-label-small\" id=\"shortName-" + stock.label + "\">" + stock.label + "</label>" +
-                    "           </div>" +
-                    "      </div>" +
-                    "      <div class=\"stock-selection-right\" id=\"right-" + stock.label + "\">" +
-                    "           <div class=\"stock-selection-summary-price\" id=\"price-" + stock.label + "\">" +
-                    "               <label class=\"detail-label-price\" id=\"labelPrice-" + stock.label + "\">$" + stock.price + "</label>" +
-                    "           </div>" +
-                    "           <div class=\".stock-selection-change-value\" id=\"change-" + stock.label + "\">" +
-                    "               <label class= " + cssType + " id=\"labelChange-" + stock.label + "\">" + stock.priceChangeFromPreviousDay + "%</label>" +
-                    "           </div>" +
-                    "       </div>" +
-                    "   </div>" +
-                    "</div>";
-
+    var dataSet = (getIsETFActive()) ? getETFsInPortfolio() : getStocksInPortfolio();
+    console.log("Displaying Asset List");
+    dataSet.forEach(stock => {
+        if (index < 20) {
+            var cssType;
+            if (stock.priceChangeFromPreviousDay < 0) {
+                cssType = "\"box red detail-label-small\""
             }
-            index++;
-        });
-    }
-    else {
-        console.log("Displaying Stock List");
-        getStocksInPortfolio().forEach(stock => {
-            if (index < 20) {
-                var cssType;
-                if (stock.priceChangeFromPreviousDay < 0) {
-                    cssType = "\"box red detail-label-small\""
-                }
-                else if (stock.priceChangeFromPreviousDay >= 0) {
-                    cssType = "\"box green detail-label-small\""
-                }
-                boxControl +=
-                    "<div onclick = handleChartDisplay(event)>" +
-                    "   <div name=\"stockSummary\" class=\"stock-selection-summary\" id=\"outer-" + stock.label + "\">" +
-                    "       <div class=\"stock-selection-left\" id=\"left-" + stock.label + "\">" +
-                    "           <div class=\"stock-selection-summary-stock-name\"id=\"divName-" + stock.label + "\">" +
-                    "               <label class=\"detail-label\" id=\"fullName-" + stock.label + "\">" + stock.name + "</label>" +
-                    "           </div>" +
-                    "           <div class=\"stock-selection-summary-short-name\" id=\"ticker-" + stock.label + "\">" +
-                    "               <label class=\"detail-label-small\" id=\"shortName-" + stock.label + "\">" + stock.label + "</label>" +
-                    "           </div>" +
-                    "      </div>" +
-                    "      <div class=\"stock-selection-right\" id=\"right-" + stock.label + "\">" +
-                    "           <div class=\"stock-selection-summary-price\" id=\"price-" + stock.label + "\">" +
-                    "               <label class=\"detail-label-price\" id=\"labelPrice-" + stock.label + "\">$" + stock.price + "</label>" +
-                    "           </div>" +
-                    "           <div class=\".stock-selection-change-value\" id=\"change-" + stock.label + "\">" +
-                    "               <label class= " + cssType + " id=\"labelChange-" + stock.label + "\">" + stock.priceChangeFromPreviousDay + "%</label>" +
-                    "           </div>" +
-                    "       </div>" +
-                    "   </div>" +
-                    "</div>";
-
+            else if (stock.priceChangeFromPreviousDay >= 0) {
+                cssType = "\"box green detail-label-small\""
             }
-            index++;
-        });
-    }
+            boxControl +=
+                "<div onclick = handleChartDisplay(event)>" +
+                "   <div name=\"stockSummary\" class=\"stock-selection-summary\" id=\"outer-" + stock.label + "\">" +
+                "       <div class=\"stock-selection-left\" id=\"left-" + stock.label + "\">" +
+                "           <div class=\"stock-selection-summary-stock-name\"id=\"divName-" + stock.label + "\">" +
+                "               <label class=\"detail-label\" id=\"fullName-" + stock.label + "\">" + stock.name + "</label>" +
+                "           </div>" +
+                "           <div class=\"stock-selection-summary-short-name\" id=\"ticker-" + stock.label + "\">" +
+                "               <label class=\"detail-label-small\" id=\"shortName-" + stock.label + "\">" + stock.label + "</label>" +
+                "           </div>" +
+                "      </div>" +
+                "      <div class=\"stock-selection-right\" id=\"right-" + stock.label + "\">" +
+                "           <div class=\"stock-selection-summary-price\" id=\"price-" + stock.label + "\">" +
+                "               <label class=\"detail-label-price\" id=\"labelPrice-" + stock.label + "\">$" + stock.price + "</label>" +
+                "           </div>" +
+                "           <div class=\".stock-selection-change-value\" id=\"change-" + stock.label + "\">" +
+                "               <label class= " + cssType + " id=\"labelChange-" + stock.label + "\">" + stock.priceChangeFromPreviousDay + "%</label>" +
+                "           </div>" +
+                "       </div>" +
+                "   </div>" +
+                "</div>";
+
+        }
+        index++;
+    });
     stockHeader.innerHTML = boxControl;
-    getStockDataByTicker(getActiveStockTicker(), false, displayStockChart);
+    getAssetDataByTicker(getActiveStockTicker(), false, displayStockChart);
 }
 
 function displayConfigurationBox(analyticFilter, displayValue, period) {
@@ -440,7 +402,8 @@ function loadVelocity() {
     var ticker = getActiveStockTicker();
     var displayValue = getDisplayValueFilter();
     var dateFilter = getDateFilterValue();
-    getAnalytics('StockVelocity', ticker, displayValue, 0, dateFilter, displayStockChart);
+    var prefix = (getIsETFActive()) ? "ETF" : "Stock";
+    getAnalytics(prefix + 'Velocity', ticker, displayValue, 0, dateFilter, displayStockChart);
 }
 
 function loadMovingAverage(crossover) {
@@ -448,7 +411,8 @@ function loadMovingAverage(crossover) {
     var displayValue = getDisplayValueFilter();
     var dateFilters = (crossover) ? ["1W", "3M"] : getMovingAverageDateFilter();
     var movingAverageDateFilter = getNumberOfDaysByDateFilter(dateFilters[0]);
-    getAnalytics('StockMovingAverage', ticker, displayValue, movingAverageDateFilter, dateFilters[0], (crossover) ? loadSecondMovingAverage : displayStockChart);
+    var prefix = (getIsETFActive()) ? "ETF" : "Stock";
+    getAnalytics(prefix + 'MovingAverage', ticker, displayValue, movingAverageDateFilter, dateFilters[0], (crossover) ? loadSecondMovingAverage : displayStockChart);
 }
 
 function loadSecondMovingAverage() {
@@ -456,7 +420,8 @@ function loadSecondMovingAverage() {
     var displayValue = getDisplayValueFilter();
     var dateFilters = ["1W", "3M"];
     var movingAverageDateFilter = getNumberOfDaysByDateFilter(dateFilters[1]);
-    getAnalytics('StockMovingAverage', ticker, displayValue, movingAverageDateFilter, dateFilters[1], displayStockChart);
+    var prefix = (getIsETFActive()) ? "ETF" : "Stock";
+    getAnalytics(prefix + 'MovingAverage', ticker, displayValue, movingAverageDateFilter, dateFilters[1], displayStockChart);
 }
 
 function toggleMovingAverageDateFilterDropDownVisibility(on) {
