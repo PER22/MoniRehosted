@@ -71,7 +71,7 @@ function requestData(dataString, ticker, operation, field, timePeriod, increment
                 "requester": client,
                 "operation": "GetETFData",
                 "asset": ticker,
-                "incremental": incremental
+                "incremental": (incremental) ? "True" : "False"
             }
             break;
         case "StockMovingAverage":
@@ -81,7 +81,7 @@ function requestData(dataString, ticker, operation, field, timePeriod, increment
                 "asset": ticker,
                 "displayValue": field, //"Open"/"Close"/"High"/"Low"
                 "numberOfDays": timePeriod, //"100"
-                "incremental": incremental
+                "incremental": (incremental) ? "True" : "False"
             }
             break;
         case "ETFMovingAverage":
@@ -91,7 +91,7 @@ function requestData(dataString, ticker, operation, field, timePeriod, increment
                 "asset": ticker,
                 "displayValue": field, //"Open"/"Close"/"High"/"Low"
                 "numberOfDays": timePeriod, //"100"
-                "incremental": incremental
+                "incremental": (incremental) ? "True" : "False"
             }
             break;
         case "StockVelocity":
@@ -100,7 +100,7 @@ function requestData(dataString, ticker, operation, field, timePeriod, increment
                 "operation": "StockVelocity",
                 "asset": ticker,
                 "displayValue": field,
-                "incremental": incremental
+                "incremental": (incremental) ? "True" : "False"
             }
             break;
         case "ETFVelocity":
@@ -109,7 +109,7 @@ function requestData(dataString, ticker, operation, field, timePeriod, increment
                 "operation": "ETFVelocity",
                 "asset": ticker,
                 "displayValue": field,
-                "incremental": incremental
+                "incremental": (incremental) ? "True" : "False"
             }
             break;
         default:
