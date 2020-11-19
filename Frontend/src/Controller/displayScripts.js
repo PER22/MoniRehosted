@@ -83,7 +83,8 @@ function handleFilterMovingAverage(e) {
     }
     setPeriodDropDownName(sender, dateRangeValue + " v");
     setMovingAverageFilterValue((getAnalyticFilterValue() == "Crossover") ? [trendOneFilter, trendTwoFilter] : [trendOneFilter]);
-    getAnalytics('StockMovingAverage', getActiveStockTicker(), getDisplayValueFilter(), getNumberOfDaysByDateFilter(dateRangeValue), dateRangeValue, displayStockChart);
+    var prefix = (getIsETFActive()) ? "ETF" : "Stock";
+    getAnalytics(prefix + 'MovingAverage', getActiveStockTicker(), getDisplayValueFilter(), getNumberOfDaysByDateFilter(dateRangeValue), dateRangeValue, displayStockChart);
 }
 
 
@@ -94,7 +95,7 @@ function handleDisplayMovingAverage(e) {
     setCursor("wait");
     setMovingAverageFilterValue(dateRangeValue);
     setMovingAverageDripDownName(dateRangeValue + " v");
-    getAnalytics('StockMovingAverage', getActiveStockTicker(), getDisplayValueFilter(), getMovingAverageDateFilterNumOfDays(), getMovingAverageDateFilter(), displayStockChart);
+    getAnalytics(prefix + 'MovingAverage', getActiveStockTicker(), getDisplayValueFilter(), getMovingAverageDateFilterNumOfDays(), getMovingAverageDateFilter(), displayStockChart);
 }
 
 //Function used when switching between Stock and ETF
