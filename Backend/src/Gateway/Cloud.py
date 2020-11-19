@@ -119,16 +119,16 @@ class MySubscribeCallback(SubscribeCallback):
                     asset = database.get(assetType, controlCommand['asset'])
 
                     if("True" in str(controlCommand["incremental"])):
-                        data = Analytics.calculateVelocityChunked(asset, Analytics.fieldFilter(controlCommand["displayValue"]))
+                        data = Analytics.calculatePartialVelocity(asset, Analytics.fieldFilter(controlCommand["displayValue"]))
 
                         pubnub.publish().channel('FinanceSub').message({
                             "requester": serverID,
                             "operation": "Velocity",
-                            "total": len(data),
-                            "data": json.dumps(data)
+                            "total": 1,
+                            "data": json.dumps([data])
                         }).pn_async(my_publish_callback)
                     else:
-                        data = Analytics.calculatePartialVelocity(asset, Analytics.fieldFilter(controlCommand["displayValue"]))
+                        data = Analytics.calculateVelocityChunked(asset, Analytics.fieldFilter(controlCommand["displayValue"]))
 
                         for i in range(len(data)):
                             pubnub.publish().channel('FinanceSub').message({
