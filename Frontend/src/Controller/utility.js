@@ -75,7 +75,7 @@ function getChartVolumeByTicker(valueType, ticker) {
 function getVelocityValuesByTicker(key, ticker) {
     var stock = myPortfolio.getStockByTicker(ticker);
     var numberOfDays = myPortfolio.getNumberOfStockDetailsInRange();
-    return stock.getVelocity(key, numberOfDays);
+    return stock.getVelocityByKey(key, numberOfDays);
 }
 //Sets Portfolio date range based off selected date-picker-button
 function setDateRangeByDatePickerButton(datePickerButtonValue) {
@@ -160,7 +160,21 @@ function doesVelocityExist(key) {
 function getActiveStockMovingAverage(key) {
     var activeStock = myPortfolio.getActiveStock();
     var numberOfDays = myPortfolio.getNumberOfStockDetailsInRange();
-    return activeStock.getMovingAverage(key, numberOfDays);
+    return activeStock.getMovingAverageByKey(key, numberOfDays);
+}
+function getLatestDateInSet(type, key) {
+    var activeStock = myPortfolio.getActiveStock();
+    var noReload = false;
+    if (type == "Trend") {
+        noReload = (activeStock.data.length == 0);
+    }
+    else if (type == "MovingAverage") {
+        noReload = !isActiveMovingAverageLoaded(key);
+    }
+    else if (type == "Velocity") {
+        noReload = !isActiveVelocityLoaded();
+    }
+    return (noReload) ? "" : activeStock.data[activeStock.data.length - 1].getDate();
 }
 
 function setIsETFActive(etf) {
@@ -172,6 +186,15 @@ function getIsETFActive() {
 
 function getETFsInPortfolio() {
     return myPortfolio.getETFs();
+}
+
+function isActiveMovingAverageLoaded(key) {
+    var activeStock = myPortfolio.getActiveStock();
+    return (myPortfolio.validateMovingAverageImport(key));
+}
+function isActiveVelocityLoaded() {
+    var activeStock = myPortfolio.getActiveStock();
+    return (Object.keys(activeStock.getVelocity()).length != 0);
 }
 
 function getTrendDataByDisplayValue(ticker, displayValue) {

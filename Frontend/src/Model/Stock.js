@@ -50,6 +50,12 @@ class Stock {
     isLoaded() {
         return this.loaded;
     }
+    getVelocity() {
+        return this.velocity;
+    }
+    getMovingAverage() {
+        return this.movingAverage;
+    }
     sortDataByDate() {
         this.data.sort((a, b) => {
             if (a.date > b.date) return 1;
@@ -149,22 +155,31 @@ class Stock {
     getLastData() {
         return this.data[this.data.length - 1];
     }
-    getMovingAverage(key, numberOfDays) {
+    getMovingAverageByKey(key, numberOfDays) {
         var dataSet = this.movingAverage[key];
         return dataSet.slice(dataSet.length - numberOfDays, dataSet.length - 1);
     }
     doesMovingAverageExist(key) {
         return (key in this.movingAverage);
     }
-    addVelocityRecord(key, data) {
-        this.velocity[key] = data;
+    doesVelocityExist(key) {
+        return (key in this.velocity);
     }
-    getVelocity(key, numberOfDays) {
+    addVelocityRecord(key, data) {
+        if (this.velocity[key] == undefined)
+            this.velocity[key] = data;
+        else
+            this.velocity[key].push(data);
+    }
+    getVelocityByKey(key, numberOfDays) {
         var dataSet = this.velocity[key];
         return (dataSet == undefined) ? [] : dataSet.slice(dataSet.length - numberOfDays, dataSet.length - 1);
     }
     addMovingAverageRecord(key, data) {
-        this.movingAverage[key] = data;
+        if (this.movingAverage[key] == undefined)
+            this.movingAverage[key] = data;
+        else
+            this.movingAverage[key].push(data);
     }
     setMovingAverageFilter(movingAverageFilters) {
         this.movingAverageFilters = movingAverageFilters;

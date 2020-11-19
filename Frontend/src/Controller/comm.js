@@ -8,8 +8,8 @@ pubnub = null;
 
 function subscribePubNub() {
     pubnub = new PubNub({
-        publishKey: "pub-c-9ec7d15f-4966-4f9e-9f34-b7ca51622aac",
-        subscribeKey: "sub-c-08c91d8c-196f-11eb-bc34-ce6fd967af95"
+        publishKey: "pub-c-7a762d1f-b8f0-4463-a1aa-8bb59616f2b4",
+        subscribeKey: "sub-c-200f3c34-29f4-11eb-8e02-129fdf4b0d84"
     });
     pubnub.subscribe({
         channels: ['FinanceSub']
@@ -26,66 +26,90 @@ function publishMessage(message) {
     pubnub.publish(publishPayload, function (status, response) { })
 }
 
-function requestData(dataString, ticker, operation, field, timePeriod) {
+function requestData(dataString, ticker, operation, field, timePeriod, incremental) {
     var message = "";
+    var client = "Client-" + myPortfolio.getPubNubClient();
     switch (dataString) {
         case "deleteStock":
             message = {
-                "requester": "Client",
+                "requester": client,
                 "operation": "DeleteStock",
-                "stock": ticker
+                "asset": ticker
             };
             break;
         case "deleteETF":
             message = {
-                "requester": "Client",
+                "requester": client,
                 "operation": "DeleteETF",
-                "stock": ticker
+                "asset": ticker
             };
             break;
         case "GetStockLabels":
             message = {
-                "requester": "Client",
+                "requester": client,
                 "operation": "GetStockLabels",
                 "amount": "a"
             };
             break;
         case "GetETFLabels":
             message = {
-                "requester": "Client",
+                "requester": client,
                 "operation": "GetETFLabels",
                 "amount": "a"
             };
             break;
         case "GetStockData":
             message = {
-                "requester": "Client",
+                "requester": client,
                 "operation": "GetStockData",
-                "stock": ticker
+                "asset": ticker,
+                "incremental": (incremental) ? "True" : "False"
             }
             break;
         case "GetETFData":
             message = {
-                "requester": "Client",
+                "requester": client,
                 "operation": "GetETFData",
-                "stock": ticker
+                "asset": ticker,
+                "incremental": incremental
             }
             break;
         case "StockMovingAverage":
             message = {
-                "requester": "Client",
+                "requester": client,
                 "operation": "StockMovingAverage",
-                "stock": ticker,
+                "asset": ticker,
                 "displayValue": field, //"Open"/"Close"/"High"/"Low"
-                "numberOfDays": timePeriod //"100"
+                "numberOfDays": timePeriod, //"100"
+                "incremental": incremental
+            }
+            break;
+        case "ETFMovingAverage":
+            message = {
+                "requester": client,
+                "operation": "ETFMovingAverage",
+                "asset": ticker,
+                "displayValue": field, //"Open"/"Close"/"High"/"Low"
+                "numberOfDays": timePeriod, //"100"
+                "incremental": incremental
             }
             break;
         case "StockVelocity":
             message = {
-                "requester": "Client",
+                "requester": client,
                 "operation": "StockVelocity",
-                "stock": ticker,
-                "displayValue": field
+                "asset": ticker,
+                "displayValue": field,
+                "incremental": incremental
+            }
+            break;
+        case "ETFVelocity":
+            message = {
+                "requester": client,
+                "operation": "ETFVelocity",
+                "asset": ticker,
+                "displayValue": field,
+                "incremental": incremental
             }
             break;
         default:
@@ -94,17 +118,18 @@ function requestData(dataString, ticker, operation, field, timePeriod) {
 }
 
 function getAnalytics(operation, ticker, displayValue, numberOfDays, dateFilter, _callback) {
-    if (operation.includes("MovingAverage") && doesMovingAverageExist(dateFilter + '-' + displayValue)) {
+    var incremental = updateIncrementally(operation.includes("MovingAverage") ? "MovingAverage" : "Velocity", dateFilter + '-' + displayValue);
+    if (operation.includes("MovingAverage") && doesMovingAverageExist(dateFilter + '-' + displayValue) && !incremental) {
         _callback(ticker);
         return;
     }
-    if (operation.includes("Velocity") && doesVelocityExist(displayValue)) {
+    if (operation.includes("Velocity") && doesVelocityExist(displayValue) && !incremental) {
         _callback(ticker);
         return;
     }
 
     var packetIndex = 0;
-    var dataRequest = requestData(operation, ticker, operation, displayValue, numberOfDays.toString());
+    var dataRequest = requestData(operation, ticker, operation, displayValue, numberOfDays.toString(), incremental);
     response = [];
     var listener = {
         status: function (statusEvent) {
@@ -113,7 +138,7 @@ function getAnalytics(operation, ticker, displayValue, numberOfDays, dateFilter,
             }
         },
         message: function (msg) {
-            if (msg.message.requester == "Server") {
+            if (msg.message.requester == (myPortfolio.getPubNubClient() + 1)) {
                 response.push(msg.message);
                 packetIndex++;
                 console.log("Imported " + ticker + ": " + operation);
@@ -173,7 +198,7 @@ function getSideBarData(_callback) {
             }
         },
         message: function (msg) {
-            if (msg.message.requester == "Server") {
+            if (msg.message.requester == (myPortfolio.getPubNubClient() + 1)) {
                 if (getIsETFActive()) {
                     myPortfolio.importETFs(msg.message.data);
                     console.log("Imported SideBar ETF Data");
@@ -182,7 +207,7 @@ function getSideBarData(_callback) {
                     myPortfolio.importStocks(msg.message.data);
                     console.log("Imported SideBar STOCK Data");
                 }
-                
+
                 packetIndex++;
                 if (packetIndex == msg.message.total) {
                     pubnub.removeListener(listener);
@@ -193,6 +218,10 @@ function getSideBarData(_callback) {
     };
     console.log("Requesting data...");
     pubnub.addListener(listener);
+
+    pubnub.subscribe({
+        channels: ['FinanceSub']
+    });
 };
 
 
@@ -209,7 +238,7 @@ function deleteStock(ticker, _callback) {
             }
         },
         message: function (msg) {
-            if (msg.message.requester == "Server") {
+            if (msg.message.requester == (myPortfolio.getPubNubClient() + 1)) {
                 pubnub.removeListener(listener);
                 console.log(message);
             }
@@ -222,10 +251,10 @@ function deleteStock(ticker, _callback) {
     });
 };
 
-
-function getStockDataByTicker(ticker, reload, _callback) {
+function getAssetDataByTicker(ticker, reload, _callback) {
     //Return if stock data is already loaded
-    if (myPortfolio.getStockByTicker(ticker).isLoaded() && !reload) {
+    var incremental = updateIncrementally("Trend");
+    if (myPortfolio.getStockByTicker(ticker).isLoaded() && !reload && !incremental) {
         _callback(ticker);
         return;
     }
@@ -233,7 +262,14 @@ function getStockDataByTicker(ticker, reload, _callback) {
     var stock = new Stock();
     var indx = 0;
     var reloaded = false;
-    var dataRequest = requestData("GetStockData", ticker);
+    var dataRequest = "";
+    if (getIsETFActive()) {
+        dataRequest = requestData("GetETFData", ticker, "", "", "", incremental);
+    }
+    else {
+        dataRequest = requestData("GetStockData", ticker, "", "", "", incremental);
+    }
+
 
     //Listener to wait for response from server
     var listener = {
@@ -243,7 +279,7 @@ function getStockDataByTicker(ticker, reload, _callback) {
             }
         },
         message: function (msg) {
-            if (msg.message.requester == "Server") {
+            if (msg.message.requester == (myPortfolio.getPubNubClient() + 1)) {
                 stock = myPortfolio.getStockByTicker(ticker);
                 if (stock.getData() == null || (reload && !reloaded)) {
                     stock.setData([]);
@@ -262,7 +298,6 @@ function getStockDataByTicker(ticker, reload, _callback) {
         }
     };
 
-
     console.log("Requesting data...");
     pubnub.addListener(listener);
 
@@ -271,4 +306,10 @@ function getStockDataByTicker(ticker, reload, _callback) {
     });
 
     console.log(myPortfolio);
+}
+
+function updateIncrementally(type,key) {
+    var latestDateNumber = new Date(getLatestDateInSet(type, key)).getDate() + 2;
+    var currentDateNumber = new Date().getDate();
+    return (getLatestDateInSet(type, key) == "" || latestDateNumber == NaN) ? false : (latestDateNumber != currentDateNumber);
 }
