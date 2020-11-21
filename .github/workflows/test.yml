@@ -13,17 +13,10 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v1
         with:
-          python-version: 3.9
+          python-version: 3.7
 
-      - name: Install dependencies with pipenv
-        run: |
-          pip install pipenv
-          pipenv install --deploy --dev
-          pipenv install pubnub
-          pipenv install unittest
-
-
-      - run: pipenv run mypy
+      - run: pip install pubnub
+      - run: pip install unittest
       - run: pipenv run unnittest -m /Backend/test/Analytics_Test.py
       - run: pipenv run unnittest -m /Backend/test/Cloud_Test.py
       - run: pipenv run unnittest -m /Backend/test/Database_Test.py
