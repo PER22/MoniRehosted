@@ -19,9 +19,8 @@ jobs:
         run: |
           pip install pipenv
           pipenv install --deploy --dev
-	  pipenv install pubnub
-	  pipenv install unittest
-	  //I need the python dependencies here to install on github's virtual machine
+          pipenv install pubnub
+          pipenv install unittest
 
 
       - run: pipenv run mypy
