@@ -16,7 +16,7 @@ jobs:
           python-version: 3.7
 
       - run: pip install pubnub
-      - run: python -m unittest  /Backend/test/Analytics_Test.py
-      - run: python -m unittest  /Backend/test/Cloud_Test.py
-      - run: python -m unittest  /Backend/test/Database_Test.py
-      - run: python -m unittest  /Backend/test/Stock_Test.py
+      - run: python -m unittest  Analytics_Test.py
+      - run: python -m unittest  Cloud_Test.py
+      - run: python -m unittest  Database_Test.py
+      - run: python -m unittest  Stock_Test.py
