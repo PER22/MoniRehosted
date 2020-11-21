@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Setup Python
+      - name: Setup Python and run tests
         uses: actions/setup-python@v1
         with:
           python-version: 3.7
